@@ -52,8 +52,13 @@ const taskSlice = createSlice({
         state.tasks[index].status = status;
       }
     },
+
+    removeTasks: (state) => {
+      state.tasks = [];
+    },
   },
 });
 
-export const { addTask, addTasks, updateStatusOfTask } = taskSlice.actions;
+export const { addTask, addTasks, updateStatusOfTask, removeTasks } =
+  taskSlice.actions;
 export default taskSlice.reducer;
