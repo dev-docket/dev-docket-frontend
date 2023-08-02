@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { KanbanBoard } from "../components/KanbanBoard/KanbanBoard";
-import { Link } from "react-router-dom";
 import { useFetchTasks } from "../hooks/tasks/useFetchTasks";
 import { useAppSelector } from "../hooks/storeHook";
 import { Task } from "../types/Task";
+import { SmallButton } from "../components/common/buttons/SmallButton";
+import { useLogout } from "../hooks/auth/useLogout";
 
 export type ColumnType = {
   id: string;
@@ -43,12 +44,14 @@ const initialBoard: BoardType = {
 };
 
 export const Home = () => {
+  const userIsLoggedIn = useAppSelector((state) => state.auth.token !== null);
   const tasks = useAppSelector((state) => state.task.tasks);
   const [board, setBoard] = useState<BoardType>({
     ...initialBoard,
   });
 
   useFetchTasks();
+  const { logoutUser } = useLogout();
 
   useEffect(() => {
     setBoard((prev) => ({
@@ -75,12 +78,15 @@ export const Home = () => {
       <nav className="bg-header-background p-4">
         <div className="flex justify-between">
           <div className="flex space-x-4">
-            <Link
-              to={"/login"}
-              className="text-gray-100 bg-indigo-500 hover:bg-gray-700 px-3 py-2 rounded"
-            >
-              Login
-            </Link>
+            {userIsLoggedIn ? (
+              <SmallButton
+                redirectPath="/"
+                title="Logout"
+                onButtonClick={logoutUser}
+              />
+            ) : (
+              <SmallButton redirectPath="/login" title="Login" />
+            )}
           </div>
         </div>
       </nav>
