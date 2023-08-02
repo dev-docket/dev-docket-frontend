@@ -5,19 +5,25 @@ import persistStore from "redux-persist/es/persistStore";
 
 import taskSlice from "./slices/taskSlice";
 import authSlice, { AuthState } from "./slices/authSlice";
-import userSlice from "./slices/userSlice";
+import userSlice, { UserState } from "./slices/userSlice";
 
-const persistConfig = {
-  key: "root",
+const authPersistConfig = {
+  key: "auth",
   storage,
 };
 
-const authReducer = persistReducer<AuthState>(persistConfig, authSlice);
+const userPersistConfig = {
+  key: "user",
+  storage,
+};
+
+const authReducer = persistReducer<AuthState>(authPersistConfig, authSlice);
+const userReducer = persistReducer<UserState>(userPersistConfig, userSlice);
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    user: userSlice,
+    user: userReducer,
     task: taskSlice,
   },
 });
