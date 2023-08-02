@@ -82,7 +82,7 @@ export const Home = () => {
               <SmallButton
                 redirectPath="/"
                 title="Logout"
-                onButtonClick={logoutUser}
+                onClick={logoutUser}
               />
             ) : (
               <SmallButton redirectPath="/login" title="Login" />
