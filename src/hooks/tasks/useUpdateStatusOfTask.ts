@@ -1,25 +1,26 @@
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../storeHook";
 import axios from "axios";
-import { toast } from "react-toastify";
 
 import { updateStatusOfTask as updateStatus } from "../../store/slices/taskSlice";
 import { TaskStatus } from "../../types/Task";
+import { handleError } from "../../utils/handleError";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export const useUpdateStatusOfTask = () => {
   const userId = useAppSelector((state) => state.user.user?.id);
   const token = useAppSelector((state) => state.auth.token);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [state, setState] = useState({
+    isLoading: false,
+    error: null as string | null,
+  });
 
   const dispatch = useAppDispatch();
 
-  const updateStatusOfTask = async (taskId: string, status: TaskStatus) => {
+  const updateStatusOfTask = async (taskId: number, status: TaskStatus) => {
     try {
-      setIsLoading(true);
-      setError(false);
+      setState({ ...state, isLoading: true, error: null });
       const response = await axios.patch(
         `${apiUrl}/users/${userId}/tasks/${taskId}`,
         { status },
@@ -31,17 +32,24 @@ export const useUpdateStatusOfTask = () => {
       );
 
       if (response.status !== 200) {
-        throw new Error("Something went wrong!");
+        throw new Error(response.data.message);
       }
 
-      dispatch(updateStatus({ id: parseInt(taskId), status }));
-    } catch (err) {
-      setError(err.message);
-      toast.error(err.message);
+      dispatch(updateStatus({ id: taskId, status }));
+    } catch (err: unknown) {
+      // if (err instanceof Error) {
+      //   setState({ ...state, error: err.message });
+      //   toast.error(err.message);
+      // } else {
+      //   setState({ ...state, error: "An unknown error occurred." });
+      //   toast.error("An unknown error occurred.");
+      // }
+
+      handleError(err);
     } finally {
-      setIsLoading(false);
+      setState({ ...state, isLoading: false });
     }
   };
 
-  return { isLoading, error, updateStatusOfTask };
+  return { isLoading: state.isLoading, error: state.error, updateStatusOfTask };
 };
