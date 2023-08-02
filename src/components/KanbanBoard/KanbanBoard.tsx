@@ -1,6 +1,8 @@
-import { DragDropContext, DraggableLocation } from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { Column } from "./Column";
 import { ColumnType } from "../../pages/Home";
+import { useUpdateStatusOfTask } from "../../hooks/tasks/useUpdateStatusOfTask";
+import { TaskStatus } from "../../types/Task";
 
 interface Props {
   columns: ColumnType[];
@@ -12,10 +14,9 @@ interface Props {
 }
 
 export const KanbanBoard = ({ columns, setBoard }: Props) => {
-  const handleDragEnd = (result: {
-    source: DraggableLocation;
-    destination: DraggableLocation;
-  }) => {
+  const { updateStatusOfTask } = useUpdateStatusOfTask();
+
+  const handleDragEnd = (result: DropResult) => {
     const { source, destination } = result;
 
     // Ignore if the item is dropped outside of any column or dropped in the same position
@@ -59,7 +60,10 @@ export const KanbanBoard = ({ columns, setBoard }: Props) => {
         movedCard = { ...movedCard, status: "DONE" };
       }
 
-      
+      const taskId = movedCard.id;
+      const taskStatus = movedCard.status as TaskStatus;
+
+      updateStatusOfTask(taskId, taskStatus);
     }
 
     // Update the columns state
