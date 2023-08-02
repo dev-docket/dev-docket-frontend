@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLogin } from "../hooks/auth/useLogin";
 import { useNavigate } from "react-router-dom";
+import { SmallButton } from "../components/common/buttons/SmallButton";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,52 +21,43 @@ export const Login = () => {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
+    <div className="bg-[#141318] h-screen">
+      <div className="flex flex-col items-center justify-center h-full">
+        <div className="bg-[#222428] p-8 rounded-lg shadow-lg text-white">
+          <h1 className="text-center uppercase text-opacity-50 text-sm">
+            Welcome back
+          </h1>
+          <h2 className="text-2xl font-bold text-center ">
+            Log into your account
+          </h2>
+          <div className="mt-4">
+            <label htmlFor="email">Email</label>
+          </div>
 
-      {/* <form> */}
-      <div>
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          className="
-            border border-gray-300
-            rounded-md
-            px-4
-            py-2
-            mt-1
-            w-full
-            focus:outline-none
-            focus:ring-2
-            focus:ring-blue-600"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+          <input
+            type="email"
+            id="email"
+            className="w-full p-2 border bg-[#222428] border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          className="
-            border border-gray-300
-            rounded-md
-            px-4
-            py-2
-            mt-1
-            w-full
-            focus:outline-none
-            focus:ring-2
-            focus:ring-blue-600"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <div className="mt-4">
+            <label htmlFor="email">Email</label>
+          </div>
 
-        <button type="submit" onClick={handleLogin}>
-          Login
-        </button>
+          <input
+            type="password"
+            id="password"
+            className="w-full p-2 border bg-[#222428] border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <div className="mt-6">
+            <SmallButton redirectPath="/" title="Login" onClick={handleLogin} />
+          </div>
+        </div>
       </div>
-      {/* </form> */}
     </div>
   );
 };
