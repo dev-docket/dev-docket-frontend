@@ -2,14 +2,14 @@ import { useState } from "react";
 import { useAppDispatch } from "../storeHook";
 import { addToken } from "../../store/slices/authSlice";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { setUser } from "../../store/slices/userSlice";
+import { handleError } from "../../utils/handleError";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export const useLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   const dispatch = useAppDispatch();
 
@@ -29,8 +29,13 @@ export const useLogin = () => {
       dispatch(setUser(data.user));
       return data.token;
     } catch (err) {
-      setError(err.message);
-      toast.error(err.message);
+      // setError(err.message);
+      // toast.error(err.message);
+
+      if (err instanceof Error) {
+        setError(err.message);
+      }
+      handleError(err);
     } finally {
       setIsLoading(false);
     }
