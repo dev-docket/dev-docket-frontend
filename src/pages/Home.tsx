@@ -91,8 +91,10 @@ export const Home = () => {
         </div>
       </nav>
       <div className="flex-1 bg-dark-background">
-        <div className="container mx-auto p-8">
-          <KanbanBoard columns={board.columns} setBoard={setBoard} />
+        <div className="container px-8 mt-10 mx-auto">
+          <div className="w-full max-w-lg mx-auto animate-resize">
+            <KanbanBoard columns={board.columns} setBoard={setBoard} />
+          </div>
         </div>
       </div>
     </div>
