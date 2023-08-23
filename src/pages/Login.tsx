@@ -13,10 +13,8 @@ export const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    if (!emailError) {
+    if (emailError) {
       toast.error("Please enter a valid email address");
-      console.log("Please enter a valid email address");
-
       return;
     }
 
