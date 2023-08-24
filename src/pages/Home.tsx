@@ -44,13 +44,15 @@ const initialBoard: BoardType = {
 };
 
 export const Home = () => {
+  const userId = useAppSelector((state) => state.user.user?.id);
+  const token = useAppSelector((state) => state.auth.token);
   const userIsLoggedIn = useAppSelector((state) => state.auth.token !== null);
   const tasks = useAppSelector((state) => state.task.tasks);
   const [board, setBoard] = useState<BoardType>({
     ...initialBoard,
   });
 
-  useFetchTasks();
+  useFetchTasks(userId, token);
   const { logoutUser } = useLogout();
 
   useEffect(() => {
