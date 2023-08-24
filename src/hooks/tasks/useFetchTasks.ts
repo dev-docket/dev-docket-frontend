@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../storeHook";
 import { addTasks } from "../../store/slices/taskSlice";
-import axios from "axios";
-import { handleError } from "../../utils/handleError";
+import axios, { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -37,7 +37,16 @@ export const useFetchTasks = () => {
           setError(err.message);
         }
 
-        handleError(err);
+        if (err instanceof AxiosError) {
+          if (err.response?.status === 403) {
+            toast.error(
+              "You are not authorized to do that. Try to login again."
+            );
+            return;
+          }
+        }
+
+        toast.error("You have failed to fetch tasks");
       }
       setIsLoading(false);
     };
