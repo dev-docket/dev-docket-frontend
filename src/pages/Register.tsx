@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FormAuth } from "../components/Form/FormAuth";
 import { useRegister } from "../hooks/auth/useRegister";
@@ -11,7 +10,6 @@ export const Register = () => {
   const [passwordError, setPasswordError] = useState<boolean>(false);
 
   const { register } = useRegister();
-  const navigate = useNavigate();
 
   const handleRegistration = async () => {
     if (emailError) {
@@ -24,11 +22,7 @@ export const Register = () => {
       return;
     }
 
-    const response = await register(email, password);
-
-    if (response) {
-      navigate("/");
-    }
+    await register(email, password);
   };
 
   const validateUserEmail = (email: string) => {
