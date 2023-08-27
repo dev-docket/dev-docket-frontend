@@ -48,6 +48,7 @@ export const FormAuth = ({
           id={input.id}
           value={input.value}
           onChange={input.onChange}
+          enterPressed={onButtonClick}
           isError={input.isError}
           errorMessage={
             input.errorMessage ??

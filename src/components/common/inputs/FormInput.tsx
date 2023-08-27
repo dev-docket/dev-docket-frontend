@@ -10,12 +10,28 @@ interface Props {
   isError?: boolean;
   errorMessage: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  enterPressed?: () => void;
 }
 
 export const FormInput = (props: Props) => {
-  const { type, id, value, isError = false, errorMessage, onChange } = props;
+  const {
+    type,
+    id,
+    value,
+    isError = false,
+    errorMessage,
+    onChange,
+    enterPressed,
+  } = props;
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [isFocused, setIsFocused] = useState(false);
+
+  const handlePressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      enterPressed && enterPressed();
+    }
+  };
 
   useLayoutEffect(() => {
     if (tooltipRef.current) {
@@ -58,6 +74,7 @@ export const FormInput = (props: Props) => {
         onChange={onChange}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
+        onKeyDown={handlePressEnter}
       />
 
       <div className="absolute top-1/2 right-2 transform -translate-y-1/2">
