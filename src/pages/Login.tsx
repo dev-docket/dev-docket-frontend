@@ -18,6 +18,11 @@ export const Login = () => {
       return;
     }
 
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
     const response = await login(email, password);
 
     if (response) {
