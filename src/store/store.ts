@@ -6,6 +6,7 @@ import persistStore from "redux-persist/es/persistStore";
 import taskSlice from "./slices/taskSlice";
 import authSlice, { AuthState } from "./slices/authSlice";
 import userSlice, { UserState } from "./slices/userSlice";
+import homeSlice from "./slices/homeSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -25,6 +26,7 @@ export const store = configureStore({
     auth: authReducer,
     user: userReducer,
     task: taskSlice,
+    home: homeSlice,
   },
 });
 
