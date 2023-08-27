@@ -35,7 +35,7 @@ export const useLogin = () => {
 
       return data.token;
     } catch (err) {
-      if (axios.isAxiosError(err) && err.response?.status === 401) {
+      if (axios.isAxiosError(err)) {
         toast.update(toastId, {
           render: "Invalid login or password",
           type: "error",
