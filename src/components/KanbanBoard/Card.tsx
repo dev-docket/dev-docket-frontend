@@ -1,6 +1,8 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Task } from "../../types/Task";
+import { useAppDispatch } from "../../hooks/storeHook";
+import { openDetailsTaskSidebar } from "../../store/slices/homeSlice";
 
 interface Props {
   task: Task;
@@ -8,9 +10,15 @@ interface Props {
 }
 
 export const Card = ({ task, index }: Props) => {
-  const [enabled, setEnabled] = React.useState(false);
+  const [enabled, setEnabled] = useState(false);
 
-  React.useEffect(() => {
+  const dispatch = useAppDispatch();
+
+  const toggleSidebar = () => {
+    dispatch(openDetailsTaskSidebar(task));
+  };
+
+  useEffect(() => {
     const animation = requestAnimationFrame(() => setEnabled(true));
 
     return () => {
@@ -27,6 +35,7 @@ export const Card = ({ task, index }: Props) => {
     <Draggable draggableId={task.id.toString()} index={index}>
       {(provided) => (
         <div
+          onClick={toggleSidebar}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
