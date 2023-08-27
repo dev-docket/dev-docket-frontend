@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { KanbanBoard } from "../components/KanbanBoard/KanbanBoard";
 import { useFetchTasks } from "../hooks/tasks/useFetchTasks";
-import { useAppSelector } from "../hooks/storeHook";
+import { useAppDispatch, useAppSelector } from "../hooks/storeHook";
 import { Task } from "../types/Task";
 import { SmallButton } from "../components/common/buttons/SmallButton";
 import { useLogout } from "../hooks/auth/useLogout";
+import { TaskDetailsSidebar } from "../components/KanbanBoard/TaskDetailsSidebar/TaskDetailsSidebar";
+import { closeDetailsTaskSidebar } from "../store/slices/homeSlice";
 
 export type ColumnType = {
   id: string;
@@ -51,9 +53,17 @@ export const Home = () => {
   const [board, setBoard] = useState<BoardType>({
     ...initialBoard,
   });
+  const { isDetailsTaskSidebarOpen, activeTask } = useAppSelector(
+    (state) => state.home
+  );
 
   useFetchTasks(userId, token);
   const { logoutUser } = useLogout();
+  const dispatch = useAppDispatch();
+
+  const handleModalClose = () => {
+    dispatch(closeDetailsTaskSidebar());
+  };
 
   useEffect(() => {
     setBoard((prev) => ({
@@ -77,7 +87,7 @@ export const Home = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      <nav className="bg-header-background p-4">
+      <nav className="bg-header-background p-4 z-20 border-b-gray-600 border-b">
         <div className="flex justify-between">
           <div className="flex space-x-4">
             {userIsLoggedIn ? (
@@ -99,6 +109,12 @@ export const Home = () => {
           </div>
         </div>
       </div>
+
+      <TaskDetailsSidebar
+        task={activeTask}
+        show={isDetailsTaskSidebarOpen}
+        onHide={handleModalClose}
+      />
     </div>
   );
 };
