@@ -103,8 +103,8 @@ export const Home = () => {
         </div>
       </nav>
       <div className="flex-1 bg-dark-background">
-        <div className="container px-8 mt-10 mx-auto">
-          <div className="w-full max-w-lg mx-auto animate-resize">
+        <div className="container px-8 mt-10">
+          <div className="w-full max-w-lg animate-resize">
             <KanbanBoard columns={board.columns} setBoard={setBoard} />
           </div>
         </div>
