@@ -21,7 +21,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
 
   const [isInputEnabled, setIsInputEnabled] = useState(false);
   const [descriptionInput, setDescriptionInput] = useState<string>(
-    description ?? ""
+    description ?? "",
   );
 
   useEffect(() => {
@@ -51,15 +51,15 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
 
   const sidebarHeader = () => {
     return (
-      <div className="border-b border-gray-600 mt-5">
-        <div className="flex justify-between items-center px-5">
+      <div className="mt-5 border-b border-gray-600">
+        <div className="flex items-center justify-between px-5">
           <h2 className="text-sm">Bookshelf #24</h2>
 
           <Close className="cursor-pointer" onClick={onHide} />
         </div>
 
-        <div className="flex justify-between items-center px-5">
-          <h2 className="text-xl font-bold mb-4">
+        <div className="flex items-center justify-between px-5">
+          <h2 className="mb-4 text-xl font-bold">
             {title ? title : "Loading ..."}
           </h2>
 
@@ -72,14 +72,13 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
   return (
     <div
       ref={sidebarRef}
-      className={`fixed top-[72px] right-0 w-[60%] max-md:w-full h-full
-      bg-[#0d1117] text-white shadow-md transition-transform duration-300 ease-in-out transform ${
+      className={`fixed right-0 top-[72px] h-full w-[60%] transform bg-[#0d1117] text-white shadow-md transition-all duration-300 ease-in-out max-xl:w-[80%] max-lg:w-full ${
         show ? "translate-x-0" : "translate-x-full"
       }`}
     >
       {sidebarHeader()}
 
-      <div className="flex w-full h-full">
+      <div className="flex h-full w-full">
         <LeftContainer
           task={task}
           isInputEnabled={isInputEnabled}
