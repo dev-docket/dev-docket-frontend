@@ -59,7 +59,7 @@ export const LeftContainer = (props: Props) => {
             </div>
             <button
               onClick={() => setIsInputEnabled(true)}
-              className="text-sm hover:bg-slate-600 active:bg-slate-900 transition-colors ease-out p-2 rounded-md"
+              className="text-sm hover:bg-button-hover-dark active:bg-slate-900 transition-colors ease-out p-2 rounded-md"
             >
               Edit
             </button>

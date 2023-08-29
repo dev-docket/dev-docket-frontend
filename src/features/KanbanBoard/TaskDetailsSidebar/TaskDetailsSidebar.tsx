@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Task } from "../../../types/Task";
 import { Close } from "@mui/icons-material";
 import { LeftContainer } from "./LeftContainer";
+import { RightContainer } from "./RightContainer";
 
 interface TaskDetailsSidebarProps {
   task?: Task;
@@ -71,7 +72,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
   return (
     <div
       ref={sidebarRef}
-      className={`fixed top-[72px] right-0 w-3/4 max-md:w-full h-full
+      className={`fixed top-[72px] right-0 w-[60%] max-md:w-full h-full
       bg-[#0d1117] text-white shadow-md transition-transform duration-300 ease-in-out transform ${
         show ? "translate-x-0" : "translate-x-full"
       }`}
@@ -87,7 +88,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
           setIsInputEnabled={setIsInputEnabled}
         />
 
-        <div className="w-[33%] p-5">test</div>
+        <RightContainer />
       </div>
     </div>
   );
