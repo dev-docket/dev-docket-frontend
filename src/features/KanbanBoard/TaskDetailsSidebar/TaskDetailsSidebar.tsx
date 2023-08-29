@@ -63,7 +63,9 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
             {title ? title : "Loading ..."}
           </h2>
 
-          <button>Edit title</button>
+          <button className="rounded-md px-2 py-1 text-sm hover:bg-icon-gray hover:bg-opacity-20">
+            Edit title
+          </button>
         </div>
       </div>
     );
