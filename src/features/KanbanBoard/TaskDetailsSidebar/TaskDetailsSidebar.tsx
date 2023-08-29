@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Task } from "../../../types/Task";
 import { Close } from "@mui/icons-material";
 import { LeftContainer } from "./LeftContainer";
@@ -15,18 +15,8 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
   show,
   onHide,
 }) => {
-  // task = {} as Task;
-  const { title, description } = task || {};
+  const { title } = task || {};
   const sidebarRef = useRef<HTMLDivElement>(null);
-
-  const [isInputEnabled, setIsInputEnabled] = useState(false);
-  const [descriptionInput, setDescriptionInput] = useState<string>(
-    description ?? "",
-  );
-
-  useEffect(() => {
-    setDescriptionInput(description ?? "");
-  }, [description]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -81,13 +71,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
       {sidebarHeader()}
 
       <div className="flex h-full w-full">
-        <LeftContainer
-          task={task}
-          isInputEnabled={isInputEnabled}
-          setDescriptionInput={setDescriptionInput}
-          descriptionInput={descriptionInput}
-          setIsInputEnabled={setIsInputEnabled}
-        />
+        <LeftContainer task={task} />
 
         <RightContainer />
       </div>
