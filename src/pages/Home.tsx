@@ -45,7 +45,7 @@ export const Home = () => {
     ...initialBoard,
   });
   const { isDetailsTaskSidebarOpen, activeTask } = useAppSelector(
-    (state) => state.home
+    (state) => state.home,
   );
 
   useFetchTasks(userId, token);
@@ -76,11 +76,11 @@ export const Home = () => {
   }, [tasks]);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex h-screen flex-col">
       <Navbar />
       <div className="flex-1 bg-dark-background">
-        <div className="container px-8 mt-10">
-          <div className="w-full max-w-lg animate-resize">
+        <div className="container mt-10 px-8">
+          <div className="animate-resize w-full max-w-lg">
             <KanbanBoard columns={board.columns} setBoard={setBoard} />
           </div>
         </div>

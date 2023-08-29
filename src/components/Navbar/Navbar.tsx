@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useLogout } from "../../hooks/auth/useLogout";
 import { useAppSelector } from "../../hooks/storeHook";
 import { SmallButton } from "../common/buttons/SmallButton";
@@ -8,7 +9,7 @@ export const Navbar = () => {
   const { logoutUser } = useLogout();
 
   return (
-    <nav className="p-4 z-20 bg-header-background text-white border-b-border-dark-primary border-b">
+    <nav className="z-20 border-b border-b-border-dark-primary bg-header-background p-4 text-white">
       <div className="flex justify-between">
         <div className="flex space-x-4">
           <>
