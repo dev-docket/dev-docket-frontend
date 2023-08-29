@@ -1,71 +1,66 @@
+import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
+import { setDescriptionInputActive } from "../../../store/slices/homeSlice";
 import { Task } from "../../../types/Task";
+import { DescriptionEditMode } from "./DescriptionEditMode";
 
 interface Props {
   task?: Task;
-  isInputEnabled: boolean;
-  setIsInputEnabled: (value: boolean) => void;
-  descriptionInput: string;
-  setDescriptionInput: (value: string) => void;
 }
 
 export const LeftContainer = (props: Props) => {
-  const {
-    task,
-    isInputEnabled,
-    setIsInputEnabled,
-    descriptionInput,
-    setDescriptionInput,
-  } = props;
+  const { task } = props;
+  const { isDescriptionInputActive, descriptionInputValue } = useAppSelector(
+    (state) => state.home,
+  );
+
+  const dispatch = useAppDispatch();
+
+  const profileWithEditButton = () => {
+    return (
+      <div className="flex items-center justify-between">
+        <div>
+          {/* TODO: Profile image, profile name and time of last edited task. */}
+          profile
+        </div>
+        <button
+          onClick={() => dispatch(setDescriptionInputActive(true))}
+          className="rounded-md p-2 text-sm transition-colors ease-out hover:bg-button-hover-dark active:bg-slate-900"
+        >
+          Edit
+        </button>
+      </div>
+    );
+  };
 
   const conditionalDescription = () => {
-    if (isInputEnabled) {
+    if (isDescriptionInputActive) {
+      return <DescriptionEditMode />;
+    }
+
+    if (descriptionInputValue) {
       return (
-        <textarea
-          disabled={!isInputEnabled}
-          autoFocus
-          onFocus={(e) => {
-            const { target } = e;
-            setTimeout(() => {
-              target.selectionStart = target.value.length;
-              target.selectionEnd = target.value.length;
-            }, 0);
-          }}
-          value={descriptionInput}
-          onChange={(e) => setDescriptionInput(e.target.value)}
-          className="m-0 w-full rounded-md border-b border-none border-[#2f81f7d9] bg-transparent p-2"
-        />
+        <>
+          {profileWithEditButton()}
+          <p className="text-gray-300">{descriptionInputValue}</p>
+        </>
       );
     }
 
-    if (descriptionInput) {
-      return <p className="text-gray-300">{descriptionInput}</p>;
-    }
-
     return (
-      <span className="text-sm italic text-gray-500">
-        No description provided
-      </span>
+      <>
+        {profileWithEditButton()}
+        <span className="text-sm italic text-gray-500">
+          No description provided
+        </span>
+      </>
     );
   };
 
   return (
-    <div className="w-[66%] border-r border-gray-600 p-5">
+    <div className="w-[66%] border-r border-r-border-dark-primary bg-[#161b22]">
       {task && task.id ? (
-        <div className="flex flex-col gap-[1rem]">
-          <div className="flex items-center justify-between">
-            <div>
-              {/* TODO: Profile image, profile name and time of last edited task. */}
-              profile
-            </div>
-            <button
-              onClick={() => setIsInputEnabled(true)}
-              className="rounded-md p-2 text-sm transition-colors ease-out hover:bg-button-hover-dark active:bg-slate-900"
-            >
-              Edit
-            </button>
-          </div>
-
-          <div>{conditionalDescription()}</div>
+        <div className="w-full border-b border-b-border-dark-primary bg-[#0d1117] p-5">
+          {conditionalDescription()}
         </div>
       ) : (
         <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-solid border-white border-t-transparent" />
