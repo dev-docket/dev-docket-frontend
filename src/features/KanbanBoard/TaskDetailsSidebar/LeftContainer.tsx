@@ -32,7 +32,7 @@ export const LeftContainer = (props: Props) => {
           }}
           value={descriptionInput}
           onChange={(e) => setDescriptionInput(e.target.value)}
-          className="bg-transparent border-none m-0 p-2 w-full border-b border-[#2f81f7d9] rounded-md"
+          className="m-0 w-full rounded-md border-b border-none border-[#2f81f7d9] bg-transparent p-2"
         />
       );
     }
@@ -42,14 +42,14 @@ export const LeftContainer = (props: Props) => {
     }
 
     return (
-      <span className="text-gray-500 text-sm italic">
+      <span className="text-sm italic text-gray-500">
         No description provided
       </span>
     );
   };
 
   return (
-    <div className="p-5 border-r border-gray-600 w-[66%]">
+    <div className="w-[66%] border-r border-gray-600 p-5">
       {task && task.id ? (
         <div className="flex flex-col gap-[1rem]">
           <div className="flex items-center justify-between">
@@ -59,7 +59,7 @@ export const LeftContainer = (props: Props) => {
             </div>
             <button
               onClick={() => setIsInputEnabled(true)}
-              className="text-sm hover:bg-button-hover-dark active:bg-slate-900 transition-colors ease-out p-2 rounded-md"
+              className="rounded-md p-2 text-sm transition-colors ease-out hover:bg-button-hover-dark active:bg-slate-900"
             >
               Edit
             </button>
@@ -68,7 +68,7 @@ export const LeftContainer = (props: Props) => {
           <div>{conditionalDescription()}</div>
         </div>
       ) : (
-        <div className="w-12 h-12 border-4 border-white border-t-transparent border-solid rounded-full animate-spin mx-auto" />
+        <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-solid border-white border-t-transparent" />
       )}
     </div>
   );
