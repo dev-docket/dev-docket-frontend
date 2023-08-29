@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
-import { setDescriptionInputActive } from "../../../store/slices/homeSlice";
+import { setDescriptionInputActive } from "../../../store/slices/projectPageSlice";
 import { Task } from "../../../types/Task";
 import { DescriptionEditMode } from "./DescriptionEditMode";
 
@@ -10,7 +10,7 @@ interface Props {
 export const LeftContainer = (props: Props) => {
   const { task } = props;
   const { isDescriptionInputActive, descriptionInputValue } = useAppSelector(
-    (state) => state.home,
+    (state) => state.projectPage,
   );
 
   const dispatch = useAppDispatch();

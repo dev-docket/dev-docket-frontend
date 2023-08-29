@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Task } from "../../types/Task";
 import { useAppDispatch } from "../../hooks/storeHook";
-import { openDetailsTaskSidebar } from "../../store/slices/homeSlice";
+import { openDetailsTaskSidebar } from "../../store/slices/projectPageSlice";
 
 interface Props {
   task: Task;
@@ -39,9 +39,9 @@ export const Card = ({ task, index }: Props) => {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="bg-dark-background p-2 rounded mb-2 shadow"
+          className="mb-2 rounded bg-dark-background p-2 shadow"
         >
-          <h3 className="text-md text-white font-semibold mb-1">
+          <h3 className="text-md mb-1 font-semibold text-white">
             {task.title}
           </h3>
           <p className="text-sm text-gray-400">{task.description}</p>

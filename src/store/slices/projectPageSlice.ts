@@ -1,21 +1,21 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Task } from "../../types/Task";
 
-interface HomeState {
+interface ProjectPageState {
   isDetailsTaskSidebarOpen: boolean;
   activeTask?: Task;
   isDescriptionInputActive?: boolean;
   descriptionInputValue?: string;
 }
 
-const initialState: HomeState = {
+const initialState: ProjectPageState = {
   isDetailsTaskSidebarOpen: false,
   activeTask: undefined,
   isDescriptionInputActive: false,
 };
 
-const homeSlice = createSlice({
-  name: "home",
+const projectPageSlice = createSlice({
+  name: "projectPage",
   initialState,
   reducers: {
     openDetailsTaskSidebar: (state, payload: PayloadAction<Task>) => {
@@ -43,5 +43,5 @@ export const {
   closeDetailsTaskSidebar,
   setDescriptionInputActive,
   setDescriptionInputValue,
-} = homeSlice.actions;
-export default homeSlice.reducer;
+} = projectPageSlice.actions;
+export default projectPageSlice.reducer;

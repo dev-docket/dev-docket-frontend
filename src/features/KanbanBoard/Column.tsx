@@ -1,6 +1,6 @@
 import { Droppable } from "react-beautiful-dnd";
 import { Card } from "./Card";
-import { ColumnType } from "../../pages/Home";
+import { ColumnType } from "../../pages/Project";
 import { useState } from "react";
 import { Add, Close } from "@mui/icons-material";
 import { useCreateTaskFromTitle } from "../../hooks/tasks/useCreateTaskFromTitle";
@@ -42,9 +42,9 @@ export const Column = ({ column }: Props) => {
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className="w-64 p-4 rounded"
+            className="w-64 rounded p-4"
           >
-            <h2 className="text-xl text-white font-bold mb-4">
+            <h2 className="mb-4 text-xl font-bold text-white">
               {column.title}
             </h2>
             {column.cards.map((task, index) => (
@@ -56,22 +56,22 @@ export const Column = ({ column }: Props) => {
       </Droppable>
 
       {isNewTaskInputActive ? (
-        <div className="px-4 mb-4">
+        <div className="mb-4 px-4">
           <textarea
             value={newTaskTitle}
             onChange={(e) => setNewTaskTitle(e.target.value)}
             placeholder="Enter title to new task"
-            className="bg-dark-background w-full border-none rounded-md resize-none"
+            className="w-full resize-none rounded-md border-none bg-dark-background"
           />
           <button
             onClick={handleAddNewTask}
-            className="inline-flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded"
+            className="inline-flex items-center justify-center rounded bg-blue-500 px-4 py-2 text-white"
           >
             Add new task
           </button>
           <button
             onClick={handleCancelNewTask}
-            className="mx-2 px-4 py-2 rounded-md hover:bg-gray-500 hover:bg-opacity-40"
+            className="mx-2 rounded-md px-4 py-2 hover:bg-gray-500 hover:bg-opacity-40"
           >
             <Close />
           </button>
@@ -80,7 +80,7 @@ export const Column = ({ column }: Props) => {
         <div className="mx-4">
           <button
             onClick={() => setIsNewTaskInputActive(true)}
-            className="mb-1 px-2 py-1 w-full text-start text-md hover:bg-gray-500 hover:bg-opacity-40 rounded-md"
+            className="text-md mb-1 w-full rounded-md px-2 py-1 text-start hover:bg-gray-500 hover:bg-opacity-40"
           >
             <Add fontSize="inherit" /> Create new task
           </button>

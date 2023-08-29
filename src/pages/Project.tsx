@@ -4,7 +4,7 @@ import { useFetchTasks } from "../hooks/tasks/useFetchTasks";
 import { useAppDispatch, useAppSelector } from "../hooks/storeHook";
 import { Task } from "../types/Task";
 import { TaskDetailsSidebar } from "../features/KanbanBoard/TaskDetailsSidebar/TaskDetailsSidebar";
-import { closeDetailsTaskSidebar } from "../store/slices/homeSlice";
+import { closeDetailsTaskSidebar } from "../store/slices/projectPageSlice";
 import { Navbar } from "../components/Navbar/Navbar";
 
 export type ColumnType = {
@@ -37,7 +37,7 @@ const initialBoard: BoardType = {
   ],
 };
 
-export const Home = () => {
+export const Project = () => {
   const userId = useAppSelector((state) => state.user.user?.id);
   const token = useAppSelector((state) => state.auth.token);
   const tasks = useAppSelector((state) => state.task.tasks);
@@ -45,7 +45,7 @@ export const Home = () => {
     ...initialBoard,
   });
   const { isDetailsTaskSidebarOpen, activeTask } = useAppSelector(
-    (state) => state.home,
+    (state) => state.projectPage,
   );
 
   useFetchTasks(userId, token);

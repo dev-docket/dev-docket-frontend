@@ -1,6 +1,6 @@
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { Column } from "./Column";
-import { ColumnType } from "../../pages/Home";
+import { ColumnType } from "../../pages/Project";
 import { useUpdateStatusOfTask } from "../../hooks/tasks/useUpdateStatusOfTask";
 import { TaskStatus } from "../../types/Task";
 
@@ -33,10 +33,10 @@ export const KanbanBoard = ({ columns, setBoard }: Props) => {
 
     // Find the source and destination columns
     const sourceColumn = newColumns.find(
-      (column) => column.id === source.droppableId
+      (column) => column.id === source.droppableId,
     );
     const destinationColumn = newColumns.find(
-      (column) => column.id === destination.droppableId
+      (column) => column.id === destination.droppableId,
     );
 
     // Remove the card from the source column and insert it into the destination column

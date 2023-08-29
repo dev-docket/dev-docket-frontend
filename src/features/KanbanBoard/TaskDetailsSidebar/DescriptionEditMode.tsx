@@ -3,11 +3,11 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
 import {
   setDescriptionInputActive,
   setDescriptionInputValue,
-} from "../../../store/slices/homeSlice";
+} from "../../../store/slices/projectPageSlice";
 
 export const DescriptionEditMode = () => {
   const { isDescriptionInputActive, descriptionInputValue } = useAppSelector(
-    (state) => state.home,
+    (state) => state.projectPage,
   );
 
   const dispatch = useAppDispatch();

@@ -7,7 +7,7 @@ import taskSlice from "./slices/taskSlice";
 import authSlice, { AuthState } from "./slices/authSlice";
 import { authApi } from "./slices/authApi";
 import userSlice, { UserState } from "./slices/userSlice";
-import homeSlice from "./slices/homeSlice";
+import projectPageSlice from "./slices/projectPageSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -33,7 +33,7 @@ export const store = configureStore({
     authApi: authApi.reducer,
     user: userReducer,
     task: taskSlice,
-    home: homeSlice,
+    projectPage: projectPageSlice,
   },
   middleware: (getDefaultMiddleware) => authApiMiddleware(getDefaultMiddleware),
 });
