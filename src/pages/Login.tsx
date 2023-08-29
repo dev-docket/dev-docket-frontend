@@ -1,16 +1,20 @@
 import { useState } from "react";
-import { useLogin } from "../hooks/auth/useLogin";
 import { useNavigate } from "react-router-dom";
 import { FormAuth } from "../components/Form/FormAuth";
 import { toast } from "react-toastify";
+import { useLoginMutation } from "../store/slices/authApi";
+import { useAppDispatch } from "../hooks/storeHook";
+import { addToken } from "../store/slices/authSlice";
+import { setUser } from "../store/slices/userSlice";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState<boolean>(false);
+  const [login] = useLoginMutation();
 
-  const { login } = useLogin();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const handleLogin = async () => {
     if (emailError) {
@@ -23,10 +27,17 @@ export const Login = () => {
       return;
     }
 
-    const response = await login(email, password);
+    const response = await login({ email, password });
 
-    if (response) {
+    console.log(response);
+
+    if ("data" in response && response.data) {
+      dispatch(addToken(response.data.token));
+      dispatch(setUser(response.data.user));
+
       navigate("/");
+    } else {
+      toast.error("Invalid email or password");
     }
   };
 
