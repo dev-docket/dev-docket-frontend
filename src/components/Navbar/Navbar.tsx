@@ -24,7 +24,7 @@ export const Navbar = () => {
               Projects <ArrowDropDownSharp />
             </button> */}
 
-            <DropdownMenu />
+            <DropdownMenu title="Projects" />
           </div>
 
           <>

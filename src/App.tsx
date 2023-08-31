@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -13,6 +18,8 @@ function App() {
       <Router>
         <ToastContainer />
         <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" />} />
+
           {/* Route to main feature */}
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/projects/:projectName/board" element={<Project />} />

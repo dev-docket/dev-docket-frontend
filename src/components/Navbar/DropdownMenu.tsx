@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-export const DropdownMenu = () => {
+interface Props {
+  title: string;
+}
+
+export const DropdownMenu = ({ title }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -9,7 +13,7 @@ export const DropdownMenu = () => {
         onClick={() => setIsOpen(!isOpen)}
         className="inline-flex w-full items-center justify-center rounded-md px-4 py-2 text-white hover:bg-icon-gray hover:bg-opacity-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
       >
-        <span className="mr-1">Dropdown</span>
+        <span className="mr-1">{title}</span>
         <svg
           width="20"
           height="20"

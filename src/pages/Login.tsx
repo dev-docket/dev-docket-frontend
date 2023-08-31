@@ -29,13 +29,11 @@ export const Login = () => {
 
     const response = await login({ email, password });
 
-    console.log(response);
-
     if ("data" in response && response.data) {
       dispatch(addToken(response.data.token));
       dispatch(setUser(response.data.user));
 
-      navigate("/");
+      navigate("/dashboard");
     } else {
       toast.error("Invalid email or password");
     }
