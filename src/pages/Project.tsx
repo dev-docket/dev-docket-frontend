@@ -7,6 +7,7 @@ import { TaskDetailsSidebar } from "../features/KanbanBoard/TaskDetailsSidebar/T
 import { closeDetailsTaskSidebar } from "../store/slices/projectPageSlice";
 import { Navbar } from "../components/Navbar/Navbar";
 import { useParams } from "react-router-dom";
+import { setActiveProjectByName } from "../store/slices/projectSlice";
 
 export type ColumnType = {
   id: string;
@@ -48,6 +49,8 @@ export const Project = () => {
   const { isDetailsTaskSidebarOpen, activeTask } = useAppSelector(
     (state) => state.projectPage,
   );
+
+  const activeProject = useAppSelector((state) => state.project.activeProject);
   const { projectName } = useParams<{ projectName: string }>();
 
   useFetchTasks(userId!, token!, projectName!);
@@ -56,6 +59,12 @@ export const Project = () => {
   const handleModalClose = () => {
     dispatch(closeDetailsTaskSidebar());
   };
+
+  useEffect(() => {
+    if (projectName !== activeProject?.name) {
+      dispatch(setActiveProjectByName(projectName!));
+    }
+  }, [activeProject?.name, dispatch, projectName]);
 
   useEffect(() => {
     setBoard((prev) => ({
