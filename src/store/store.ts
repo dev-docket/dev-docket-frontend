@@ -7,7 +7,7 @@ import taskSlice from "./slices/taskSlice";
 import authSlice, { AuthState } from "./slices/authSlice";
 import userSlice, { UserState } from "./slices/userSlice";
 import projectPageSlice from "./slices/projectPageSlice";
-import projectSlice from "./slices/projectSlice";
+import projectSlice, { ProjectState } from "./slices/projectSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -19,15 +19,24 @@ const userPersistConfig = {
   storage,
 };
 
+const projectPersistConfig = {
+  key: "project",
+  storage,
+};
+
 const authReducer = persistReducer<AuthState>(authPersistConfig, authSlice);
 const userReducer = persistReducer<UserState>(userPersistConfig, userSlice);
+const projectReducer = persistReducer<ProjectState>(
+  projectPersistConfig,
+  projectSlice,
+);
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     user: userReducer,
     task: taskSlice,
-    project: projectSlice,
+    project: projectReducer,
     projectPage: projectPageSlice,
   },
 });
