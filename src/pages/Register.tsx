@@ -35,7 +35,6 @@ export const Register = () => {
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+=[\]{};':"\\|,.<>/?-])[a-zA-Z\d!@#$%^&*()_+=[\]{};':"\\|,.<>/?-]{8,}$/;
 
-    console.log(password);
     if (!passwordRegex.test(password)) {
       setPasswordError(true);
     } else {
