@@ -25,8 +25,6 @@ export const Dashboard = () => {
 
     const project = projects.find((p) => p.name === projectName);
 
-    console.log(project);
-
     if (!project) return;
 
     dispatch(removeTasks());
