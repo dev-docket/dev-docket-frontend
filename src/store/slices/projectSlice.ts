@@ -3,10 +3,12 @@ import { Project } from "../../types/Project";
 
 export interface ProjectState {
   projects: Project[];
+  activeProject?: Project;
 }
 
 const initialState: ProjectState = {
   projects: [],
+  activeProject: undefined,
 };
 
 const projectSlice = createSlice({
@@ -23,6 +25,7 @@ const projectSlice = createSlice({
         }
       });
     },
+
     addProject: (state, action: PayloadAction<Project>) => {
       const index = state.projects.findIndex(
         (project) => project.id === action.payload.id,
@@ -33,11 +36,26 @@ const projectSlice = createSlice({
         state.projects.push(action.payload);
       }
     },
+
     removeProjects: (state) => {
       state.projects = [];
+    },
+
+    setActiveProject: (state, action: PayloadAction<Project>) => {
+      state.activeProject = action.payload;
+    },
+
+    removeActiveProject: (state) => {
+      state.activeProject = undefined;
     },
   },
 });
 
-export const { addProjects, addProject, removeProjects } = projectSlice.actions;
+export const {
+  addProjects,
+  addProject,
+  removeProjects,
+  setActiveProject,
+  removeActiveProject,
+} = projectSlice.actions;
 export default projectSlice.reducer;
