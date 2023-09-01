@@ -5,9 +5,9 @@ import persistStore from "redux-persist/es/persistStore";
 
 import taskSlice from "./slices/taskSlice";
 import authSlice, { AuthState } from "./slices/authSlice";
-import { authApi } from "./slices/authApi";
 import userSlice, { UserState } from "./slices/userSlice";
 import projectPageSlice from "./slices/projectPageSlice";
+import projectSlice from "./slices/projectSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -22,20 +22,14 @@ const userPersistConfig = {
 const authReducer = persistReducer<AuthState>(authPersistConfig, authSlice);
 const userReducer = persistReducer<UserState>(userPersistConfig, userSlice);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const authApiMiddleware = (getDefaultMiddleware: any) =>
-  getDefaultMiddleware().concat(authApi.middleware);
-
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    // [authApi.reducerPath]: authApi.reducer,
-    authApi: authApi.reducer,
     user: userReducer,
     task: taskSlice,
+    project: projectSlice,
     projectPage: projectPageSlice,
   },
-  middleware: (getDefaultMiddleware) => authApiMiddleware(getDefaultMiddleware),
 });
 
 export const persistor = persistStore(store);

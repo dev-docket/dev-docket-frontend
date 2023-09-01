@@ -2,7 +2,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../storeHook";
 import { addTask } from "../../store/slices/taskSlice";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -13,9 +13,10 @@ export const useCreateTaskFromTitle = () => {
   const dispatch = useAppDispatch();
 
   const createTask = async (
+    userId: number,
+    token: string,
     title: string,
-    token: string | null,
-    userId?: number
+    projectName: string,
   ) => {
     setIsLoading(true);
     setError(null);
@@ -24,20 +25,23 @@ export const useCreateTaskFromTitle = () => {
 
       if (!title || !title.trim()) throw new Error("Title is required");
 
-      const response = await fetch(`${apiUrl}/users/${userId}/tasks`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      const { data, status } = await axios.post(
+        `${apiUrl}/users/${userId}/projects/${projectName}/tasks`,
+        {
+          title,
         },
-        body: JSON.stringify({ title }),
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
-      if (response.status !== 201) {
+      if (status !== 201) {
         throw new Error("Something went wrong!");
       }
 
-      const data = await response.json();
       dispatch(addTask(data));
     } catch (err) {
       if (err instanceof Error) {

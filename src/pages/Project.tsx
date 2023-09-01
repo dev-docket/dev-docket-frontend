@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { KanbanBoard } from "../features/KanbanBoard/KanbanBoard";
-import { useFetchTasks } from "../hooks/tasks/useFetchTasks";
+import { useFetchTasks } from "../hooks/tasks/useGetTasks";
 import { useAppDispatch, useAppSelector } from "../hooks/storeHook";
 import { Task } from "../types/Task";
 import { TaskDetailsSidebar } from "../features/KanbanBoard/TaskDetailsSidebar/TaskDetailsSidebar";
 import { closeDetailsTaskSidebar } from "../store/slices/projectPageSlice";
 import { Navbar } from "../components/Navbar/Navbar";
+import { useParams } from "react-router-dom";
 
 export type ColumnType = {
   id: string;
@@ -47,8 +48,9 @@ export const Project = () => {
   const { isDetailsTaskSidebarOpen, activeTask } = useAppSelector(
     (state) => state.projectPage,
   );
+  const { projectName } = useParams<{ projectName: string }>();
 
-  useFetchTasks(userId, token);
+  useFetchTasks(userId!, token!, projectName!);
   const dispatch = useAppDispatch();
 
   const handleModalClose = () => {

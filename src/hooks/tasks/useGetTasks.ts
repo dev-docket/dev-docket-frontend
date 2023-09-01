@@ -6,7 +6,11 @@ import { toast } from "react-toastify";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-export const useFetchTasks = (userId?: number, token?: string | null) => {
+export const useFetchTasks = (
+  userId: number,
+  token: string,
+  projectName: string,
+) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,11 +23,16 @@ export const useFetchTasks = (userId?: number, token?: string | null) => {
       try {
         if (!userId || !token) throw new Error("Please login first");
 
-        const response = await axios.get(`${apiUrl}/users/${userId}/tasks`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        ("/:userId/projects/:projectName/tasks");
+
+        const response = await axios.get(
+          `${apiUrl}/users/${userId}/projects/${projectName}/tasks`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
+        );
         if (response.status !== 200) {
           throw new Error("Something went wrong!");
         }
@@ -38,7 +47,7 @@ export const useFetchTasks = (userId?: number, token?: string | null) => {
         if (err instanceof AxiosError) {
           if (err.response?.status === 403) {
             toast.error(
-              "You are not authorized to do that. Try to login again."
+              "You are not authorized to do that. Try to login again.",
             );
             return;
           }
@@ -50,7 +59,7 @@ export const useFetchTasks = (userId?: number, token?: string | null) => {
     };
 
     fetchTasks();
-  }, [dispatch, token, userId]);
+  }, [dispatch, projectName, token, userId]);
 
   return { isLoading, error };
 };

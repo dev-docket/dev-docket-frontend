@@ -1,53 +1,60 @@
 import { useState } from "react";
 import { useAppDispatch } from "../storeHook";
-import { addToken } from "../../store/slices/authSlice";
-import { setUser } from "../../store/slices/userSlice";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { addProject } from "../../store/slices/projectSlice";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-export const useLogin = () => {
+export const useCreateProject = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const login = async (email: string, password: string) => {
+  const createProject = async (userId: number, jwt: string, name: string) => {
     setIsLoading(true);
     setError(null);
-    const toastId = toast.loading("Logging in...");
+    const toastId = toast.loading("Creating project...");
 
     try {
-      const { data } = await axios.post(`${apiUrl}/auth/login`, {
-        email,
-        password,
-      });
+      const { data, status } = await axios.post(
+        `${apiUrl}/users/${userId}/projects`,
+        {
+          name,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt}`,
+          },
+        },
+      );
 
-      dispatch(addToken(data.token));
-      dispatch(setUser(data.user));
+      if (status !== 201) {
+        throw new Error("Something went wrong!");
+      }
 
       toast.update(toastId, {
-        render: "You have successfully logged in",
+        render: "You have successfully created project",
         type: "success",
         isLoading: false,
         autoClose: 1000,
       });
 
-      navigate("/dashboard");
-
-      return data.token;
+      dispatch(addProject(data));
+      navigate(`/projects/${data.name}/board`);
     } catch (err) {
       if (axios.isAxiosError(err)) {
         toast.update(toastId, {
-          render: "Invalid login or password",
+          render: "We couldn't create project",
           type: "error",
           isLoading: false,
           autoClose: 2000,
         });
-        setError("Invalid login or password");
+        setError("We couldn't create project");
       } else {
         setError("Something went wrong!");
       }
@@ -56,5 +63,5 @@ export const useLogin = () => {
     }
   };
 
-  return { isLoading, error, login };
+  return { isLoading, error, createProject };
 };

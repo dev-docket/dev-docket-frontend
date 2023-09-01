@@ -17,15 +17,8 @@ const taskSlice = createSlice({
   name: "task",
   initialState,
   reducers: {
-    addTask: (state, action) => {
-      action.payload.forEach((task: Task) => {
-        const index = state.tasks.findIndex((t) => t.id === task.id);
-        if (index !== -1) {
-          state.tasks[index] = task;
-        } else {
-          state.tasks.push(task);
-        }
-      });
+    addTask: (state, action: PayloadAction<Task>) => {
+      state.tasks.push(action.payload);
     },
 
     /**
@@ -44,7 +37,7 @@ const taskSlice = createSlice({
 
     updateStatusOfTask: (
       state,
-      action: PayloadAction<{ id: number; status: TaskStatus }>
+      action: PayloadAction<{ id: number; status: TaskStatus }>,
     ) => {
       const { id, status } = action.payload;
       const index = state.tasks.findIndex((task) => task.id === id);

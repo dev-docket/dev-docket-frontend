@@ -6,6 +6,7 @@ import { Add, Close } from "@mui/icons-material";
 import { useCreateTaskFromTitle } from "../../hooks/tasks/useCreateTaskFromTitle";
 import { useAppSelector } from "../../hooks/storeHook";
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
 interface Props {
   column: ColumnType;
@@ -17,6 +18,7 @@ export const Column = ({ column }: Props) => {
   const userId = useAppSelector((state) => state.user.user?.id);
   const token = useAppSelector((state) => state.auth.token);
 
+  const { projectName } = useParams<{ projectName: string }>();
   const { createTask } = useCreateTaskFromTitle();
 
   const handleAddNewTask = () => {
@@ -25,7 +27,7 @@ export const Column = ({ column }: Props) => {
       return;
     }
 
-    createTask(newTaskTitle, token, userId);
+    createTask(userId!, token!, newTaskTitle, projectName!);
 
     handleCancelNewTask();
   };
