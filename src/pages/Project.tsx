@@ -22,7 +22,7 @@ const initialBoard: BoardType = {
   columns: [
     {
       id: "1",
-      title: "To Do",
+      title: "Todo",
       cards: [],
     },
     {
