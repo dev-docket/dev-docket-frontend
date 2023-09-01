@@ -1,11 +1,27 @@
 import { useState } from "react";
+import { useAppSelector } from "../../hooks/storeHook";
+import React from "react";
+import { Link } from "react-router-dom";
 
 interface Props {
   title: string;
 }
 
 export const DropdownMenu = ({ title }: Props) => {
+  const projects = useAppSelector((state) => state.project.projects);
+
   const [isOpen, setIsOpen] = useState(false);
+
+  const options = projects.map((project) => (
+    <Link
+      key={project.id}
+      to={`/projects/${project.name}/board`}
+      className="text-md block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+      role="menuitem"
+    >
+      {project.name}
+    </Link>
+  ));
 
   return (
     <div className="relative inline-block text-left">
@@ -36,7 +52,8 @@ export const DropdownMenu = ({ title }: Props) => {
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
-            <a
+            <React.Fragment>{options}</React.Fragment>
+            {/* <a
               href="#"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
@@ -56,7 +73,7 @@ export const DropdownMenu = ({ title }: Props) => {
               role="menuitem"
             >
               Option 3
-            </a>
+            </a> */}
           </div>
         </div>
       )}
