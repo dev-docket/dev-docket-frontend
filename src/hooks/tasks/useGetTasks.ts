@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../storeHook";
-import { addTasks } from "../../store/slices/taskSlice";
+import { addTasks, removeTasks } from "../../store/slices/taskSlice";
 import axios, { AxiosError } from "axios";
 import { toast } from "react-toastify";
 
@@ -38,6 +38,7 @@ export const useFetchTasks = (
         }
 
         const data = await response.data;
+        dispatch(removeTasks());
         dispatch(addTasks(data));
       } catch (err) {
         if (err instanceof Error) {
