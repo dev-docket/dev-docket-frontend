@@ -17,10 +17,6 @@ const taskSlice = createSlice({
   name: "task",
   initialState,
   reducers: {
-    addTask: (state, action: PayloadAction<Task>) => {
-      state.tasks.push(action.payload);
-    },
-
     /**
      * Add multiple tasks to the store. If a task already exists, update it.
      */
@@ -33,6 +29,10 @@ const taskSlice = createSlice({
           state.tasks.push(task);
         }
       });
+    },
+
+    addTask: (state, action: PayloadAction<Task>) => {
+      state.tasks.push(action.payload);
     },
 
     updateStatusOfTask: (
