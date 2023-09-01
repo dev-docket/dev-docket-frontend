@@ -3,6 +3,7 @@ import { Task } from "../../../types/Task";
 import { Close } from "@mui/icons-material";
 import { LeftContainer } from "./LeftContainer";
 import { RightContainer } from "./RightContainer";
+import { useAppSelector } from "../../../hooks/storeHook";
 
 interface TaskDetailsSidebarProps {
   task?: Task;
@@ -15,6 +16,8 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
   show,
   onHide,
 }) => {
+  const activeProject = useAppSelector((state) => state.project.activeProject);
+
   const { title } = task || {};
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -43,7 +46,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
     return (
       <div className="mt-5 border-b border-gray-600">
         <div className="flex items-center justify-between px-5">
-          <h2 className="text-sm">Bookshelf #24</h2>
+          <h2 className="text-sm">{activeProject?.name}</h2>
 
           <Close className="cursor-pointer" onClick={onHide} />
         </div>
