@@ -7,6 +7,7 @@ import { useCreateTaskFromTitle } from "../../hooks/tasks/useCreateTaskFromTitle
 import { useAppSelector } from "../../hooks/storeHook";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
+import { Task, TaskStatus } from "../../types/Task";
 
 interface Props {
   column: ColumnType;
@@ -21,13 +22,28 @@ export const Column = ({ column }: Props) => {
   const { projectName } = useParams<{ projectName: string }>();
   const { createTask } = useCreateTaskFromTitle();
 
-  const handleAddNewTask = () => {
+  const handleAddNewTask = (taskStatus: string) => {
     if (!newTaskTitle) {
       toast.error("Task title cannot be empty");
       return;
     }
 
-    createTask(userId!, token!, newTaskTitle, projectName!);
+    const status: TaskStatus =
+      taskStatus === "Todo"
+        ? "OPEN"
+        : taskStatus === "In Progress"
+        ? "IN_PROGRESS"
+        : "DONE";
+
+    createTask(
+      userId!,
+      token!,
+      {
+        title: newTaskTitle,
+        status: status,
+      } as Task,
+      projectName!,
+    );
 
     handleCancelNewTask();
   };
@@ -66,7 +82,7 @@ export const Column = ({ column }: Props) => {
             className="w-full resize-none rounded-md border-none bg-dark-background"
           />
           <button
-            onClick={handleAddNewTask}
+            onClick={() => handleAddNewTask(column.title)}
             className="inline-flex items-center justify-center rounded bg-blue-500 px-4 py-2 text-white"
           >
             Add new task

@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { useAppDispatch } from "../storeHook";
 import { addTask } from "../../store/slices/taskSlice";
 import axios, { AxiosError } from "axios";
+import { Task } from "../../types/Task";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -15,7 +16,7 @@ export const useCreateTaskFromTitle = () => {
   const createTask = async (
     userId: number,
     token: string,
-    title: string,
+    task: Task,
     projectName: string,
   ) => {
     setIsLoading(true);
@@ -23,12 +24,14 @@ export const useCreateTaskFromTitle = () => {
     try {
       if (!userId || !token) throw new Error("Please login first");
 
-      if (!title || !title.trim()) throw new Error("Title is required");
+      if (!task.title || !task.title.trim())
+        throw new Error("Title is required");
 
       const { data, status } = await axios.post(
         `${apiUrl}/users/${userId}/projects/${projectName}/tasks`,
         {
-          title,
+          title: task.title,
+          status: task.status,
         },
         {
           headers: {
