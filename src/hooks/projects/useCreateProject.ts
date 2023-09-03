@@ -23,7 +23,7 @@ export const useCreateProject = () => {
       const { data, status } = await axios.post(
         `${apiUrl}/users/${userId}/projects`,
         {
-          name,
+          name: name.trim(),
         },
         {
           headers: {
