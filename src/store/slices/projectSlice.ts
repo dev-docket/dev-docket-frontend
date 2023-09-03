@@ -41,6 +41,12 @@ const projectSlice = createSlice({
       state.projects = [];
     },
 
+    removeProjectbyName: (state, action: PayloadAction<string>) => {
+      state.projects = state.projects.filter(
+        (project) => project.name !== action.payload,
+      );
+    },
+
     setActiveProject: (state, action: PayloadAction<Project>) => {
       state.activeProject = action.payload;
     },
@@ -64,6 +70,7 @@ export const {
   addProjects,
   addProject,
   removeProjects,
+  removeProjectbyName,
   setActiveProject,
   setActiveProjectByName,
   removeActiveProject,
