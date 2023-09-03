@@ -10,7 +10,7 @@ export const Navbar = () => {
   const { logoutUser } = useLogout();
 
   return (
-    <nav className="z-20 border-b border-b-border-dark-primary bg-header-background p-4 text-white">
+    <nav className="z-1 border-b border-b-border-dark-primary bg-header-background p-4 text-white">
       <div className="flex justify-between">
         <div className="flex w-full items-center justify-between space-x-4">
           <div>
