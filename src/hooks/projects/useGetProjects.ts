@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch } from "../storeHook";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { addProjects } from "../../store/slices/projectSlice";
+import { addProjects, removeProjects } from "../../store/slices/projectSlice";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -31,7 +31,8 @@ export const useGetProjects = (userId: number, jwt: string) => {
         if (status !== 200) {
           throw new Error("Something went wrong!");
         }
-        
+
+        dispatch(removeProjects());
         dispatch(addProjects(data));
       } catch (err) {
         if (axios.isAxiosError(err)) {
