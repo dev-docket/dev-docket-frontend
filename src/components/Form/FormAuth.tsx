@@ -24,6 +24,7 @@ interface Props {
   onButtonClick: () => void;
   underButtonText: string;
   underButtonTextBold: string;
+  isLoading?: boolean;
 }
 
 export const FormAuth = ({
@@ -36,6 +37,7 @@ export const FormAuth = ({
   onButtonClick,
   underButtonText,
   underButtonTextBold,
+  isLoading,
 }: Props) => {
   const renderInput = (input: Input) => {
     return (
@@ -60,25 +62,28 @@ export const FormAuth = ({
   };
 
   return (
-    <div className="bg-[#141318] h-screen">
-      <div className="flex flex-col items-center justify-center h-full">
-        <div className="bg-[#222428] p-8 m-4 w-1/3 max-lg:w-auto rounded-lg shadow-lg text-white">
-          <h1 className="text-center uppercase opacity-50 text-sm">
+    <div className="h-screen bg-[#141318]">
+      <div className="flex h-full flex-col items-center justify-center">
+        <div className="m-4 w-1/3 rounded-lg bg-[#222428] p-8 text-white shadow-lg max-lg:w-auto">
+          <h1 className="text-center text-sm uppercase opacity-50">
             {headerTitle}
           </h1>
-          <h2 className="text-2xl font-bold text-center ">{headerSubTitle}</h2>
+          <h2 className="text-center text-2xl font-bold ">{headerSubTitle}</h2>
 
           {renderInput(input1)}
           {renderInput(input2)}
 
           <div className="mt-6">
             <SmallButton
-              // redirectPath="/"
               title={buttonTitle}
               onClick={onButtonClick}
+              isLoading={isLoading}
+              spinIndicator={{
+                color: "#fff",
+              }}
             />
 
-            <p className="text-xs mt-3">
+            <p className="mt-3 text-xs">
               <span className="opacity-50">{underButtonText}</span>{" "}
               <Link to={linkRedirectPath}>
                 {underButtonTextBold} <ArrowRightAltIcon />

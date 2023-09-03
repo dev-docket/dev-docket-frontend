@@ -7,8 +7,7 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState<boolean>(false);
-  // const [login] = useLoginMutation();
-  const { login } = useLogin();
+  const { isLoading, login } = useLogin();
 
   const handleLogin = async () => {
     if (emailError) {
@@ -22,15 +21,6 @@ export const Login = () => {
     }
 
     await login(email, password);
-
-    // if ("data" in response && response.data) {
-    //   dispatch(addToken(response.data.token));
-    //   dispatch(setUser(response.data.user));
-
-    //   navigate("/dashboard");
-    // } else {
-    //   toast.error("Invalid email or password");
-    // }
   };
 
   const validateUserEmail = (email: string) => {
@@ -68,6 +58,7 @@ export const Login = () => {
       linkRedirectPath={"/register"}
       underButtonText={"Not registered yet?"}
       underButtonTextBold={"Register"}
+      isLoading={isLoading}
     />
   );
 };
