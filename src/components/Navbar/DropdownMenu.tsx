@@ -16,7 +16,7 @@ export const DropdownMenu = ({ title }: Props) => {
     <Link
       key={project.id}
       to={`/projects/${project.name}/board`}
-      className="text-md block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+      className="text-md block rounded-md px-4 py-2 text-white hover:bg-secondary-background"
       role="menuitem"
     >
       {project.name}
@@ -45,14 +45,22 @@ export const DropdownMenu = ({ title }: Props) => {
         </svg>
       </button>
       {isOpen && (
-        <div className="absolute left-0 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+        <div className="absolute left-0 border-opacity-20 w-56 origin-top-right rounded-md border border-icon-gray bg-dark-background px-2 py-2 shadow-lg ring-1 ring-black ring-opacity-5">
           <div
             className="py-1"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
-            <React.Fragment>{options}</React.Fragment>
+            <React.Fragment>
+              {options.length === 0 ? (
+                <p className="block px-4 py-2 text-sm text-white hover:cursor-pointer">
+                  No projects yet
+                </p>
+              ) : (
+                options
+              )}
+            </React.Fragment>
             {/* <a
               href="#"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
