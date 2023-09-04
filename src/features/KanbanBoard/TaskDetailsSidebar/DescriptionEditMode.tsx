@@ -73,7 +73,7 @@ export const DescriptionEditMode = () => {
 
       <div className="flex justify-between">
         <div className="flex items-center">
-          {/* <a
+          <a
             href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax"
             target="_blank"
             className="flex items-center rounded-md p-2 hover:cursor-pointer hover:bg-button-hover-dark"
@@ -92,7 +92,7 @@ export const DescriptionEditMode = () => {
             </svg>
             <span className="text-xs">Markdown is supported</span>
           </a>
-          <div className="mx-2 h-full border-l border-icon-gray border-opacity-40" /> */}
+          <div className="mx-2 h-full border-l border-icon-gray border-opacity-40" />
         </div>
         <div>
           <button
