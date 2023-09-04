@@ -42,12 +42,12 @@ export const useUpdateTaskPartial = () => {
       dispatch(updateTask(data));
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        toast.error("We couldn't create project", {
+        toast.error("We couldn't update project", {
           type: "error",
           isLoading: false,
           autoClose: 2000,
         });
-        setError("We couldn't create project");
+        setError("We couldn't update project");
       } else {
         setError("Something went wrong!");
       }
