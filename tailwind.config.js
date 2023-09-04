@@ -1,4 +1,5 @@
 import flowbitePlugin from "flowbite/plugin";
+import typography from "@tailwindcss/typography";
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -17,7 +18,24 @@ export default {
           gray: "#7d8590",
         },
       },
+
+      typography: {
+        DEFAULT: {
+          css: {
+            color: "#fff",
+            h1: {
+              color: "#fff",
+            },
+            a: {
+              color: "#3182ce",
+              "&:hover": {
+                color: "#2c5282",
+              },
+            },
+          },
+        },
+      },
     },
   },
-  plugins: [flowbitePlugin],
+  plugins: [flowbitePlugin, typography],
 };

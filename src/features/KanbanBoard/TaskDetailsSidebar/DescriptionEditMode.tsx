@@ -1,38 +1,60 @@
-import { RemoveRedEyeOutlined } from "@mui/icons-material";
+import { Edit, RemoveRedEyeOutlined } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
 import {
   setDescriptionInputActive,
   setDescriptionInputValue,
 } from "../../../store/slices/projectPageSlice";
+import ReactMarkdown from "react-markdown";
+import { useState } from "react";
 
 export const DescriptionEditMode = () => {
   const { isDescriptionInputActive, descriptionInputValue } = useAppSelector(
     (state) => state.projectPage,
   );
 
+  const [isPreviewActive, setIsPreviewActive] = useState(false);
+
   const dispatch = useAppDispatch();
 
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between">
-        <div>
-          <RemoveRedEyeOutlined /> Preview
+        <div
+          onClick={() => setIsPreviewActive((prev) => !prev)}
+          className="flex items-center justify-center rounded-md p-2 text-sm transition-colors hover:cursor-pointer hover:bg-icon-gray hover:bg-opacity-20"
+        >
+          {isPreviewActive ? (
+            <>
+              <Edit className="mr-2" /> Edit
+            </>
+          ) : (
+            <>
+              <RemoveRedEyeOutlined className="mr-2" /> Preview
+            </>
+          )}
         </div>
       </div>
-      <textarea
-        disabled={!isDescriptionInputActive}
-        autoFocus
-        onFocus={(e) => {
-          const { target } = e;
-          setTimeout(() => {
-            target.selectionStart = target.value.length;
-            target.selectionEnd = target.value.length;
-          }, 0);
-        }}
-        value={descriptionInputValue}
-        onChange={(e) => dispatch(setDescriptionInputValue(e.target.value))}
-        className="m-0 h-4 min-h-[5.25rem] w-full rounded-md border-b border-none border-[#2f81f7d9] bg-transparent p-2"
-      />
+
+      {isPreviewActive ? (
+        <ReactMarkdown className="prose markdown-preview prose-slate text-white">
+          {`${descriptionInputValue ?? ""}`}
+        </ReactMarkdown>
+      ) : (
+        <textarea
+          disabled={!isDescriptionInputActive}
+          autoFocus
+          onFocus={(e) => {
+            const { target } = e;
+            setTimeout(() => {
+              target.selectionStart = target.value.length;
+              target.selectionEnd = target.value.length;
+            }, 0);
+          }}
+          value={descriptionInputValue}
+          onChange={(e) => dispatch(setDescriptionInputValue(e.target.value))}
+          className="m-0 h-4 min-h-[5.25rem] w-full rounded-md border-b border-none border-[#2f81f7d9] bg-transparent p-2"
+        />
+      )}
 
       <div className="flex justify-between">
         <div className="flex items-center">
