@@ -6,8 +6,14 @@ import {
 } from "../../../store/slices/projectPageSlice";
 import ReactMarkdown from "react-markdown";
 import { useState } from "react";
+import { useUpdateTaskPartial } from "../../../hooks/tasks/useUpdateTaskPartial";
+import { Task } from "../../../types/Task";
 
 export const DescriptionEditMode = () => {
+  const userId = useAppSelector((state) => state.user.user?.id);
+  const jwt = useAppSelector((state) => state.auth.token);
+  const taskId = useAppSelector((state) => state.projectPage.activeTask?.id);
+
   const { isDescriptionInputActive, descriptionInputValue } = useAppSelector(
     (state) => state.projectPage,
   );
@@ -15,6 +21,15 @@ export const DescriptionEditMode = () => {
   const [isPreviewActive, setIsPreviewActive] = useState(false);
 
   const dispatch = useAppDispatch();
+  const { updateTaskPartial } = useUpdateTaskPartial();
+
+  const handleUpdateTaskDescription = () => {
+    updateTaskPartial(userId!, taskId!, jwt!, {
+      description: descriptionInputValue,
+    } as Task);
+
+    dispatch(setDescriptionInputActive(false));
+  };
 
   return (
     <div className="flex flex-col gap-2">
@@ -36,7 +51,7 @@ export const DescriptionEditMode = () => {
       </div>
 
       {isPreviewActive ? (
-        <ReactMarkdown className="prose markdown-preview prose-slate text-white">
+        <ReactMarkdown className="markdown-preview prose prose-slate text-white">
           {`${descriptionInputValue ?? ""}`}
         </ReactMarkdown>
       ) : (
@@ -86,8 +101,11 @@ export const DescriptionEditMode = () => {
           >
             Cancel
           </button>
-          <button className="ml-2 rounded-md bg-[#2ea043] px-2 py-1 text-sm hover:bg-[#3ab450]">
-            Update comment
+          <button
+            onClick={handleUpdateTaskDescription}
+            className="ml-2 rounded-md bg-[#2ea043] px-2 py-1 text-sm hover:bg-[#3ab450]"
+          >
+            Update description
           </button>
         </div>
       </div>
