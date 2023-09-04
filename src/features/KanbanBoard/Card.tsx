@@ -44,8 +44,6 @@ export const Card = ({ task, index }: Props) => {
           <h3 className="text-md mb-1 border-b-2 border-blue-600 border-transparent font-semibold text-white transition-colors ease-in-out hover:cursor-pointer hover:border-b-2 hover:border-blue-600 hover:text-blue-600">
             {task.title}
           </h3>
-
-          <p className="text-sm text-gray-400">{task.description}</p>
         </div>
       )}
     </Draggable>
