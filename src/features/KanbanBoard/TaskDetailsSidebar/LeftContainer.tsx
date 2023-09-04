@@ -1,3 +1,4 @@
+import ReactMarkdown from "react-markdown";
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
 import { setDescriptionInputActive } from "../../../store/slices/projectPageSlice";
 import { Task } from "../../../types/Task";
@@ -17,7 +18,7 @@ export const LeftContainer = (props: Props) => {
 
   const profileWithEditButton = () => {
     return (
-      <div className="flex items-center justify-between">
+      <div className="mb-4 flex items-center justify-between border-b border-b-icon-gray border-opacity-30">
         <div>
           {/* TODO: Profile image, profile name and time of last edited task. */}
           profile
@@ -41,7 +42,9 @@ export const LeftContainer = (props: Props) => {
       return (
         <>
           {profileWithEditButton()}
-          <p className="text-gray-300">{descriptionInputValue}</p>
+          <ReactMarkdown className="markdown-preview prose prose-slate text-white">
+            {`${descriptionInputValue ?? ""}`}
+          </ReactMarkdown>
         </>
       );
     }
