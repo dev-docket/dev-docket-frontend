@@ -3,11 +3,11 @@ import { Card } from "./Card";
 import { ColumnType } from "../../pages/Project";
 import { useState } from "react";
 import { Add, Close } from "@mui/icons-material";
-import { useCreateTaskFromTitle } from "../../hooks/tasks/useCreateTaskFromTitle";
 import { useAppSelector } from "../../hooks/storeHook";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { Task, TaskStatus } from "../../types/Task";
+import { useCreateTaskFromName } from "../../hooks/tasks/useCreateTaskFromName";
 
 interface Props {
   column: ColumnType;
@@ -15,15 +15,15 @@ interface Props {
 
 export const Column = ({ column }: Props) => {
   const [isNewTaskInputActive, setIsNewTaskInputActive] = useState(false);
-  const [newTaskTitle, setNewTaskTitle] = useState("");
+  const [newTaskName, setNewTaskName] = useState("");
   const userId = useAppSelector((state) => state.user.user?.id);
   const token = useAppSelector((state) => state.auth.token);
 
   const { projectName } = useParams<{ projectName: string }>();
-  const { createTask } = useCreateTaskFromTitle();
+  const { createTask } = useCreateTaskFromName();
 
   const handleAddNewTask = (taskStatus: string) => {
-    if (!newTaskTitle) {
+    if (!newTaskName) {
       toast.error("Task title cannot be empty");
       return;
     }
@@ -39,7 +39,7 @@ export const Column = ({ column }: Props) => {
       userId!,
       token!,
       {
-        title: newTaskTitle,
+        name: newTaskName,
         status: status,
       } as Task,
       projectName!,
@@ -50,7 +50,7 @@ export const Column = ({ column }: Props) => {
 
   const handleCancelNewTask = () => {
     setIsNewTaskInputActive(false);
-    setNewTaskTitle("");
+    setNewTaskName("");
   };
 
   return (
@@ -76,8 +76,8 @@ export const Column = ({ column }: Props) => {
       {isNewTaskInputActive ? (
         <div className="mb-4 px-4">
           <textarea
-            value={newTaskTitle}
-            onChange={(e) => setNewTaskTitle(e.target.value)}
+            value={newTaskName}
+            onChange={(e) => setNewTaskName(e.target.value)}
             placeholder="Enter title to new task"
             className="w-full resize-none rounded-md border-none bg-dark-background"
           />

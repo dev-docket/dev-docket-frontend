@@ -50,7 +50,7 @@ export const Card = ({ task, index }: Props) => {
             className="text-md mb-1 border-b-2 border-blue-600 border-transparent font-semibold text-white transition-colors ease-in-out hover:cursor-pointer hover:border-b-2 hover:border-blue-600 hover:text-blue-600"
             style={{ overflowWrap: "break-word", wordBreak: "break-word" }}
           >
-            {task.title}
+            {task.name}
           </h3>
         </div>
       )}

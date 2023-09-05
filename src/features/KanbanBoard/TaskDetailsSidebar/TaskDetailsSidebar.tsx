@@ -18,7 +18,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
 }) => {
   const activeProject = useAppSelector((state) => state.project.activeProject);
 
-  const { title } = task || {};
+  const { name } = task || {};
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -52,9 +52,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
         </div>
 
         <div className="flex items-center justify-between px-5">
-          <h2 className="mb-4 text-xl font-bold">
-            {title ? title : "Loading ..."}
-          </h2>
+          <h2 className="mb-4 text-xl font-bold">{name ?? "Loading ..."}</h2>
 
           <button className="rounded-md px-2 py-1 text-sm hover:bg-icon-gray hover:bg-opacity-20">
             Edit title

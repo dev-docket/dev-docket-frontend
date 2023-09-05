@@ -7,7 +7,7 @@ import { Task } from "../../types/Task";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-export const useCreateTaskFromTitle = () => {
+export const useCreateTaskFromName = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,13 +24,12 @@ export const useCreateTaskFromTitle = () => {
     try {
       if (!userId || !token) throw new Error("Please login first");
 
-      if (!task.title || !task.title.trim())
-        throw new Error("Title is required");
+      if (!task.name || !task.name.trim()) throw new Error("Name is required");
 
       const { data, status } = await axios.post(
         `${apiUrl}/users/${userId}/projects/${projectName}/tasks`,
         {
-          title: task.title,
+          name: task.name,
           status: task.status,
         },
         {

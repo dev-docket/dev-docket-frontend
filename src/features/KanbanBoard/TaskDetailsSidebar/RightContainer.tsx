@@ -10,7 +10,7 @@ import { useState } from "react";
 export const RightContainer = () => {
   const userId = useAppSelector((state) => state.user.user?.id);
   const taskId = useAppSelector((state) => state.projectPage.activeTask?.id);
-  const title = useAppSelector((state) => state.projectPage.activeTask?.title);
+  const title = useAppSelector((state) => state.projectPage.activeTask?.name);
   const jwt = useAppSelector((state) => state.auth.token);
 
   const [isDeleteTaskModalOpen, setIsDeleteTaskModalOpen] = useState(false);
