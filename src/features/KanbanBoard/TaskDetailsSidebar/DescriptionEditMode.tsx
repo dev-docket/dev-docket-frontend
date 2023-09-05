@@ -65,7 +65,7 @@ export const DescriptionEditMode = () => {
               target.selectionEnd = target.value.length;
             }, 0);
           }}
-          value={descriptionInputValue}
+          value={descriptionInputValue ?? ""}
           onChange={(e) => dispatch(setDescriptionInputValue(e.target.value))}
           className="m-0 h-4 min-h-[7rem] w-full rounded-md border-b border-none border-[#2f81f7d9] bg-transparent p-2"
         />
