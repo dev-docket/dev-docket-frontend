@@ -23,6 +23,10 @@ function App() {
           {/* Route to main feature */}
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/projects/:projectName/board" element={<Project />} />
+          <Route
+            path="/projects/:projectName/board/tasks/:taskId"
+            element={<Project />}
+          />
 
           {/* Route to auth feature */}
           <Route path="/login" element={<Login />} />

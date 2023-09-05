@@ -4,9 +4,9 @@ import { useFetchTasks } from "../hooks/tasks/useGetTasks";
 import { useAppDispatch, useAppSelector } from "../hooks/storeHook";
 import { Task } from "../types/Task";
 import { TaskDetailsSidebar } from "../features/KanbanBoard/TaskDetailsSidebar/TaskDetailsSidebar";
-import { closeDetailsTaskSidebar } from "../store/slices/projectPageSlice";
+import { closeDetailsTaskSidebar, openDetailsTaskSidebar } from "../store/slices/projectPageSlice";
 import { Navbar } from "../components/Navbar/Navbar";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { setActiveProjectByName } from "../store/slices/projectSlice";
 
 export type ColumnType = {
@@ -51,13 +51,18 @@ export const Project = () => {
   );
 
   const activeProject = useAppSelector((state) => state.project.activeProject);
-  const { projectName } = useParams<{ projectName: string }>();
+  const { projectName, taskId } = useParams<{
+    projectName: string;
+    taskId: string;
+  }>();
 
   useFetchTasks(userId!, token!, projectName!);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleModalClose = () => {
     dispatch(closeDetailsTaskSidebar());
+    navigate(`/projects/${projectName}/board`);
   };
 
   useEffect(() => {
@@ -65,6 +70,15 @@ export const Project = () => {
       dispatch(setActiveProjectByName(projectName!));
     }
   }, [activeProject?.name, dispatch, projectName]);
+
+  useEffect(() => {
+    if (taskId) {
+      const task = tasks.find((task) => task.id === parseInt(taskId));
+      if (task) {
+        dispatch(openDetailsTaskSidebar(task));
+      }
+    }
+  }, [dispatch, taskId, tasks]);
 
   useEffect(() => {
     setBoard((prev) => ({
