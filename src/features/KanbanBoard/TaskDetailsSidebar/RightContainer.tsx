@@ -39,12 +39,6 @@ export const RightContainer = () => {
             Copy link to task
           </>
         </SmallWideButton>
-        <SmallWideButton>
-          <>
-            <ArchiveOutlined color="inherit" className="mr-2 text-icon-gray" />
-            Archive task
-          </>
-        </SmallWideButton>
 
         <SmallWideButton
           onClick={() => setIsDeleteTaskModalOpen(true)}
