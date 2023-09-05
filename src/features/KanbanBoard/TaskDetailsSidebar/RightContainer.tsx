@@ -1,4 +1,4 @@
-import { ArchiveOutlined, CopyAll, DeleteOutline } from "@mui/icons-material";
+import { CopyAll, DeleteOutline } from "@mui/icons-material";
 import { SmallWideButton } from "./SmallWideButton";
 import { toast } from "react-toastify";
 import { useDeleteTask } from "../../../hooks/tasks/useDeleteTask";
