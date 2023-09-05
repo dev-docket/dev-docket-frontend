@@ -49,7 +49,7 @@ export const KanbanBoard = ({ columns, setBoard }: Props) => {
       destinationColumn.cards.splice(destination.index, 0, movedCard);
 
       if (destinationColumn.id === "1") {
-        movedCard = { ...movedCard, status: "OPEN" };
+        movedCard = { ...movedCard, status: "TODO" };
       }
 
       if (destinationColumn.id === "2") {

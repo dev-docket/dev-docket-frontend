@@ -4,7 +4,10 @@ import { useFetchTasks } from "../hooks/tasks/useGetTasks";
 import { useAppDispatch, useAppSelector } from "../hooks/storeHook";
 import { Task } from "../types/Task";
 import { TaskDetailsSidebar } from "../features/KanbanBoard/TaskDetailsSidebar/TaskDetailsSidebar";
-import { closeDetailsTaskSidebar, openDetailsTaskSidebar } from "../store/slices/projectPageSlice";
+import {
+  closeDetailsTaskSidebar,
+  openDetailsTaskSidebar,
+} from "../store/slices/projectPageSlice";
 import { Navbar } from "../components/Navbar/Navbar";
 import { useNavigate, useParams } from "react-router-dom";
 import { setActiveProjectByName } from "../store/slices/projectSlice";
@@ -86,7 +89,7 @@ export const Project = () => {
       columns: [
         {
           ...prev.columns[0],
-          cards: tasks.filter((task) => task.status === "OPEN"),
+          cards: tasks.filter((task) => task.status === "TODO"),
         },
         {
           ...prev.columns[1],

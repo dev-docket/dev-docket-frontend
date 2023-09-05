@@ -5,4 +5,4 @@ export interface Task {
   status?: TaskStatus;
 }
 
-export type TaskStatus = "OPEN" | "IN_PROGRESS" | "DONE";
+export type TaskStatus = "TODO" | "IN_PROGRESS" | "DONE";

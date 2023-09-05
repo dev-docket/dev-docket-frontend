@@ -30,7 +30,7 @@ export const Column = ({ column }: Props) => {
 
     const status: TaskStatus =
       taskStatus === "Todo"
-        ? "OPEN"
+        ? "TODO"
         : taskStatus === "In Progress"
         ? "IN_PROGRESS"
         : "DONE";
