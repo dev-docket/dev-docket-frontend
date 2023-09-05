@@ -1,11 +1,32 @@
 import { ArchiveOutlined, CopyAll, DeleteOutline } from "@mui/icons-material";
 import { SmallWideButton } from "./SmallWideButton";
 import { toast } from "react-toastify";
+import { useDeleteTask } from "../../../hooks/tasks/useDeleteTask";
+import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
+import { closeDetailsTaskSidebar } from "../../../store/slices/projectPageSlice";
+import { DeleteTaskModal } from "./DeleteTaskModal";
+import { useState } from "react";
 
 export const RightContainer = () => {
+  const userId = useAppSelector((state) => state.user.user?.id);
+  const taskId = useAppSelector((state) => state.projectPage.activeTask?.id);
+  const title = useAppSelector((state) => state.projectPage.activeTask?.title);
+  const jwt = useAppSelector((state) => state.auth.token);
+
+  const [isDeleteTaskModalOpen, setIsDeleteTaskModalOpen] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const { deleteTask } = useDeleteTask();
+
   const handleCopyUrl = () => {
     navigator.clipboard.writeText(window.location.href);
     toast.success("Copied to clipboard");
+  };
+
+  const handleDeleteTask = () => {
+    deleteTask(userId!, taskId!, jwt!);
+    dispatch(closeDetailsTaskSidebar());
+    setIsDeleteTaskModalOpen(false);
   };
 
   return (
@@ -25,13 +46,24 @@ export const RightContainer = () => {
           </>
         </SmallWideButton>
 
-        <SmallWideButton customHoverBgColor="red">
+        <SmallWideButton
+          onClick={() => setIsDeleteTaskModalOpen(true)}
+          customHoverBgColor="red"
+        >
           <>
             <DeleteOutline color="error" className="mr-1" />
             Delete task from project
           </>
         </SmallWideButton>
       </div>
+
+      {isDeleteTaskModalOpen && (
+        <DeleteTaskModal
+          taskName={title ?? ""}
+          onCloseModal={setIsDeleteTaskModalOpen}
+          onDeleteTask={handleDeleteTask}
+        />
+      )}
     </div>
   );
 };
