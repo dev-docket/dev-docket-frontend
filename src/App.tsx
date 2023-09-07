@@ -11,8 +11,10 @@ import { Project } from "./pages/Project";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Dashboard } from "./pages/Dashboard";
+import { useAppSelector } from "./hooks/storeHook";
 
 function App() {
+  const token = useAppSelector((state) => state.auth.token);
   return (
     <>
       <Router>
@@ -21,7 +23,10 @@ function App() {
           <Route path="/" element={<Navigate to="/dashboard" />} />
 
           {/* Route to main feature */}
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/dashboard"
+            element={token ? <Dashboard /> : <Navigate to="/login" />}
+          />
           <Route path="/projects/:projectName/board" element={<Project />} />
           <Route
             path="/projects/:projectName/board/tasks/:taskId"
