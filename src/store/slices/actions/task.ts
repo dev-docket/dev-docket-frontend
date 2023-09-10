@@ -134,7 +134,6 @@ export const patchTask = createAsyncThunk(
 
 export const deleteTask = createAsyncThunk(
   "tasks/deleteTask",
-  // eslint-disable-next-line no-empty-pattern
   async (_, { getState, rejectWithValue }) => {
     const { user, auth, projectPage } = getState() as RootState;
     const userId = user.userId;
