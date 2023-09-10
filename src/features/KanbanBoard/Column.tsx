@@ -3,11 +3,11 @@ import { Card } from "./Card";
 import { ColumnType } from "../../pages/Project";
 import { useState } from "react";
 import { Add, Close } from "@mui/icons-material";
-import { useAppSelector } from "../../hooks/storeHook";
+import { useAppDispatch } from "../../hooks/storeHook";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { Task, TaskStatus } from "../../types/Task";
-import { useCreateTaskFromName } from "../../hooks/tasks/useCreateTaskFromName";
+import { TaskStatus } from "../../types/Task";
+import { createTask } from "../../store/slices/actions/task";
 
 interface Props {
   column: ColumnType;
@@ -16,15 +16,19 @@ interface Props {
 export const Column = ({ column }: Props) => {
   const [isNewTaskInputActive, setIsNewTaskInputActive] = useState(false);
   const [newTaskName, setNewTaskName] = useState("");
-  const userId = useAppSelector((state) => state.user.user?.id);
-  const token = useAppSelector((state) => state.auth.token);
 
   const { projectName } = useParams<{ projectName: string }>();
-  const { createTask } = useCreateTaskFromName();
+
+  const dispatch = useAppDispatch();
 
   const handleAddNewTask = (taskStatus: string) => {
-    if (!newTaskName) {
+    if (!newTaskName.trim()) {
       toast.error("Task title cannot be empty");
+      return;
+    }
+
+    if (!projectName) {
+      toast.error("Project name is empty");
       return;
     }
 
@@ -35,14 +39,12 @@ export const Column = ({ column }: Props) => {
         ? "IN_PROGRESS"
         : "DONE";
 
-    createTask(
-      userId!,
-      token!,
-      {
+    dispatch(
+      createTask({
+        projectName,
         name: newTaskName,
-        status: status,
-      } as Task,
-      projectName!,
+        status,
+      }),
     );
 
     handleCancelNewTask();
@@ -78,6 +80,12 @@ export const Column = ({ column }: Props) => {
           <textarea
             value={newTaskName}
             onChange={(e) => setNewTaskName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleAddNewTask(column.title);
+              }
+            }}
             placeholder="Enter title to new task"
             className="w-full resize-none rounded-md border-none bg-dark-background"
           />

@@ -6,12 +6,10 @@ import {
 } from "../../../store/slices/projectPageSlice";
 import ReactMarkdown from "react-markdown";
 import { useState } from "react";
-import { useUpdateTaskPartial } from "../../../hooks/tasks/useUpdateTaskPartial";
 import { Task } from "../../../types/Task";
+import { patchTask } from "../../../store/slices/actions/task";
 
 export const DescriptionEditMode = () => {
-  const userId = useAppSelector((state) => state.user.user?.id);
-  const jwt = useAppSelector((state) => state.auth.token);
   const taskId = useAppSelector((state) => state.projectPage.activeTask?.id);
 
   const { isDescriptionInputActive, descriptionInputValue } = useAppSelector(
@@ -21,13 +19,14 @@ export const DescriptionEditMode = () => {
   const [isPreviewActive, setIsPreviewActive] = useState(false);
 
   const dispatch = useAppDispatch();
-  const { updateTaskPartial } = useUpdateTaskPartial();
 
   const handleUpdateTaskDescription = () => {
-    updateTaskPartial(userId!, taskId!, jwt!, {
-      description: descriptionInputValue,
-    } as Task);
+    if (!taskId) return;
 
+    const task: Partial<Task> = {
+      description: descriptionInputValue,
+    };
+    dispatch(patchTask({ taskId, task }));
     dispatch(setDescriptionInputActive(false));
   };
 

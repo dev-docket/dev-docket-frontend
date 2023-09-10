@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { KanbanBoard } from "../features/KanbanBoard/KanbanBoard";
-import { useFetchTasks } from "../hooks/tasks/useGetTasks";
 import { useAppDispatch, useAppSelector } from "../hooks/storeHook";
 import { Task } from "../types/Task";
 import { TaskDetailsSidebar } from "../features/KanbanBoard/TaskDetailsSidebar/TaskDetailsSidebar";
@@ -11,6 +10,7 @@ import {
 import { Navbar } from "../components/Navbar/Navbar";
 import { useNavigate, useParams } from "react-router-dom";
 import { setActiveProjectByName } from "../store/slices/projectSlice";
+import { fetchAllUserTasks } from "../store/slices/actions/task";
 
 export type ColumnType = {
   id: string;
@@ -43,8 +43,6 @@ const initialBoard: BoardType = {
 };
 
 export const Project = () => {
-  const userId = useAppSelector((state) => state.user.user?.id);
-  const token = useAppSelector((state) => state.auth.token);
   const tasks = useAppSelector((state) => state.task.tasks);
   const [board, setBoard] = useState<BoardType>({
     ...initialBoard,
@@ -59,7 +57,6 @@ export const Project = () => {
     taskId: string;
   }>();
 
-  useFetchTasks(userId!, token!, projectName!);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -73,6 +70,12 @@ export const Project = () => {
       dispatch(setActiveProjectByName(projectName!));
     }
   }, [activeProject?.name, dispatch, projectName]);
+
+  useEffect(() => {
+    if (!projectName) return;
+
+    dispatch(fetchAllUserTasks(projectName));
+  }, [dispatch, projectName]);
 
   useEffect(() => {
     if (taskId) {
