@@ -1,17 +1,15 @@
 import { CopyAll, DeleteOutline } from "@mui/icons-material";
 import { SmallWideButton } from "./SmallWideButton";
 import { toast } from "react-toastify";
-import { useDeleteTask } from "../../../hooks/tasks/useDeleteTask";
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
 import { closeDetailsTaskSidebar } from "../../../store/slices/projectPageSlice";
 import { DeleteTaskModal } from "./DeleteTaskModal";
 import { useEffect, useRef, useState } from "react";
 import { displayStatus } from "../../../types/Task";
+import { deleteTask } from "../../../store/slices/actions/task";
 
 export const RightContainer = () => {
-  const userId = useAppSelector((state) => state.user.user?.id);
   const activeTask = useAppSelector((state) => state.projectPage.activeTask);
-  const jwt = useAppSelector((state) => state.auth.token);
 
   const [isDeleteTaskModalOpen, setIsDeleteTaskModalOpen] = useState(false);
   const [isDivVisible, setIsDivVisible] = useState(false);
@@ -19,7 +17,6 @@ export const RightContainer = () => {
   const divRef = useRef<HTMLDivElement>(null);
 
   const dispatch = useAppDispatch();
-  const { deleteTask } = useDeleteTask();
 
   const handleCopyUrl = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -27,8 +24,7 @@ export const RightContainer = () => {
   };
 
   const handleDeleteTask = () => {
-    if (!userId || !activeTask?.id || !jwt) return;
-    deleteTask(userId!, activeTask?.id, jwt!);
+    dispatch(deleteTask());
     dispatch(closeDetailsTaskSidebar());
     setIsDeleteTaskModalOpen(false);
   };

@@ -1,6 +1,11 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Task, TaskStatus } from "../../types/Task";
-import { createTask, fetchAllUserTasks, patchTask } from "./actions/task";
+import {
+  createTask,
+  deleteTask,
+  fetchAllUserTasks,
+  patchTask,
+} from "./actions/task";
 
 interface TaskState {
   tasks: Task[];
@@ -109,6 +114,20 @@ const taskSlice = createSlice({
       },
     );
     builder.addCase(patchTask.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = action.payload as string;
+    });
+    builder.addCase(deleteTask.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(
+      deleteTask.fulfilled,
+      (state, action: PayloadAction<number>) => {
+        state.status = "idle";
+        state.tasks = state.tasks.filter((task) => task.id !== action.payload);
+      },
+    );
+    builder.addCase(deleteTask.rejected, (state, action) => {
       state.status = "failed";
       state.error = action.payload as string;
     });

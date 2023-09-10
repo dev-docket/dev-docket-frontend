@@ -131,3 +131,45 @@ export const patchTask = createAsyncThunk(
     }
   },
 );
+
+export const deleteTask = createAsyncThunk(
+  "tasks/deleteTask",
+  // eslint-disable-next-line no-empty-pattern
+  async (_, { getState, rejectWithValue }) => {
+    const { user, auth, projectPage } = getState() as RootState;
+    const userId = user.userId;
+    const token = auth.token;
+    const taskId = projectPage?.activeTask?.id;
+
+    if (!userId || !token) {
+      return rejectWithValue("Please login first");
+    }
+
+    if (!taskId) {
+      return rejectWithValue("Please select a task first");
+    }
+
+    try {
+      const response = await axios.delete(
+        `${apiUrl}/users/${userId}/tasks/${taskId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.status !== 204) {
+        throw new Error("Something went wrong!");
+      }
+
+      return taskId;
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+        return rejectWithValue(err.message);
+      }
+      return rejectWithValue("Something went wrong!");
+    }
+  },
+);
