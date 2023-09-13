@@ -19,8 +19,8 @@ export const CreateNewProjectModal = ({ closeModal }: Props) => {
   };
 
   return (
-    <div className="absolute z-30 flex h-screen w-screen bg-secondary-background">
-      <div className="flex h-full w-1/4 flex-col bg-dark-background p-4">
+    <div className="absolute z-30 flex h-screen w-screen bg-secondary-background max-md:flex-col">
+      <div className="flex h-full w-1/4 flex-col bg-dark-background p-4 max-md:h-1/2 max-md:w-full">
         <Close
           onClick={closeModal}
           fontSize="large"
