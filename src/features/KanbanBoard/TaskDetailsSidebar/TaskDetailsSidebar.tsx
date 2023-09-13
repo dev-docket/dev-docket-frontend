@@ -71,7 +71,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
     >
       {sidebarHeader()}
 
-      <div className="flex h-full w-full">
+      <div className="flex h-full w-full max-md:flex-col">
         <LeftContainer task={task} />
 
         <RightContainer />

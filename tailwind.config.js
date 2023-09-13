@@ -7,12 +7,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        "dark-background": "#212121",
+        "dark-background": "#161819",
         "secondary-background": "#383838",
         "header-background": "#292929",
 
         "border-dark-primary": "#30363d",
         "button-hover-dark": "#21262c",
+
+        button: {
+          primary: "#5437DC",
+        },
 
         icon: {
           gray: "#7d8590",

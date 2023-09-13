@@ -107,11 +107,11 @@ export const Project = () => {
   }, [tasks]);
 
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex h-screen flex-col bg-dark-background">
       <Navbar />
-      <div className="flex-1 bg-dark-background">
-        <div className="container mt-10 px-8">
-          <div className="animate-resize w-full max-w-lg">
+      <div className="h-full overflow-x-auto bg-dark-background ">
+        <div className="container mt-10">
+          <div className="animate-resize px-5">
             <KanbanBoard columns={board.columns} setBoard={setBoard} />
           </div>
         </div>
