@@ -30,9 +30,9 @@ export const RightContainer = () => {
   };
 
   return (
-    <div className="w-full max-w-[34%]">
+    <div className="w-full max-w-[34%] mt-10 max-md:max-w-full">
       <div className="border-b border-border-dark-primary px-5 py-5">top</div>
-      <div className="mt-2 px-2">
+      <div className="mt-2 w-full px-2">
         <SmallWideButton onClick={handleCopyUrl}>
           <>
             <CopyAll color="inherit" className="mr-2 text-icon-gray" />

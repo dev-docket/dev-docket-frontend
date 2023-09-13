@@ -60,7 +60,7 @@ export const LeftContainer = (props: Props) => {
   };
 
   return (
-    <div className="w-[66%] border-r border-r-border-dark-primary bg-[#161b22]">
+    <div className="w-[66%] max-md:w-full border-r border-r-border-dark-primary bg-[#161b22]">
       {task && task.id ? (
         <div className="w-full border-b border-b-border-dark-primary bg-[#0d1117] p-5">
           {conditionalDescription()}
