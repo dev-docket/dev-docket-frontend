@@ -65,17 +65,26 @@ export const Project = () => {
     navigate(`/projects/${projectName}/board`);
   };
 
+  const teamCard = () => {
+    return (
+      <div className="h-[10rem] w-[13rem] rounded-2xl bg-[#242729] p-4 hover:cursor-pointer hover:bg-zinc-950">
+        <p>members image</p>
+        <p>Team name</p>
+      </div>
+    );
+  };
+
   useEffect(() => {
     if (projectName !== activeProject?.name) {
       dispatch(setActiveProjectByName(projectName!));
     }
   }, [activeProject?.name, dispatch, projectName]);
 
-  useEffect(() => {
-    if (!projectName) return;
+  // useEffect(() => {
+  //   if (!projectName) return;
 
-    dispatch(fetchAllUserTasks(projectName));
-  }, [dispatch, projectName]);
+  //   dispatch(fetchAllUserTasks(projectName));
+  // }, [dispatch, projectName]);
 
   useEffect(() => {
     if (taskId) {
@@ -107,13 +116,21 @@ export const Project = () => {
   }, [tasks]);
 
   return (
-    <div className="flex h-screen flex-col bg-dark-background">
+    <div className="flex h-screen flex-col bg-dark-background text-white">
       <Navbar />
-      <div className="h-full overflow-x-auto bg-dark-background ">
+      {/* <div className="h-full overflow-x-auto bg-dark-background ">
         <div className="container mt-10">
           <div className="animate-resize px-5">
             <KanbanBoard columns={board.columns} setBoard={setBoard} />
           </div>
+        </div>
+      </div> */}
+
+      <div className="mt-7 pl-10">
+        <div className="mt-10 flex gap-3 overflow-auto pb-4">
+          <div className="w-[13rem]">{teamCard()}</div>
+          <div className="w-[13rem]">{teamCard()}</div>
+          <div className="w-[13rem]">{teamCard()}</div>
         </div>
       </div>
 
