@@ -70,6 +70,7 @@ const taskSlice = createSlice({
     },
   },
   extraReducers(builder) {
+    
     builder.addCase(fetchAllUserTasks.pending, (state) => {
       state.loading = "pending";
     });

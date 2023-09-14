@@ -1,59 +1,56 @@
-import { useEffect, useState } from "react";
-import { KanbanBoard } from "../features/KanbanBoard/KanbanBoard";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/storeHook";
-import { Task } from "../types/Task";
 import { TaskDetailsSidebar } from "../features/KanbanBoard/TaskDetailsSidebar/TaskDetailsSidebar";
-import {
-  closeDetailsTaskSidebar,
-  openDetailsTaskSidebar,
-} from "../store/slices/projectPageSlice";
 import { Navbar } from "../components/Navbar/Navbar";
 import { useNavigate, useParams } from "react-router-dom";
-import { setActiveProjectByName } from "../store/slices/projectSlice";
-import { fetchAllUserTasks } from "../store/slices/actions/task";
+import { fetchTeamsByProjectSlug } from "../store/slices/actions/team";
+import { TeamCard } from "../features/Project/TeamCard";
+import { closeDetailsTaskSidebar } from "../store/slices/projectPageSlice";
 
-export type ColumnType = {
-  id: string;
-  title: string;
-  cards: Task[];
-};
+// export type ColumnType = {
+//   id: string;
+//   title: string;
+//   cards: Task[];
+// };
 
-type BoardType = {
-  columns: ColumnType[];
-};
+// type BoardType = {
+//   columns: ColumnType[];
+// };
 
-const initialBoard: BoardType = {
-  columns: [
-    {
-      id: "1",
-      title: "Todo",
-      cards: [],
-    },
-    {
-      id: "2",
-      title: "In Progress",
-      cards: [],
-    },
-    {
-      id: "3",
-      title: "Done",
-      cards: [],
-    },
-  ],
-};
+// const initialBoard: BoardType = {
+//   columns: [
+//     {
+//       id: "1",
+//       title: "Todo",
+//       cards: [],
+//     },
+//     {
+//       id: "2",
+//       title: "In Progress",
+//       cards: [],
+//     },
+//     {
+//       id: "3",
+//       title: "Done",
+//       cards: [],
+//     },
+//   ],
+// };
 
 export const Project = () => {
-  const tasks = useAppSelector((state) => state.task.tasks);
-  const [board, setBoard] = useState<BoardType>({
-    ...initialBoard,
-  });
+  // const tasks = useAppSelector((state) => state.task.tasks);
+  // const [board, setBoard] = useState<BoardType>({
+  //   ...initialBoard,
+  // });
   const { isDetailsTaskSidebarOpen, activeTask } = useAppSelector(
     (state) => state.projectPage,
   );
 
-  const activeProject = useAppSelector((state) => state.project.activeProject);
-  const { projectName, taskId } = useParams<{
-    projectName: string;
+  const { teams, loading } = useAppSelector((state) => state.team);
+
+  // const activeProject = useAppSelector((state) => state.project.activeProject);
+  const { projectSlug } = useParams<{
+    projectSlug: string;
     taskId: string;
   }>();
 
@@ -62,23 +59,37 @@ export const Project = () => {
 
   const handleModalClose = () => {
     dispatch(closeDetailsTaskSidebar());
-    navigate(`/projects/${projectName}/board`);
+    navigate(`/projects/${projectSlug}/board`);
   };
 
-  const teamCard = () => {
-    return (
-      <div className="h-[10rem] w-[13rem] rounded-2xl bg-[#242729] p-4 hover:cursor-pointer hover:bg-zinc-950">
-        <p>members image</p>
-        <p>Team name</p>
-      </div>
-    );
+  const handleNavigateToTeamPage = (teamId: number) => {
+    navigate(`/projects/${projectSlug}/teams/${teamId}`);
   };
+
+  // const teamCard = (name: string) => {
+  //   return (
+  //     <div className="flex h-[10rem] w-[13rem] flex-col rounded-2xl bg-[#242729] p-4 transition-colors hover:cursor-pointer hover:bg-zinc-950">
+  //       {/* <p>members image</p> */}
+  //       <p className="text-xl">{name}</p>
+  //       <p className="mt-auto flex justify-end text-sm">
+  //         Click to see your team
+  //         <ArrowRightAlt />
+  //       </p>
+  //     </div>
+  //   );
+  // };
 
   useEffect(() => {
-    if (projectName !== activeProject?.name) {
-      dispatch(setActiveProjectByName(projectName!));
-    }
-  }, [activeProject?.name, dispatch, projectName]);
+    if (!projectSlug) return;
+
+    dispatch(fetchTeamsByProjectSlug(projectSlug));
+  }, [dispatch, projectSlug]);
+
+  // useEffect(() => {
+  //   if (projectName !== activeProject?.name) {
+  //     dispatch(setActiveProjectByName(projectName!));
+  //   }
+  // }, [activeProject?.name, dispatch, projectName]);
 
   // useEffect(() => {
   //   if (!projectName) return;
@@ -86,34 +97,34 @@ export const Project = () => {
   //   dispatch(fetchAllUserTasks(projectName));
   // }, [dispatch, projectName]);
 
-  useEffect(() => {
-    if (taskId) {
-      const task = tasks.find((task) => task.id === parseInt(taskId));
-      if (task) {
-        dispatch(openDetailsTaskSidebar(task));
-      }
-    }
-  }, [dispatch, taskId, tasks]);
+  // useEffect(() => {
+  //   if (taskId) {
+  //     const task = tasks.find((task) => task.id === parseInt(taskId));
+  //     if (task) {
+  //       dispatch(openDetailsTaskSidebar(task));
+  //     }
+  //   }
+  // }, [dispatch, taskId, tasks]);
 
-  useEffect(() => {
-    setBoard((prev) => ({
-      ...prev,
-      columns: [
-        {
-          ...prev.columns[0],
-          cards: tasks.filter((task) => task.status === "TODO"),
-        },
-        {
-          ...prev.columns[1],
-          cards: tasks.filter((task) => task.status === "IN_PROGRESS"),
-        },
-        {
-          ...prev.columns[2],
-          cards: tasks.filter((task) => task.status === "DONE"),
-        },
-      ],
-    }));
-  }, [tasks]);
+  // useEffect(() => {
+  //   setBoard((prev) => ({
+  //     ...prev,
+  //     columns: [
+  //       {
+  //         ...prev.columns[0],
+  //         cards: tasks.filter((task) => task.status === "TODO"),
+  //       },
+  //       {
+  //         ...prev.columns[1],
+  //         cards: tasks.filter((task) => task.status === "IN_PROGRESS"),
+  //       },
+  //       {
+  //         ...prev.columns[2],
+  //         cards: tasks.filter((task) => task.status === "DONE"),
+  //       },
+  //     ],
+  //   }));
+  // }, [tasks]);
 
   return (
     <div className="flex h-screen flex-col bg-dark-background text-white">
@@ -126,11 +137,28 @@ export const Project = () => {
         </div>
       </div> */}
 
-      <div className="mt-7 pl-10">
-        <div className="mt-10 flex gap-3 overflow-auto pb-4">
-          <div className="w-[13rem]">{teamCard()}</div>
-          <div className="w-[13rem]">{teamCard()}</div>
-          <div className="w-[13rem]">{teamCard()}</div>
+      <div className="flex justify-end">
+        <div className="w-[80%] pl-2">
+          <div className="mt-7">
+            <div className="mt-10 flex gap-3 overflow-auto pb-4">
+              {loading == "succeeded" ? (
+                teams.map((team) => (
+                  <div key={team.id} className="w-[13rem]">
+                    <TeamCard
+                      team={team}
+                      onNavigateToTeamPage={handleNavigateToTeamPage}
+                    />
+                  </div>
+                ))
+              ) : (
+                <div
+                  className="inline-block h-6 w-6 animate-spin rounded-full border-[3px] border-current border-t-transparent pl-2 text-blue-600"
+                  role="status"
+                  aria-label="loading"
+                />
+              )}
+            </div>
+          </div>
         </div>
       </div>
 

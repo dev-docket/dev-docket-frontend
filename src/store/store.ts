@@ -8,6 +8,8 @@ import authSlice, { AuthState } from "./slices/authSlice";
 import userSlice, { UserState } from "./slices/userSlice";
 import projectPageSlice from "./slices/projectPageSlice";
 import projectSlice, { ProjectState } from "./slices/projectSlice";
+import teamPageSlice from "./slices/teamPageSlice";
+import teamSlice from "./slices/teamSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -35,9 +37,13 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
     user: userReducer,
-    task: taskSlice,
+
     project: projectReducer,
+    team: teamSlice,
+    task: taskSlice,
+
     projectPage: projectPageSlice,
+    teamPage: teamPageSlice,
   },
   middleware: getDefaultMiddleware({
     serializableCheck: false,

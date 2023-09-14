@@ -26,16 +26,10 @@ export const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const handleOpenBoard = (projectName?: string) => {
-    if (!projectName) return;
-
-    const project = projects.find((p) => p.name === projectName);
-
-    if (!project) return;
-
+  const handleOpenBoard = (project: Project) => {
     dispatch(removeTasks());
     dispatch(setActiveProject(project));
-    navigate(`/projects/${projectName}/board`);
+    navigate(`/projects/${project.slug}/dashboard`);
   };
 
   const handleOpenDangerZoneModal = (projectName?: string) => {
@@ -46,63 +40,65 @@ export const Dashboard = () => {
   return (
     <div className="flex h-screen flex-col bg-dark-background text-white">
       <Navbar />
-      <div className="mt-7 px-7">
-        <div className="animate-resize flex w-full justify-between">
-          <h1 className="mr-5 min-w-fit text-2xl">Your projects</h1>
-          <div className="w-[8rem]">
-            <SmallButton
-              title="Create new project"
-              onClick={() => setIsCreateNewProjectModalOpen(true)}
-            />
+      <div className="flex justify-end">
+        <div className="mt-7 w-[80%] px-10">
+          <div className="animate-resize flex w-full justify-between">
+            <h1 className="mr-5 min-w-fit text-2xl">Your projects</h1>
+            <div className="w-[8rem]">
+              <SmallButton
+                title="Create new project"
+                onClick={() => setIsCreateNewProjectModalOpen(true)}
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="mt-5 rounded-md border-2 border-icon-gray">
-          {!projects.length && (
-            <div
-              onClick={() => setIsCreateNewProjectModalOpen(true)}
-              className="rounded-md"
-            >
-              <div className="flex items-center justify-between px-2 py-3 first:border-0 hover:cursor-pointer hover:bg-icon-gray">
-                <div>
-                  <CreateNewFolder className="mr-2" />
-                  <span className="mr-4 text-xl">No projects yet</span>
-                  <span className="text-sm">Create a new project</span>
+          <div className="mt-5 rounded-md border-2 border-icon-gray">
+            {!projects.length && (
+              <div
+                onClick={() => setIsCreateNewProjectModalOpen(true)}
+                className="rounded-md"
+              >
+                <div className="flex items-center justify-between px-2 py-3 first:border-0 hover:cursor-pointer hover:bg-icon-gray">
+                  <div>
+                    <CreateNewFolder className="mr-2" />
+                    <span className="mr-4 text-xl">No projects yet</span>
+                    <span className="text-sm">Create a new project</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {projects.map((project: Project) => (
-            <div
-              key={project.id}
-              onClick={() => handleOpenBoard(project.name)}
-              className="flex items-center justify-between border-t-2 border-icon-gray px-4 py-3 first:border-0 hover:cursor-pointer hover:bg-icon-gray"
-            >
-              <div>
-                {isLoading ? (
-                  <div
-                    className="inline-block h-6 w-6 animate-spin rounded-full border-[3px] border-current border-t-transparent pl-2 text-blue-600"
-                    role="status"
-                    aria-label="loading"
+            {projects.map((project: Project) => (
+              <div
+                key={project.id}
+                onClick={() => handleOpenBoard(project)}
+                className="flex items-center justify-between border-t-2 border-icon-gray px-4 py-3 first:border-0 hover:cursor-pointer hover:bg-icon-gray"
+              >
+                <div>
+                  {isLoading ? (
+                    <div
+                      className="inline-block h-6 w-6 animate-spin rounded-full border-[3px] border-current border-t-transparent pl-2 text-blue-600"
+                      role="status"
+                      aria-label="loading"
+                    />
+                  ) : (
+                    <>
+                      <BackpackOutlined className="mr-2" />
+                      <span className="text-xl">{project.name}</span>
+                      <span className="text-sm">{project.description}</span>
+                    </>
+                  )}
+                </div>
+                <>
+                  <ProjectSettingDropdown
+                    openDangerZoneModal={() =>
+                      handleOpenDangerZoneModal(project?.name)
+                    }
                   />
-                ) : (
-                  <>
-                    <BackpackOutlined className="mr-2" />
-                    <span className="text-xl">{project.name}</span>
-                    <span className="text-sm">{project.description}</span>
-                  </>
-                )}
+                </>
               </div>
-              <>
-                <ProjectSettingDropdown
-                  openDangerZoneModal={() =>
-                    handleOpenDangerZoneModal(project?.name)
-                  }
-                />
-              </>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 

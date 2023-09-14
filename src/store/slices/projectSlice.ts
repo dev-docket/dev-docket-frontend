@@ -51,6 +51,15 @@ const projectSlice = createSlice({
       state.activeProject = action.payload;
     },
 
+    setActiveProjectBySlug: (state, action: PayloadAction<string>) => {
+      const project = state.projects.find(
+        (project) => project.slug === action.payload,
+      );
+      if (project) {
+        state.activeProject = project;
+      }
+    },
+
     setActiveProjectByName: (state, action: PayloadAction<string>) => {
       const project = state.projects.find(
         (project) => project.name === action.payload,
@@ -72,6 +81,7 @@ export const {
   removeProjects,
   removeProjectbyName,
   setActiveProject,
+  setActiveProjectBySlug,
   setActiveProjectByName,
   removeActiveProject,
 } = projectSlice.actions;
