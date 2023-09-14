@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Project } from "../../types/Project";
+import { createProject, deleteProject } from "./actions/project";
 
 export interface ProjectState {
   projects: Project[];
@@ -72,6 +73,22 @@ const projectSlice = createSlice({
     removeActiveProject: (state) => {
       state.activeProject = undefined;
     },
+  },
+  extraReducers(builder) {
+    builder.addCase(
+      createProject.fulfilled,
+      (state, action: PayloadAction<Project>) => {
+        state.projects.push(action.payload);
+      },
+    );
+    builder.addCase(
+      deleteProject.fulfilled,
+      (state, action: PayloadAction<string>) => {
+        state.projects = state.projects.filter(
+          (project) => project.slug !== action.payload,
+        );
+      },
+    );
   },
 });
 

@@ -33,7 +33,7 @@ export const Navbar = () => {
 
   return (
     <>
-      <nav className="z-1 ml-[20%] w-[80%] border-b border-white border-opacity-30 bg-header-background p-4 text-white">
+      <nav className="z-1 ml-[20%] w-[80%] border-b border-white border-opacity-30 bg-header-background p-4 text-white transition-all max-md:ml-0 max-md:w-full">
         <div className="flex justify-between">
           <div className="flex w-full items-center justify-between space-x-4">
             <div>
@@ -67,7 +67,10 @@ export const Navbar = () => {
 
       <div
         className="fixed left-0 top-0 h-screen w-[20%] max-w-[20%] border-r border-r-white border-opacity-30 bg-[#161819] transition-all max-md:w-[6rem] max-md:max-w-none"
-        style={{ width: isSidebarOpen ? "20%" : "6rem" }}
+        style={{
+          width: isSidebarOpen ? "20%" : "0",
+          display: isSidebarOpen ? "block" : "none",
+        }}
       >
         <div className="flex items-center justify-between p-4">
           <div className="flex w-full justify-between">

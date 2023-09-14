@@ -20,7 +20,7 @@ export const Dashboard = () => {
   const [isCreateNewProjectModalOpen, setIsCreateNewProjectModalOpen] =
     useState(false);
   const [isDangerZoneModalOpen, setIsDangerZoneModalOpen] = useState(false);
-  const [projectNameToDelete, setProjectNameToDelete] = useState<string>("");
+  const [projectToDelete, setProjectToDelete] = useState<Project>();
 
   const { isLoading } = useGetProjects(userId!, token!);
   const navigate = useNavigate();
@@ -29,76 +29,74 @@ export const Dashboard = () => {
   const handleOpenBoard = (project: Project) => {
     dispatch(removeTasks());
     dispatch(setActiveProject(project));
-    navigate(`/projects/${project.slug}/dashboard`);
+    navigate(`/projects/${project.slug}/project-dashboard`);
   };
 
-  const handleOpenDangerZoneModal = (projectName?: string) => {
-    setProjectNameToDelete(projectName ?? "");
+  const handleOpenDangerZoneModal = (project?: Project) => {
+    setProjectToDelete(project);
     setIsDangerZoneModalOpen(true);
   };
 
   return (
     <div className="flex h-screen flex-col bg-dark-background text-white">
       <Navbar />
-      <div className="flex justify-end">
-        <div className="mt-7 w-[80%] px-10">
-          <div className="animate-resize flex w-full justify-between">
-            <h1 className="mr-5 min-w-fit text-2xl">Your projects</h1>
-            <div className="w-[8rem]">
-              <SmallButton
-                title="Create new project"
-                onClick={() => setIsCreateNewProjectModalOpen(true)}
-              />
-            </div>
+      <div className="ml-[20%] mt-4 w-[80%] px-4 max-md:ml-0 max-md:w-full">
+        <div className="flex w-full justify-between">
+          <h1 className="mr-5 min-w-fit text-2xl">Your projects</h1>
+          <div className="w-[8rem]">
+            <SmallButton
+              title="Create new project"
+              onClick={() => setIsCreateNewProjectModalOpen(true)}
+            />
           </div>
+        </div>
 
-          <div className="mt-5 rounded-md border-2 border-icon-gray">
-            {!projects.length && (
-              <div
-                onClick={() => setIsCreateNewProjectModalOpen(true)}
-                className="rounded-md"
-              >
-                <div className="flex items-center justify-between px-2 py-3 first:border-0 hover:cursor-pointer hover:bg-icon-gray">
-                  <div>
-                    <CreateNewFolder className="mr-2" />
-                    <span className="mr-4 text-xl">No projects yet</span>
-                    <span className="text-sm">Create a new project</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {projects.map((project: Project) => (
-              <div
-                key={project.id}
-                onClick={() => handleOpenBoard(project)}
-                className="flex items-center justify-between border-t-2 border-icon-gray px-4 py-3 first:border-0 hover:cursor-pointer hover:bg-icon-gray"
-              >
+        <div className="mt-5 rounded-md border-2 border-icon-gray">
+          {!projects.length && (
+            <div
+              onClick={() => setIsCreateNewProjectModalOpen(true)}
+              className="rounded-md"
+            >
+              <div className="flex items-center justify-between px-2 py-3 first:border-0 hover:cursor-pointer hover:bg-icon-gray">
                 <div>
-                  {isLoading ? (
-                    <div
-                      className="inline-block h-6 w-6 animate-spin rounded-full border-[3px] border-current border-t-transparent pl-2 text-blue-600"
-                      role="status"
-                      aria-label="loading"
-                    />
-                  ) : (
-                    <>
-                      <BackpackOutlined className="mr-2" />
-                      <span className="text-xl">{project.name}</span>
-                      <span className="text-sm">{project.description}</span>
-                    </>
-                  )}
+                  <CreateNewFolder className="mr-2" />
+                  <span className="mr-4 text-xl">No projects yet</span>
+                  <span className="text-sm">Create a new project</span>
                 </div>
-                <>
-                  <ProjectSettingDropdown
-                    openDangerZoneModal={() =>
-                      handleOpenDangerZoneModal(project?.name)
-                    }
-                  />
-                </>
               </div>
-            ))}
-          </div>
+            </div>
+          )}
+
+          {projects.map((project: Project) => (
+            <div
+              key={project.id}
+              onClick={() => handleOpenBoard(project)}
+              className="flex items-center justify-between border-t-2 border-icon-gray px-4 py-3 first:border-0 focus-within:bg-slate-600 hover:cursor-pointer hover:bg-icon-gray"
+            >
+              <div>
+                {isLoading ? (
+                  <div
+                    className="inline-block h-6 w-6 animate-spin rounded-full border-[3px] border-current border-t-transparent pl-2 text-blue-600"
+                    role="status"
+                    aria-label="loading"
+                  />
+                ) : (
+                  <>
+                    <BackpackOutlined className="mr-2" />
+                    <span className="text-xl">{project.name}</span>
+                    <span className="text-sm">{project.description}</span>
+                  </>
+                )}
+              </div>
+              <>
+                <ProjectSettingDropdown
+                  openDangerZoneModal={() =>
+                    handleOpenDangerZoneModal(project)
+                  }
+                />
+              </>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -109,7 +107,8 @@ export const Dashboard = () => {
       )}
       {isDangerZoneModalOpen && (
         <DangerZoneModal
-          projectNameToDelete={projectNameToDelete}
+          projectName={projectToDelete?.name}
+          projectSlug={projectToDelete?.slug}
           closeModal={() => setIsDangerZoneModalOpen(false)}
         />
       )}

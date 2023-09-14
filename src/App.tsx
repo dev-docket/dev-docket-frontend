@@ -54,7 +54,7 @@ function App() {
             element={token ? <Dashboard /> : <Navigate to="/login" />}
           />
           <Route
-            path="/projects/:projectSlug/dashboard"
+            path="/projects/:projectSlug/project-dashboard"
             element={<Project />}
           />
 

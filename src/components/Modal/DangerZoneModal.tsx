@@ -1,25 +1,29 @@
 import { Close, ReportProblem } from "@mui/icons-material";
 import { useState } from "react";
-import { useDeleteProjectWithAllTasks } from "../../hooks/projects/useDeleteProjectWithAllTasks";
-import { useAppSelector } from "../../hooks/storeHook";
+import { useAppDispatch } from "../../hooks/storeHook";
+import { deleteProject } from "../../store/slices/actions/project";
 
 interface Props {
-  projectNameToDelete: string;
+  projectName?: string;
+  projectSlug?: string;
   closeModal: () => void;
 }
 
-export const DangerZoneModal = ({ projectNameToDelete, closeModal }: Props) => {
-  const userId = useAppSelector((state) => state.user.user?.id);
-  const token = useAppSelector((state) => state.auth.token);
-
+export const DangerZoneModal = ({
+  projectName,
+  projectSlug,
+  closeModal,
+}: Props) => {
   const [value, setValue] = useState("");
 
-  const { deleteProject } = useDeleteProjectWithAllTasks();
+  const dispach = useAppDispatch();
 
   const handleDeleteProject = async () => {
     if (value !== "delete the project irreversibly") return;
 
-    await deleteProject(userId!, token!, projectNameToDelete);
+    if (!projectSlug) return;
+
+    dispach(deleteProject({ projectSlug }));
     closeModal();
   };
 
@@ -44,7 +48,7 @@ export const DangerZoneModal = ({ projectNameToDelete, closeModal }: Props) => {
             Are you sure you want to delete the project forever?
           </p>
           <p className="text-base text-gray-400">
-            You will delete project: {projectNameToDelete}
+            You will delete project: {projectName}
           </p>
         </div>
 

@@ -1,4 +1,3 @@
-// actions.ts
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../../store";
