@@ -1,21 +1,21 @@
 import { Close } from "@mui/icons-material";
-import { useAppSelector } from "../../../hooks/storeHook";
 import { useState } from "react";
-import { useCreateProject } from "../../../hooks/projects/useCreateProject";
+import { useAppDispatch } from "../../../hooks/storeHook";
+import { createProject } from "../../../store/slices/actions/project";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   closeModal: () => void;
 }
 
 export const CreateNewProjectModal = ({ closeModal }: Props) => {
-  const userId = useAppSelector((state) => state.user.user?.id);
-  const jwt = useAppSelector((state) => state.auth.token);
   const [name, setName] = useState("");
 
-  const { createProject } = useCreateProject();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const handleCreateTask = async () => {
-    await createProject(userId!, jwt!, name);
+  const handleCreateTask = () => {
+    dispatch(createProject({ projectName: name, navigate }));
   };
 
   return (

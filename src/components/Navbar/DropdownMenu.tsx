@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "../../hooks/storeHook";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -14,14 +14,27 @@ export const DropdownMenu = ({ title }: Props) => {
 
   const options = projects.map((project) => (
     <Link
+      onClick={() => setIsOpen(false)}
       key={project.id}
-      to={`/projects/${project.name}/board`}
+      to={`/projects/${project.slug}/project-dashboard`}
       className="text-md block rounded-md px-4 py-2 text-white hover:bg-secondary-background"
       role="menuitem"
     >
       {project.name}
     </Link>
   ));
+
+  useEffect(() => {
+    const closeMenu = () => {
+      setIsOpen(false);
+    };
+
+    window.addEventListener("mousedown", closeMenu);
+
+    return () => {
+      window.removeEventListener("mousedown", closeMenu);
+    };
+  }, []);
 
   return (
     <div className="relative inline-block text-left">
@@ -45,7 +58,7 @@ export const DropdownMenu = ({ title }: Props) => {
         </svg>
       </button>
       {isOpen && (
-        <div className="absolute left-0 border-opacity-20 w-56 origin-top-right rounded-md border border-icon-gray bg-dark-background px-2 py-2 shadow-lg ring-1 ring-black ring-opacity-5">
+        <div className="absolute left-0 w-56 origin-top-right rounded-md border border-icon-gray border-opacity-20 bg-dark-background px-2 py-2 shadow-lg ring-1 ring-black ring-opacity-5">
           <div
             className="py-1"
             role="menu"

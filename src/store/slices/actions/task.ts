@@ -1,4 +1,3 @@
-// actions.ts
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../../store";
@@ -6,6 +5,38 @@ import { Task, TaskStatus } from "../../../types/Task";
 import { toast } from "react-toastify";
 
 const apiUrl = import.meta.env.VITE_API_URL;
+
+export const fetchAllTasksInTeam = createAsyncThunk(
+  "tasks/fetchAllTasksInTeam",
+  async (teamId: number, { getState, rejectWithValue }) => {
+    const { auth } = getState() as RootState;
+    const token = auth.token;
+
+    if (!token) {
+      return rejectWithValue("Please login first");
+    }
+
+    try {
+      const response = await axios.get(`${apiUrl}/teams/${teamId}/tasks`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status !== 200) {
+        throw new Error("Something went wrong!");
+      }
+
+      return await response.data;
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+        return rejectWithValue(err.message);
+      }
+      return rejectWithValue("Something went wrong!");
+    }
+  },
+);
 
 export const fetchAllUserTasks = createAsyncThunk(
   "tasks/fetchAllUserTasks",
