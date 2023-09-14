@@ -1,13 +1,18 @@
 import { Droppable } from "react-beautiful-dnd";
 import { Card } from "./Card";
-import { ColumnType } from "../../pages/Project";
 import { useState } from "react";
 import { Add, Close } from "@mui/icons-material";
 import { useAppDispatch } from "../../hooks/storeHook";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { TaskStatus } from "../../types/Task";
+import { Task, TaskStatus } from "../../types/Task";
 import { createTask } from "../../store/slices/actions/task";
+
+type ColumnType = {
+  id: string;
+  title: string;
+  cards: Task[];
+};
 
 interface Props {
   column: ColumnType;
@@ -67,7 +72,7 @@ export const Column = ({ column }: Props) => {
             <h2 className="mb-4 text-xl font-bold text-white">
               {column.title}
             </h2>
-            {column.cards.map((task, index) => (
+            {column.cards.map((task: Task, index: number) => (
               <Card key={task.id} task={task} index={index} />
             ))}
             {provided.placeholder}
