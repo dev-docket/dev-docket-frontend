@@ -9,8 +9,7 @@ import { SmallButton } from "../components/common/buttons/SmallButton";
 export const Project = () => {
   const { teams, loading } = useAppSelector((state) => state.team);
 
-  const [isCreateNewTeamModalOpen, setIsCreateNewTeamModalOpen] =
-    useState(false);
+  const [, setIsCreateNewTeamModalOpen] = useState(false);
 
   const { projectSlug } = useParams<{
     projectSlug: string;
