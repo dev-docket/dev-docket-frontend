@@ -59,14 +59,14 @@ function App() {
           />
 
           <Route
-            path="/projects/:projectSlug/teams/:teamId"
+            path="/projects/:projectSlug/teams/:teamId/board"
             element={<Team />}
           />
 
-          {/* <Route
-            path="/projects/:projectSlug/board/tasks/:taskId"
-            element={<Project />}
-          /> */}
+          <Route
+            path="/projects/:projectSlug/teams/:teamId/board/tasks/:taskId"
+            element={<Team />}
+          />
 
           {/* Route to auth feature */}
           <Route path="/login" element={<Login />} />

@@ -14,9 +14,9 @@ export const Team = () => {
     (state) => state.globalSettings.isMenuSidebarOpen,
   );
 
-  const { projectSlug } = useParams<{
+  const { projectSlug, teamId } = useParams<{
     projectSlug: string;
-    taskId: string;
+    teamId: string;
   }>();
 
   const dispatch = useAppDispatch();
@@ -24,7 +24,7 @@ export const Team = () => {
 
   const handleModalClose = () => {
     dispatch(closeDetailsTaskSidebar());
-    navigate(`/projects/${projectSlug}/board`);
+    navigate(`/projects/${projectSlug}/teams/${teamId}/board`);
   };
   return (
     <div className="h-screen bg-background-primary text-white">

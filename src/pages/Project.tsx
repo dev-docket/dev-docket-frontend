@@ -25,7 +25,7 @@ export const Project = () => {
   const navigate = useNavigate();
 
   const handleNavigateToTeamPage = (teamId: number) => {
-    navigate(`/projects/${projectSlug}/teams/${teamId}`);
+    navigate(`/projects/${projectSlug}/teams/${teamId}/board`);
   };
 
   useEffect(() => {
