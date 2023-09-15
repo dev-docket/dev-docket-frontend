@@ -18,8 +18,12 @@ const teamPageSlice = createSlice({
       state.activeTaskInSidebar = payload.payload;
       state.isTaskDetailsSidebarOpen = true;
     },
+    closeTaskDetailsSidebar: (state) => {
+      state.isTaskDetailsSidebarOpen = false;
+    },
   },
 });
 
-export const { openTaskDetailsSidebar } = teamPageSlice.actions;
+export const { openTaskDetailsSidebar, closeTaskDetailsSidebar } =
+  teamPageSlice.actions;
 export default teamPageSlice.reducer;

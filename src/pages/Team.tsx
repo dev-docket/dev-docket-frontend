@@ -3,29 +3,46 @@ import { Navbar } from "../components/Navbar/Navbar";
 import { KanbanBoard } from "../features/KanbanBoard/KanbanBoard";
 import { TaskDetailsSidebar } from "../features/KanbanBoard/TaskDetailsSidebar/TaskDetailsSidebar";
 import { useAppDispatch, useAppSelector } from "../hooks/storeHook";
-import { closeDetailsTaskSidebar } from "../store/slices/projectPageSlice";
+import { useEffect } from "react";
+import { closeTaskDetailsSidebar } from "../store/slices/teamPageSlice";
+import { fetchTaskAndOpenDetailsSidebar } from "../store/slices/actions/task";
 
 export const Team = () => {
-  const { isDetailsTaskSidebarOpen, activeTask } = useAppSelector(
-    (state) => state.projectPage,
+  const { isTaskDetailsSidebarOpen, activeTaskInSidebar } = useAppSelector(
+    (state) => state.teamPage,
   );
 
   const isMenuSidebarOpen = useAppSelector(
     (state) => state.globalSettings.isMenuSidebarOpen,
   );
 
-  const { projectSlug, teamId } = useParams<{
+  const { projectSlug, teamId, taskId } = useParams<{
     projectSlug: string;
     teamId: string;
+    taskId: string;
   }>();
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleModalClose = () => {
-    dispatch(closeDetailsTaskSidebar());
+    dispatch(closeTaskDetailsSidebar());
     navigate(`/projects/${projectSlug}/teams/${teamId}/board`);
   };
+
+  useEffect(() => {
+    if (!teamId || !taskId) {
+      return;
+    }
+
+    dispatch(
+      fetchTaskAndOpenDetailsSidebar({
+        teamId: Number(teamId),
+        taskId: Number(taskId),
+        dispatch,
+      }),
+    );
+  }, [dispatch, taskId, teamId]);
   return (
     <div className="h-screen bg-background-primary text-white">
       <Navbar />
@@ -41,8 +58,8 @@ export const Team = () => {
       </div>
 
       <TaskDetailsSidebar
-        task={activeTask}
-        show={isDetailsTaskSidebarOpen}
+        task={activeTaskInSidebar}
+        show={isTaskDetailsSidebarOpen}
         onHide={handleModalClose}
       />
     </div>

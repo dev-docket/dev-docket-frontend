@@ -1,8 +1,10 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { AnyAction, ThunkDispatch, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../../store";
 import { Task, TaskStatus } from "../../../types/Task";
 import { toast } from "react-toastify";
+import { Dispatch } from "react";
+import { openTaskDetailsSidebar } from "../teamPageSlice";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -61,6 +63,61 @@ export const fetchAllUserTasks = createAsyncThunk(
 
       if (response.status !== 200) {
         throw new Error("Something went wrong!");
+      }
+
+      return await response.data;
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+        return rejectWithValue(err.message);
+      }
+      return rejectWithValue("Something went wrong!");
+    }
+  },
+);
+
+/**
+ * Fetches a single task from the server and opens the task details sidebar
+ */
+export const fetchTaskAndOpenDetailsSidebar = createAsyncThunk(
+  "tasks/fetchTask",
+  async (
+    {
+      teamId,
+      taskId,
+      dispatch,
+    }: {
+      teamId: number;
+      taskId: number;
+      dispatch?: ThunkDispatch<unknown, undefined, AnyAction> &
+        Dispatch<AnyAction>;
+    },
+    { getState, rejectWithValue },
+  ) => {
+    const { user, auth } = getState() as RootState;
+    const userId = user.userId;
+    const token = auth.token;
+
+    if (!userId || !token) {
+      return rejectWithValue("Please login first");
+    }
+
+    try {
+      const response = await axios.get(
+        `${apiUrl}/teams/${teamId}/tasks/${taskId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Something went wrong!");
+      }
+
+      if (dispatch) {
+        dispatch(openTaskDetailsSidebar(response.data));
       }
 
       return await response.data;
