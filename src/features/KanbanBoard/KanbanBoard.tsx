@@ -129,7 +129,6 @@ export const KanbanBoard = () => {
   }, [tasks]);
 
   useEffect(() => {
-    console.log("teamId", Number(teamId));
     dispatch(fetchAllTasksInTeam(Number(teamId)));
   }, [dispatch, teamId]);
 
