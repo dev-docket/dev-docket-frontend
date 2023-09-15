@@ -14,7 +14,7 @@ export const CreateNewProjectModal = ({ closeModal }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleCreateTask = () => {
+  const handleCreateProject = () => {
     dispatch(createProject({ projectName: name, navigate }));
   };
 
@@ -34,8 +34,8 @@ export const CreateNewProjectModal = ({ closeModal }: Props) => {
       <div className="w-full p-4">
         <h1 className="text-2xl">Create new project</h1>
         <p className="text-sm">
-          Projects are where you manage your work. They’re made up of
-          issues—tasks and ideas to discuss.
+          Projects are where you manage your work. The contain teams and other
+          structures that help you organize your work.
         </p>
 
         <div className="mt-4">
@@ -44,12 +44,12 @@ export const CreateNewProjectModal = ({ closeModal }: Props) => {
             id="projectName"
             className="mt-1 w-full bg-secondary-background p-2 text-white"
             type="text"
-            placeholder="e.g. Project Unicorn"
+            placeholder="e.g. Unicorn"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
           <button
-            onClick={handleCreateTask}
+            onClick={handleCreateProject}
             className="text-md mt-4 rounded-md bg-[#2ea043] px-3 py-2 hover:bg-[#3ab450]"
           >
             Create project
