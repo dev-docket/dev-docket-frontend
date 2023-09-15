@@ -78,10 +78,10 @@ export const createTask = createAsyncThunk(
   "tasks/createTask",
   async (
     {
-      projectName,
+      teamId,
       name,
       status,
-    }: { projectName: string; name: string; status: TaskStatus },
+    }: { teamId: number; name: string; status: TaskStatus },
     { getState, rejectWithValue },
   ) => {
     const { user, auth } = getState() as RootState;
@@ -94,7 +94,7 @@ export const createTask = createAsyncThunk(
 
     try {
       const response = await axios.post(
-        `${apiUrl}/users/${userId}/projects/${projectName}/tasks`,
+        `${apiUrl}/users/${userId}/teams/${teamId}/tasks`,
         {
           name: name.trim(),
           status,
