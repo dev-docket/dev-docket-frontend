@@ -223,10 +223,10 @@ export const patchTask = createAsyncThunk(
 export const deleteTask = createAsyncThunk(
   "tasks/deleteTask",
   async (_, { getState, rejectWithValue }) => {
-    const { user, auth, projectPage } = getState() as RootState;
+    const { user, auth, teamPage } = getState() as RootState;
     const userId = user.userId;
     const token = auth.token;
-    const taskId = projectPage?.activeTask?.id;
+    const taskId = teamPage?.activeTaskInSidebar?.id;
 
     if (!userId || !token) {
       return rejectWithValue("Please login first");
