@@ -71,6 +71,9 @@ function App() {
           {/* Route to auth feature */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
+          {/* Route to error feature */}
+          <Route path="*" element={<Navigate to="/dashboard" />} />
         </Routes>
       </Router>
     </>
