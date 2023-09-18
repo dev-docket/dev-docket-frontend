@@ -117,7 +117,7 @@ export const createTeam = createAsyncThunk(
         throw new Error("Something went wrong!");
       }
 
-      navigation(`/projects/${projectSlug}/teams/${response.data.id}`);
+      navigation(`/projects/${projectSlug}/teams/${response.data.id}/board`);
 
       return await response.data;
     } catch (err) {
