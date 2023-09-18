@@ -1,8 +1,10 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { AnyAction, ThunkDispatch, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../../store";
 import { Task, TaskStatus } from "../../../types/Task";
 import { toast } from "react-toastify";
+import { Dispatch } from "react";
+import { openTaskDetailsSidebar } from "../teamPageSlice";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -74,14 +76,67 @@ export const fetchAllUserTasks = createAsyncThunk(
   },
 );
 
+/**
+ * Fetches a single task from the server and opens the task details sidebar
+ */
+export const fetchTaskAndOpenDetailsSidebar = createAsyncThunk(
+  "tasks/fetchTask",
+  async (
+    {
+      taskId,
+      dispatch,
+    }: {
+      taskId: number;
+      dispatch?: ThunkDispatch<unknown, undefined, AnyAction> &
+        Dispatch<AnyAction>;
+    },
+    { getState, rejectWithValue },
+  ) => {
+    const { user, auth } = getState() as RootState;
+    const userId = user.userId;
+    const token = auth.token;
+
+    if (!userId || !token) {
+      return rejectWithValue("Please login first");
+    }
+
+    try {
+      const response = await axios.get(
+        `${apiUrl}/users/${userId}/tasks/${taskId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Something went wrong!");
+      }
+
+      if (dispatch) {
+        dispatch(openTaskDetailsSidebar(response.data));
+      }
+
+      return await response.data;
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+        return rejectWithValue(err.message);
+      }
+      return rejectWithValue("Something went wrong!");
+    }
+  },
+);
+
 export const createTask = createAsyncThunk(
   "tasks/createTask",
   async (
     {
-      projectName,
+      teamId,
       name,
       status,
-    }: { projectName: string; name: string; status: TaskStatus },
+    }: { teamId: number; name: string; status: TaskStatus },
     { getState, rejectWithValue },
   ) => {
     const { user, auth } = getState() as RootState;
@@ -94,7 +149,7 @@ export const createTask = createAsyncThunk(
 
     try {
       const response = await axios.post(
-        `${apiUrl}/users/${userId}/projects/${projectName}/tasks`,
+        `${apiUrl}/users/${userId}/teams/${teamId}/tasks`,
         {
           name: name.trim(),
           status,
@@ -166,10 +221,10 @@ export const patchTask = createAsyncThunk(
 export const deleteTask = createAsyncThunk(
   "tasks/deleteTask",
   async (_, { getState, rejectWithValue }) => {
-    const { user, auth, projectPage } = getState() as RootState;
+    const { user, auth, teamPage } = getState() as RootState;
     const userId = user.userId;
     const token = auth.token;
-    const taskId = projectPage?.activeTask?.id;
+    const taskId = teamPage?.activeTaskInSidebar?.id;
 
     if (!userId || !token) {
       return rejectWithValue("Please login first");

@@ -2,14 +2,16 @@ import { CopyAll, DeleteOutline } from "@mui/icons-material";
 import { SmallWideButton } from "./SmallWideButton";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
-import { closeDetailsTaskSidebar } from "../../../store/slices/projectPageSlice";
 import { DeleteTaskModal } from "./DeleteTaskModal";
 import { useEffect, useRef, useState } from "react";
 import { displayStatus } from "../../../types/Task";
 import { deleteTask } from "../../../store/slices/actions/task";
+import { closeTaskDetailsSidebar } from "../../../store/slices/teamPageSlice";
 
 export const RightContainer = () => {
-  const activeTask = useAppSelector((state) => state.projectPage.activeTask);
+  const activeTask = useAppSelector(
+    (state) => state.teamPage.activeTaskInSidebar,
+  );
 
   const [isDeleteTaskModalOpen, setIsDeleteTaskModalOpen] = useState(false);
   const [isDivVisible, setIsDivVisible] = useState(false);
@@ -25,7 +27,7 @@ export const RightContainer = () => {
 
   const handleDeleteTask = () => {
     dispatch(deleteTask());
-    dispatch(closeDetailsTaskSidebar());
+    dispatch(closeTaskDetailsSidebar());
     setIsDeleteTaskModalOpen(false);
   };
 

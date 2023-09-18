@@ -48,7 +48,8 @@ export const DangerZoneModal = ({
             Are you sure you want to delete the project forever?
           </p>
           <p className="text-base text-gray-400">
-            You will delete project: {projectName}
+            You will delete project:{" "}
+            <span className="font-bold">{projectName}</span>
           </p>
         </div>
 

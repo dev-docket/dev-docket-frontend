@@ -3,6 +3,7 @@ import { Task, TaskStatus } from "../../types/Task";
 import {
   createTask,
   deleteTask,
+  fetchAllTasksInTeam,
   fetchAllUserTasks,
   patchTask,
 } from "./actions/task";
@@ -70,7 +71,20 @@ const taskSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    
+    builder.addCase(fetchAllTasksInTeam.pending, (state) => {
+      state.loading = "pending";
+    });
+    builder.addCase(
+      fetchAllTasksInTeam.fulfilled,
+      (state, action: PayloadAction<Task[]>) => {
+        state.loading = "idle";
+        state.tasks = action.payload;
+      },
+    );
+    builder.addCase(fetchAllTasksInTeam.rejected, (state, action) => {
+      state.loading = "failed";
+      state.error = action.payload as string;
+    });
     builder.addCase(fetchAllUserTasks.pending, (state) => {
       state.loading = "pending";
     });

@@ -22,7 +22,7 @@ export const Column = ({ column }: Props) => {
   const [isNewTaskInputActive, setIsNewTaskInputActive] = useState(false);
   const [newTaskName, setNewTaskName] = useState("");
 
-  const { projectName } = useParams<{ projectName: string }>();
+  const { teamId } = useParams<{ teamId: string }>();
 
   const dispatch = useAppDispatch();
 
@@ -32,8 +32,8 @@ export const Column = ({ column }: Props) => {
       return;
     }
 
-    if (!projectName) {
-      toast.error("Project name is empty");
+    if(!teamId) {
+      toast.error("Team id is not defined");
       return;
     }
 
@@ -46,7 +46,7 @@ export const Column = ({ column }: Props) => {
 
     dispatch(
       createTask({
-        projectName,
+        teamId: Number(teamId),
         name: newTaskName,
         status,
       }),

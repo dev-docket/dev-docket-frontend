@@ -10,6 +10,7 @@ import projectPageSlice from "./slices/projectPageSlice";
 import projectSlice, { ProjectState } from "./slices/projectSlice";
 import teamPageSlice from "./slices/teamPageSlice";
 import teamSlice from "./slices/teamSlice";
+import globalSettingsSlice from "./slices/globalSettingsSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -42,6 +43,7 @@ export const store = configureStore({
     team: teamSlice,
     task: taskSlice,
 
+    globalSettings: globalSettingsSlice,
     projectPage: projectPageSlice,
     teamPage: teamPageSlice,
   },

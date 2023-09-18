@@ -3,15 +3,22 @@ import { Navbar } from "../components/Navbar/Navbar";
 import { KanbanBoard } from "../features/KanbanBoard/KanbanBoard";
 import { TaskDetailsSidebar } from "../features/KanbanBoard/TaskDetailsSidebar/TaskDetailsSidebar";
 import { useAppDispatch, useAppSelector } from "../hooks/storeHook";
-import { closeDetailsTaskSidebar } from "../store/slices/projectPageSlice";
+import { useEffect } from "react";
+import { closeTaskDetailsSidebar } from "../store/slices/teamPageSlice";
+import { fetchTaskAndOpenDetailsSidebar } from "../store/slices/actions/task";
 
 export const Team = () => {
-  const { isDetailsTaskSidebarOpen, activeTask } = useAppSelector(
-    (state) => state.projectPage,
+  const { isTaskDetailsSidebarOpen, activeTaskInSidebar } = useAppSelector(
+    (state) => state.teamPage,
   );
 
-  const { projectSlug } = useParams<{
+  const isMenuSidebarOpen = useAppSelector(
+    (state) => state.globalSettings.isMenuSidebarOpen,
+  );
+
+  const { projectSlug, teamId, taskId } = useParams<{
     projectSlug: string;
+    teamId: string;
     taskId: string;
   }>();
 
@@ -19,22 +26,38 @@ export const Team = () => {
   const navigate = useNavigate();
 
   const handleModalClose = () => {
-    dispatch(closeDetailsTaskSidebar());
-    navigate(`/projects/${projectSlug}/board`);
+    dispatch(closeTaskDetailsSidebar());
+    navigate(`/projects/${projectSlug}/teams/${teamId}/board`);
   };
+
+  useEffect(() => {
+    if (!taskId) {
+      return;
+    }
+
+    dispatch(
+      fetchTaskAndOpenDetailsSidebar({
+        taskId: Number(taskId),
+        dispatch,
+      }),
+    );
+  }, [dispatch, taskId]);
+
   return (
     <div className="h-screen bg-background-primary text-white">
       <Navbar />
 
-      <div className="flex h-full flex-col">
-        <div className="ml-[20%] w-[80%] flex-grow overflow-auto p-4 transition-all max-md:ml-0 max-md:w-full">
-          <KanbanBoard />
-        </div>
+      <div
+        className={`flex flex-col ${
+          isMenuSidebarOpen ? "ml-[20%] w-[80%]" : "ml-0 w-full"
+        } overflow-auto p-4 transition-all`}
+      >
+        <KanbanBoard />
       </div>
 
       <TaskDetailsSidebar
-        task={activeTask}
-        show={isDetailsTaskSidebarOpen}
+        task={activeTaskInSidebar}
+        show={isTaskDetailsSidebarOpen}
         onHide={handleModalClose}
       />
     </div>

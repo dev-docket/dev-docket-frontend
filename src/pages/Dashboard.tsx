@@ -16,6 +16,9 @@ export const Dashboard = () => {
   const userId = useAppSelector((state) => state.user.user?.id);
   const token = useAppSelector((state) => state.auth.token);
   const projects = useAppSelector((state) => state.project.projects);
+  const isMenuSidebarOpen = useAppSelector(
+    (state) => state.globalSettings.isMenuSidebarOpen,
+  );
 
   const [isCreateNewProjectModalOpen, setIsCreateNewProjectModalOpen] =
     useState(false);
@@ -40,7 +43,11 @@ export const Dashboard = () => {
   return (
     <div className="flex h-screen flex-col bg-dark-background text-white">
       <Navbar />
-      <div className="ml-[20%] mt-4 w-[80%] px-4 max-md:ml-0 max-md:w-full">
+      <div
+        className={`${
+          isMenuSidebarOpen ? "ml-[20%]" : "w-full"
+        } mt-4 px-4 max-md:ml-0 max-md:w-full`}
+      >
         <div className="flex w-full justify-between">
           <h1 className="mr-5 min-w-fit text-2xl">Your projects</h1>
           <div className="w-[8rem]">
@@ -90,9 +97,7 @@ export const Dashboard = () => {
               </div>
               <>
                 <ProjectSettingDropdown
-                  openDangerZoneModal={() =>
-                    handleOpenDangerZoneModal(project)
-                  }
+                  openDangerZoneModal={() => handleOpenDangerZoneModal(project)}
                 />
               </>
             </div>

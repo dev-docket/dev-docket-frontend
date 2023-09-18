@@ -3,7 +3,9 @@ import { Column } from "./Column";
 import { useUpdateStatusOfTask } from "../../hooks/tasks/useUpdateStatusOfTask";
 import { Task, TaskStatus } from "../../types/Task";
 import { useEffect, useState } from "react";
-import { useAppSelector } from "../../hooks/storeHook";
+import { useAppDispatch, useAppSelector } from "../../hooks/storeHook";
+import { fetchAllTasksInTeam } from "../../store/slices/actions/task";
+import { useParams } from "react-router-dom";
 
 export type ColumnType = {
   id: string;
@@ -41,7 +43,11 @@ export const KanbanBoard = () => {
     ...initialBoard,
   });
 
+  const { teamId } = useParams<{ teamId: string }>();
+
   const { updateStatusOfTask } = useUpdateStatusOfTask();
+
+  const dispatch = useAppDispatch();
 
   const handleDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -121,6 +127,10 @@ export const KanbanBoard = () => {
       ],
     }));
   }, [tasks]);
+
+  useEffect(() => {
+    dispatch(fetchAllTasksInTeam(Number(teamId)));
+  }, [dispatch, teamId]);
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>

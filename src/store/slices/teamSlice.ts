@@ -1,5 +1,9 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { fetchTeamsByProjectId, fetchTeamsByProjectSlug } from "./actions/team";
+import {
+  createTeam,
+  fetchTeamsByProjectId,
+  fetchTeamsByProjectSlug,
+} from "./actions/team";
 
 interface Team {
   id?: number;
@@ -53,6 +57,16 @@ const teamSlice = createSlice({
       state.loading = "succeeded";
     });
     builder.addCase(fetchTeamsByProjectSlug.rejected, (state) => {
+      state.loading = "failed";
+    });
+    builder.addCase(createTeam.pending, (state) => {
+      state.loading = "pending";
+    });
+    builder.addCase(createTeam.fulfilled, (state, action) => {
+      state.teams.push(action.payload);
+      state.loading = "succeeded";
+    });
+    builder.addCase(createTeam.rejected, (state) => {
       state.loading = "failed";
     });
   },

@@ -1,39 +1,46 @@
 import { Link } from "react-router-dom";
 import { useLogout } from "../../hooks/auth/useLogout";
-import { useAppSelector } from "../../hooks/storeHook";
+import { useAppDispatch, useAppSelector } from "../../hooks/storeHook";
 import { SmallButton } from "../common/buttons/SmallButton";
 import { DropdownMenu } from "./DropdownMenu";
-import { useEffect, useState } from "react";
 import { Close } from "@mui/icons-material";
+import { closeMenuSidebar } from "../../store/slices/globalSettingsSlice";
 
 export const Navbar = () => {
   const userIsLoggedIn = useAppSelector((state) => state.auth.token !== null);
+  const isSidebarOpen = useAppSelector(
+    (state) => state.globalSettings.isMenuSidebarOpen,
+  );
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const dispach = useAppDispatch();
 
   const { logoutUser } = useLogout();
 
-  useEffect(() => {
-    if (window.innerWidth < 768) {
-      setIsSidebarOpen(false);
-    }
+  // useEffect(() => {
+  //   if (window.innerWidth < 768) {
+  //     dispach(closeMenuSidebar());
+  //   }
 
-    window.addEventListener("resize", () => {
-      if (window.innerWidth < 768) {
-        setIsSidebarOpen(false);
-      } else {
-        setIsSidebarOpen(true);
-      }
-    });
+  //   window.addEventListener("resize", () => {
+  //     if (window.innerWidth < 768) {
+  //       dispach(closeMenuSidebar());
+  //     } else {
+  //       dispach(openMenuSidebar());
+  //     }
+  //   });
 
-    return () => {
-      window.removeEventListener("resize", () => {});
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("resize", () => {});
+  //   };
+  // }, [dispach]);
 
   return (
     <>
-      <nav className="z-1 ml-[20%] w-[80%] border-b border-white border-opacity-30 bg-header-background p-4 text-white transition-all max-md:ml-0 max-md:w-full">
+      <nav
+        className={`z-1 transition-all ${
+          isSidebarOpen ? "ml-[20%]" : "w-full"
+        } border-b border-white border-opacity-30 bg-header-background p-4 text-white transition-all max-md:ml-0 max-md:w-full`}
+      >
         <div className="flex justify-between">
           <div className="flex w-full items-center justify-between space-x-4">
             <div>
@@ -76,7 +83,7 @@ export const Navbar = () => {
           <div className="flex w-full justify-between">
             <p>your side menu </p>
             <Close
-              onClick={() => setIsSidebarOpen(false)}
+              onClick={() => dispach(closeMenuSidebar())}
               className="hover:cursor-pointer"
             />
           </div>
