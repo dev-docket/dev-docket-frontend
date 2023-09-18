@@ -5,9 +5,10 @@ import {
 } from "@mui/icons-material";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import { Project } from "../../types/Project";
 
 interface Props {
-  openDangerZoneModal: () => void;
+  openDangerZoneModal: (project?: Project) => void;
 }
 
 export const ProjectSettingDropdown = ({ openDangerZoneModal }: Props) => {
@@ -74,7 +75,7 @@ export const ProjectSettingDropdown = ({ openDangerZoneModal }: Props) => {
             href="#"
             className="mx-2 block rounded-md px-4 py-2 text-red-600 transition-colors hover:bg-red-600 hover:text-white"
           >
-            <div className="flex items-center" onClick={openDangerZoneModal}>
+            <div className="flex items-center" onClick={() => openDangerZoneModal()}>
               <DeleteForever className="mr-2" /> Delete
             </div>
           </a>
