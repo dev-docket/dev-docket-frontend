@@ -83,11 +83,9 @@ export const fetchTaskAndOpenDetailsSidebar = createAsyncThunk(
   "tasks/fetchTask",
   async (
     {
-      teamId,
       taskId,
       dispatch,
     }: {
-      teamId: number;
       taskId: number;
       dispatch?: ThunkDispatch<unknown, undefined, AnyAction> &
         Dispatch<AnyAction>;
@@ -104,7 +102,7 @@ export const fetchTaskAndOpenDetailsSidebar = createAsyncThunk(
 
     try {
       const response = await axios.get(
-        `${apiUrl}/teams/${teamId}/tasks/${taskId}`,
+        `${apiUrl}/users/${userId}/tasks/${taskId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -37,7 +37,6 @@ export const Team = () => {
 
     dispatch(
       fetchTaskAndOpenDetailsSidebar({
-        teamId: Number(teamId),
         taskId: Number(taskId),
         dispatch,
       }),
