@@ -19,6 +19,7 @@ const teamPageSlice = createSlice({
       state.isTaskDetailsSidebarOpen = true;
     },
     closeTaskDetailsSidebar: (state) => {
+      state.activeTaskInSidebar = undefined;
       state.isTaskDetailsSidebarOpen = false;
     },
   },
