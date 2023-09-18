@@ -69,16 +69,20 @@ export const deleteProject = createAsyncThunk(
     }
 
     try {
-      const response = await axios.delete(`${apiUrl}/projects/${projectSlug}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.delete(
+        `${apiUrl}/users/${userId}/projects/${projectSlug}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       if (response.status !== 204) {
         throw new Error("Something went wrong!");
       }
 
+      toast.success("Project deleted successfully!");
       return projectSlug;
     } catch (err) {
       if (err instanceof Error) {
