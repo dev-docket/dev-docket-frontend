@@ -31,7 +31,7 @@ export const Team = () => {
   };
 
   useEffect(() => {
-    if (!teamId || !taskId) {
+    if (!taskId) {
       return;
     }
 
@@ -41,7 +41,8 @@ export const Team = () => {
         dispatch,
       }),
     );
-  }, [dispatch, taskId, teamId]);
+  }, [dispatch, taskId]);
+
   return (
     <div className="h-screen bg-background-primary text-white">
       <Navbar />
