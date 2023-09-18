@@ -20,23 +20,23 @@ export const Navbar = () => {
 
   const { logoutUser } = useLogout();
 
-  useEffect(() => {
-    if (window.innerWidth < 768) {
-      dispach(closeMenuSidebar());
-    }
+  // useEffect(() => {
+  //   if (window.innerWidth < 768) {
+  //     dispach(closeMenuSidebar());
+  //   }
 
-    window.addEventListener("resize", () => {
-      if (window.innerWidth < 768) {
-        dispach(closeMenuSidebar());
-      } else {
-        dispach(openMenuSidebar());
-      }
-    });
+  //   window.addEventListener("resize", () => {
+  //     if (window.innerWidth < 768) {
+  //       dispach(closeMenuSidebar());
+  //     } else {
+  //       dispach(openMenuSidebar());
+  //     }
+  //   });
 
-    return () => {
-      window.removeEventListener("resize", () => {});
-    };
-  }, [dispach]);
+  //   return () => {
+  //     window.removeEventListener("resize", () => {});
+  //   };
+  // }, [dispach]);
 
   return (
     <>

@@ -5,7 +5,7 @@ interface GlobalSettingsState {
 }
 
 const initialState: GlobalSettingsState = {
-  isMenuSidebarOpen: true,
+  isMenuSidebarOpen: false,
 };
 
 const globalSettingsSlice = createSlice({
