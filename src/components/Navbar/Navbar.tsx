@@ -3,12 +3,8 @@ import { useLogout } from "../../hooks/auth/useLogout";
 import { useAppDispatch, useAppSelector } from "../../hooks/storeHook";
 import { SmallButton } from "../common/buttons/SmallButton";
 import { DropdownMenu } from "./DropdownMenu";
-import { useEffect } from "react";
 import { Close } from "@mui/icons-material";
-import {
-  closeMenuSidebar,
-  openMenuSidebar,
-} from "../../store/slices/globalSettingsSlice";
+import { closeMenuSidebar } from "../../store/slices/globalSettingsSlice";
 
 export const Navbar = () => {
   const userIsLoggedIn = useAppSelector((state) => state.auth.token !== null);
