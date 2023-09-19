@@ -4,10 +4,15 @@ import { Task } from "../../types/Task";
 interface TeamPageState {
   isTaskDetailsSidebarOpen: boolean;
   activeTaskInSidebar?: Task;
+  isDescriptionInputActive?: boolean;
+  descriptionInputValue?: string;
 }
 
 const initialState: TeamPageState = {
   isTaskDetailsSidebarOpen: false,
+  activeTaskInSidebar: undefined,
+  isDescriptionInputActive: false,
+  descriptionInputValue: undefined,
 };
 
 const teamPageSlice = createSlice({
@@ -19,12 +24,22 @@ const teamPageSlice = createSlice({
       state.isTaskDetailsSidebarOpen = true;
     },
     closeTaskDetailsSidebar: (state) => {
-      state.activeTaskInSidebar = undefined;
       state.isTaskDetailsSidebarOpen = false;
+      state.isDescriptionInputActive = false;
+    },
+    setDescriptionInputActive: (state, payload: PayloadAction<boolean>) => {
+      state.isDescriptionInputActive = payload.payload;
+    },
+    setDescriptionInputValue: (state, payload: PayloadAction<string>) => {
+      state.descriptionInputValue = payload.payload;
     },
   },
 });
 
-export const { openTaskDetailsSidebar, closeTaskDetailsSidebar } =
-  teamPageSlice.actions;
+export const {
+  openTaskDetailsSidebar,
+  closeTaskDetailsSidebar,
+  setDescriptionInputActive,
+  setDescriptionInputValue,
+} = teamPageSlice.actions;
 export default teamPageSlice.reducer;
