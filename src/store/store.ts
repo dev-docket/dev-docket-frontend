@@ -6,7 +6,6 @@ import persistStore from "redux-persist/es/persistStore";
 import taskSlice from "./slices/taskSlice";
 import authSlice, { AuthState } from "./slices/authSlice";
 import userSlice, { UserState } from "./slices/userSlice";
-import projectPageSlice from "./slices/projectPageSlice";
 import projectSlice, { ProjectState } from "./slices/projectSlice";
 import teamPageSlice from "./slices/teamPageSlice";
 import teamSlice from "./slices/teamSlice";
@@ -44,7 +43,7 @@ export const store = configureStore({
     task: taskSlice,
 
     globalSettings: globalSettingsSlice,
-    projectPage: projectPageSlice,
+    // projectPage: projectPageSlice,
     teamPage: teamPageSlice,
   },
   middleware: getDefaultMiddleware({
