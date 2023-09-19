@@ -1,8 +1,12 @@
 import ReactMarkdown from "react-markdown";
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
-import { setDescriptionInputActive } from "../../../store/slices/projectPageSlice";
 import { Task } from "../../../types/Task";
 import { DescriptionEditMode } from "./DescriptionEditMode";
+import {
+  setDescriptionInputActive,
+  setDescriptionInputValue,
+} from "../../../store/slices/teamPageSlice";
+import { useEffect } from "react";
 
 interface Props {
   task?: Task;
@@ -10,11 +14,18 @@ interface Props {
 
 export const LeftContainer = (props: Props) => {
   const { task } = props;
-  const { isDescriptionInputActive, descriptionInputValue } = useAppSelector(
-    (state) => state.projectPage,
-  );
+  const {
+    isDescriptionInputActive,
+    descriptionInputValue,
+    activeTaskInSidebar,
+  } = useAppSelector((state) => state.teamPage);
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!activeTaskInSidebar?.description) return;
+    dispatch(setDescriptionInputValue(activeTaskInSidebar?.description));
+  }, [activeTaskInSidebar, dispatch]);
 
   const profileWithEditButton = () => {
     return (
@@ -60,7 +71,7 @@ export const LeftContainer = (props: Props) => {
   };
 
   return (
-    <div className="w-[66%] max-md:w-full border-r border-r-border-dark-primary bg-[#161b22]">
+    <div className="w-[66%] border-r border-r-border-dark-primary bg-[#161b22] max-md:w-full">
       {task && task.id ? (
         <div className="w-full border-b border-b-border-dark-primary bg-[#0d1117] p-5">
           {conditionalDescription()}
