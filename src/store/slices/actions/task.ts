@@ -80,7 +80,7 @@ export const fetchAllUserTasks = createAsyncThunk(
  * Fetches a single task from the server and opens the task details sidebar
  */
 export const fetchTaskAndOpenDetailsSidebar = createAsyncThunk(
-  "tasks/fetchTask",
+  "tasks/fetchTaskAndOpenDetailsSidebar",
   async (
     {
       taskId,
