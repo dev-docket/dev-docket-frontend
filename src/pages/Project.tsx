@@ -1,124 +1,87 @@
 import { useEffect, useState } from "react";
-import { KanbanBoard } from "../features/KanbanBoard/KanbanBoard";
-import { useFetchTasks } from "../hooks/tasks/useGetTasks";
 import { useAppDispatch, useAppSelector } from "../hooks/storeHook";
-import { Task } from "../types/Task";
-import { TaskDetailsSidebar } from "../features/KanbanBoard/TaskDetailsSidebar/TaskDetailsSidebar";
-import {
-  closeDetailsTaskSidebar,
-  openDetailsTaskSidebar,
-} from "../store/slices/projectPageSlice";
 import { Navbar } from "../components/Navbar/Navbar";
 import { useNavigate, useParams } from "react-router-dom";
-import { setActiveProjectByName } from "../store/slices/projectSlice";
-
-export type ColumnType = {
-  id: string;
-  title: string;
-  cards: Task[];
-};
-
-type BoardType = {
-  columns: ColumnType[];
-};
-
-const initialBoard: BoardType = {
-  columns: [
-    {
-      id: "1",
-      title: "Todo",
-      cards: [],
-    },
-    {
-      id: "2",
-      title: "In Progress",
-      cards: [],
-    },
-    {
-      id: "3",
-      title: "Done",
-      cards: [],
-    },
-  ],
-};
+import { fetchTeamsByProjectSlug } from "../store/slices/actions/team";
+import { TeamCard } from "../features/Project/TeamCard";
+import { SmallButton } from "../components/common/buttons/SmallButton";
+import { CreateNewTeamModal } from "../features/Project/CreateNewTeam/CreateNewTeamModal";
 
 export const Project = () => {
-  const userId = useAppSelector((state) => state.user.user?.id);
-  const token = useAppSelector((state) => state.auth.token);
-  const tasks = useAppSelector((state) => state.task.tasks);
-  const [board, setBoard] = useState<BoardType>({
-    ...initialBoard,
-  });
-  const { isDetailsTaskSidebarOpen, activeTask } = useAppSelector(
-    (state) => state.projectPage,
+  const { teams, loading } = useAppSelector((state) => state.team);
+  const isSidebarOpen = useAppSelector(
+    (state) => state.globalSettings.isMenuSidebarOpen,
   );
 
-  const activeProject = useAppSelector((state) => state.project.activeProject);
-  const { projectName, taskId } = useParams<{
-    projectName: string;
+  const [isCreateNewTeamModalOpen, setIsCreateNewTeamModalOpen] =
+    useState(false);
+
+  const { projectSlug } = useParams<{
+    projectSlug: string;
     taskId: string;
   }>();
 
-  useFetchTasks(userId!, token!, projectName!);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleModalClose = () => {
-    dispatch(closeDetailsTaskSidebar());
-    navigate(`/projects/${projectName}/board`);
+  const handleNavigateToTeamPage = (teamId: number) => {
+    navigate(`/projects/${projectSlug}/teams/${teamId}/board`);
   };
 
   useEffect(() => {
-    if (projectName !== activeProject?.name) {
-      dispatch(setActiveProjectByName(projectName!));
-    }
-  }, [activeProject?.name, dispatch, projectName]);
+    if (!projectSlug) return;
 
-  useEffect(() => {
-    if (taskId) {
-      const task = tasks.find((task) => task.id === parseInt(taskId));
-      if (task) {
-        dispatch(openDetailsTaskSidebar(task));
-      }
-    }
-  }, [dispatch, taskId, tasks]);
-
-  useEffect(() => {
-    setBoard((prev) => ({
-      ...prev,
-      columns: [
-        {
-          ...prev.columns[0],
-          cards: tasks.filter((task) => task.status === "TODO"),
-        },
-        {
-          ...prev.columns[1],
-          cards: tasks.filter((task) => task.status === "IN_PROGRESS"),
-        },
-        {
-          ...prev.columns[2],
-          cards: tasks.filter((task) => task.status === "DONE"),
-        },
-      ],
-    }));
-  }, [tasks]);
+    dispatch(fetchTeamsByProjectSlug(projectSlug));
+  }, [dispatch, projectSlug]);
 
   return (
-    <div className="flex h-screen flex-col bg-dark-background">
+    <div className="flex h-screen flex-col bg-dark-background text-white">
       <Navbar />
-      <div className="h-full overflow-x-auto bg-dark-background ">
-        <div className="container mt-10">
-          <div className="animate-resize px-5">
-            <KanbanBoard columns={board.columns} setBoard={setBoard} />
+      <div
+        className={`mt-4  ${
+          isSidebarOpen ? "ml-[20%]" : "w-[100%]"
+        } px-4 transition-all max-md:w-full`}
+      >
+        <div className="flex w-full justify-between">
+          <div>
+            <h1 className="text-2xl">Your work</h1>
+            <h2 className="text-sm">You can find your teams here in project</h2>
+          </div>
+          <div className="w-[8rem]">
+            <SmallButton
+              title="Create new team"
+              onClick={() => setIsCreateNewTeamModalOpen(true)}
+            />
+          </div>
+        </div>
+
+        <div className="mt-7">
+          <div className="mt-10 flex gap-3 overflow-auto pb-4">
+            {loading == "succeeded" ? (
+              teams.map((team) => (
+                <div key={team.id} className="w-[13rem]">
+                  <TeamCard
+                    team={team}
+                    onNavigateToTeamPage={handleNavigateToTeamPage}
+                  />
+                </div>
+              ))
+            ) : (
+              <div
+                className="inline-block h-6 w-6 animate-spin rounded-full border-[3px] border-current border-t-transparent pl-2 text-blue-600"
+                role="status"
+                aria-label="loading"
+              />
+            )}
           </div>
         </div>
       </div>
 
-      <TaskDetailsSidebar
-        task={activeTask}
-        show={isDetailsTaskSidebarOpen}
-        onHide={handleModalClose}
-      />
+      {isCreateNewTeamModalOpen && (
+        <CreateNewTeamModal
+          closeModal={() => setIsCreateNewTeamModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

@@ -16,38 +16,39 @@ export const Dashboard = () => {
   const userId = useAppSelector((state) => state.user.user?.id);
   const token = useAppSelector((state) => state.auth.token);
   const projects = useAppSelector((state) => state.project.projects);
+  const isMenuSidebarOpen = useAppSelector(
+    (state) => state.globalSettings.isMenuSidebarOpen,
+  );
 
   const [isCreateNewProjectModalOpen, setIsCreateNewProjectModalOpen] =
     useState(false);
   const [isDangerZoneModalOpen, setIsDangerZoneModalOpen] = useState(false);
-  const [projectNameToDelete, setProjectNameToDelete] = useState<string>("");
+  const [projectToDelete, setProjectToDelete] = useState<Project>();
 
   const { isLoading } = useGetProjects(userId!, token!);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const handleOpenBoard = (projectName?: string) => {
-    if (!projectName) return;
-
-    const project = projects.find((p) => p.name === projectName);
-
-    if (!project) return;
-
+  const handleOpenBoard = (project: Project) => {
     dispatch(removeTasks());
     dispatch(setActiveProject(project));
-    navigate(`/projects/${projectName}/board`);
+    navigate(`/projects/${project.slug}/project-dashboard`);
   };
 
-  const handleOpenDangerZoneModal = (projectName?: string) => {
-    setProjectNameToDelete(projectName ?? "");
+  const handleOpenDangerZoneModal = (project?: Project) => {
+    setProjectToDelete(project);
     setIsDangerZoneModalOpen(true);
   };
 
   return (
     <div className="flex h-screen flex-col bg-dark-background text-white">
       <Navbar />
-      <div className="mt-7 px-7">
-        <div className="animate-resize flex w-full justify-between">
+      <div
+        className={`${
+          isMenuSidebarOpen ? "ml-[20%]" : "w-full"
+        } mt-4 px-4 max-md:ml-0 max-md:w-full`}
+      >
+        <div className="flex w-full justify-between">
           <h1 className="mr-5 min-w-fit text-2xl">Your projects</h1>
           <div className="w-[8rem]">
             <SmallButton
@@ -76,8 +77,8 @@ export const Dashboard = () => {
           {projects.map((project: Project) => (
             <div
               key={project.id}
-              onClick={() => handleOpenBoard(project.name)}
-              className="flex items-center justify-between border-t-2 border-icon-gray px-4 py-3 first:border-0 hover:cursor-pointer hover:bg-icon-gray"
+              onClick={() => handleOpenBoard(project)}
+              className="flex items-center justify-between border-t-2 border-icon-gray px-4 py-3 first:border-0 focus-within:bg-slate-600 hover:cursor-pointer hover:bg-icon-gray"
             >
               <div>
                 {isLoading ? (
@@ -96,9 +97,7 @@ export const Dashboard = () => {
               </div>
               <>
                 <ProjectSettingDropdown
-                  openDangerZoneModal={() =>
-                    handleOpenDangerZoneModal(project?.name)
-                  }
+                  openDangerZoneModal={() => handleOpenDangerZoneModal(project)}
                 />
               </>
             </div>
@@ -113,7 +112,8 @@ export const Dashboard = () => {
       )}
       {isDangerZoneModalOpen && (
         <DangerZoneModal
-          projectNameToDelete={projectNameToDelete}
+          projectName={projectToDelete?.name}
+          projectSlug={projectToDelete?.slug}
           closeModal={() => setIsDangerZoneModalOpen(false)}
         />
       )}

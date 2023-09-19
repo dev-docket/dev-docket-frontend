@@ -6,8 +6,10 @@ import persistStore from "redux-persist/es/persistStore";
 import taskSlice from "./slices/taskSlice";
 import authSlice, { AuthState } from "./slices/authSlice";
 import userSlice, { UserState } from "./slices/userSlice";
-import projectPageSlice from "./slices/projectPageSlice";
 import projectSlice, { ProjectState } from "./slices/projectSlice";
+import teamPageSlice from "./slices/teamPageSlice";
+import teamSlice from "./slices/teamSlice";
+import globalSettingsSlice from "./slices/globalSettingsSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -35,9 +37,14 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
     user: userReducer,
-    task: taskSlice,
+
     project: projectReducer,
-    projectPage: projectPageSlice,
+    team: teamSlice,
+    task: taskSlice,
+
+    globalSettings: globalSettingsSlice,
+    // projectPage: projectPageSlice,
+    teamPage: teamPageSlice,
   },
   middleware: getDefaultMiddleware({
     serializableCheck: false,

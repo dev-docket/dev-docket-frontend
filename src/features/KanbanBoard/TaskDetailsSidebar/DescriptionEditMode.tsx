@@ -1,33 +1,34 @@
 import { Edit, RemoveRedEyeOutlined } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
+import ReactMarkdown from "react-markdown";
+import { useState } from "react";
+import { Task } from "../../../types/Task";
+import { patchTask } from "../../../store/slices/actions/task";
 import {
   setDescriptionInputActive,
   setDescriptionInputValue,
-} from "../../../store/slices/projectPageSlice";
-import ReactMarkdown from "react-markdown";
-import { useState } from "react";
-import { useUpdateTaskPartial } from "../../../hooks/tasks/useUpdateTaskPartial";
-import { Task } from "../../../types/Task";
+} from "../../../store/slices/teamPageSlice";
 
 export const DescriptionEditMode = () => {
-  const userId = useAppSelector((state) => state.user.user?.id);
-  const jwt = useAppSelector((state) => state.auth.token);
-  const taskId = useAppSelector((state) => state.projectPage.activeTask?.id);
+  const taskId = useAppSelector(
+    (state) => state.teamPage.activeTaskInSidebar?.id,
+  );
 
   const { isDescriptionInputActive, descriptionInputValue } = useAppSelector(
-    (state) => state.projectPage,
+    (state) => state.teamPage,
   );
 
   const [isPreviewActive, setIsPreviewActive] = useState(false);
 
   const dispatch = useAppDispatch();
-  const { updateTaskPartial } = useUpdateTaskPartial();
 
   const handleUpdateTaskDescription = () => {
-    updateTaskPartial(userId!, taskId!, jwt!, {
-      description: descriptionInputValue,
-    } as Task);
+    if (!taskId) return;
 
+    const task: Partial<Task> = {
+      description: descriptionInputValue,
+    };
+    dispatch(patchTask({ taskId, task }));
     dispatch(setDescriptionInputActive(false));
   };
 

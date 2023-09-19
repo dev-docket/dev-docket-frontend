@@ -1,13 +1,18 @@
 import { Droppable } from "react-beautiful-dnd";
 import { Card } from "./Card";
-import { ColumnType } from "../../pages/Project";
 import { useState } from "react";
 import { Add, Close } from "@mui/icons-material";
-import { useAppSelector } from "../../hooks/storeHook";
+import { useAppDispatch } from "../../hooks/storeHook";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { Task, TaskStatus } from "../../types/Task";
-import { useCreateTaskFromName } from "../../hooks/tasks/useCreateTaskFromName";
+import { createTask } from "../../store/slices/actions/task";
+
+type ColumnType = {
+  id: string;
+  title: string;
+  cards: Task[];
+};
 
 interface Props {
   column: ColumnType;
@@ -16,15 +21,19 @@ interface Props {
 export const Column = ({ column }: Props) => {
   const [isNewTaskInputActive, setIsNewTaskInputActive] = useState(false);
   const [newTaskName, setNewTaskName] = useState("");
-  const userId = useAppSelector((state) => state.user.user?.id);
-  const token = useAppSelector((state) => state.auth.token);
 
-  const { projectName } = useParams<{ projectName: string }>();
-  const { createTask } = useCreateTaskFromName();
+  const { teamId } = useParams<{ teamId: string }>();
+
+  const dispatch = useAppDispatch();
 
   const handleAddNewTask = (taskStatus: string) => {
-    if (!newTaskName) {
+    if (!newTaskName.trim()) {
       toast.error("Task title cannot be empty");
+      return;
+    }
+
+    if(!teamId) {
+      toast.error("Team id is not defined");
       return;
     }
 
@@ -35,14 +44,12 @@ export const Column = ({ column }: Props) => {
         ? "IN_PROGRESS"
         : "DONE";
 
-    createTask(
-      userId!,
-      token!,
-      {
+    dispatch(
+      createTask({
+        teamId: Number(teamId),
         name: newTaskName,
-        status: status,
-      } as Task,
-      projectName!,
+        status,
+      }),
     );
 
     handleCancelNewTask();
@@ -65,7 +72,7 @@ export const Column = ({ column }: Props) => {
             <h2 className="mb-4 text-xl font-bold text-white">
               {column.title}
             </h2>
-            {column.cards.map((task, index) => (
+            {column.cards.map((task: Task, index: number) => (
               <Card key={task.id} task={task} index={index} />
             ))}
             {provided.placeholder}
@@ -78,6 +85,12 @@ export const Column = ({ column }: Props) => {
           <textarea
             value={newTaskName}
             onChange={(e) => setNewTaskName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleAddNewTask(column.title);
+              }
+            }}
             placeholder="Enter title to new task"
             className="w-full resize-none rounded-md border-none bg-dark-background"
           />

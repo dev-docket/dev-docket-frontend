@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Task } from "../../types/Task";
 import { useAppDispatch, useAppSelector } from "../../hooks/storeHook";
-import { openDetailsTaskSidebar } from "../../store/slices/projectPageSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { openTaskDetailsSidebar } from "../../store/slices/teamPageSlice";
 
 interface Props {
   task: Task;
@@ -15,12 +15,16 @@ export const Card = ({ task, index }: Props) => {
 
   const [enabled, setEnabled] = useState(false);
 
+  const { teamId } = useParams<{ teamId: string }>();
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const toggleSidebar = () => {
-    dispatch(openDetailsTaskSidebar(task));
-    navigate(`/projects/${activeProject?.name}/board/tasks/${task.id}`);
+    dispatch(openTaskDetailsSidebar(task));
+    navigate(
+      `/projects/${activeProject?.slug}/teams/${teamId}/board/tasks/${task.id}`,
+    );
   };
 
   useEffect(() => {

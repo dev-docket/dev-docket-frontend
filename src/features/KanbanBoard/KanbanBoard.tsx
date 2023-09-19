@@ -1,20 +1,53 @@
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { Column } from "./Column";
-import { ColumnType } from "../../pages/Project";
 import { useUpdateStatusOfTask } from "../../hooks/tasks/useUpdateStatusOfTask";
-import { TaskStatus } from "../../types/Task";
+import { Task, TaskStatus } from "../../types/Task";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../hooks/storeHook";
+import { fetchAllTasksInTeam } from "../../store/slices/actions/task";
+import { useParams } from "react-router-dom";
 
-interface Props {
+export type ColumnType = {
+  id: string;
+  title: string;
+  cards: Task[];
+};
+
+type BoardType = {
   columns: ColumnType[];
-  setBoard: React.Dispatch<
-    React.SetStateAction<{
-      columns: ColumnType[];
-    }>
-  >;
-}
+};
 
-export const KanbanBoard = ({ columns, setBoard }: Props) => {
+const initialBoard: BoardType = {
+  columns: [
+    {
+      id: "1",
+      title: "Todo",
+      cards: [],
+    },
+    {
+      id: "2",
+      title: "In Progress",
+      cards: [],
+    },
+    {
+      id: "3",
+      title: "Done",
+      cards: [],
+    },
+  ],
+};
+
+export const KanbanBoard = () => {
+  const tasks = useAppSelector((state) => state.task.tasks);
+  const [board, setBoard] = useState<BoardType>({
+    ...initialBoard,
+  });
+
+  const { teamId } = useParams<{ teamId: string }>();
+
   const { updateStatusOfTask } = useUpdateStatusOfTask();
+
+  const dispatch = useAppDispatch();
 
   const handleDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -29,7 +62,7 @@ export const KanbanBoard = ({ columns, setBoard }: Props) => {
     }
 
     // Create a copy of the columns state
-    const newColumns = [...columns];
+    const newColumns = [...board.columns];
 
     // Find the source and destination columns
     const sourceColumn = newColumns.find(
@@ -75,10 +108,34 @@ export const KanbanBoard = ({ columns, setBoard }: Props) => {
     });
   };
 
+  useEffect(() => {
+    setBoard((prev) => ({
+      ...prev,
+      columns: [
+        {
+          ...prev.columns[0],
+          cards: tasks.filter((task) => task.status === "TODO"),
+        },
+        {
+          ...prev.columns[1],
+          cards: tasks.filter((task) => task.status === "IN_PROGRESS"),
+        },
+        {
+          ...prev.columns[2],
+          cards: tasks.filter((task) => task.status === "DONE"),
+        },
+      ],
+    }));
+  }, [tasks]);
+
+  useEffect(() => {
+    dispatch(fetchAllTasksInTeam(Number(teamId)));
+  }, [dispatch, teamId]);
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className="flex space-x-4">
-        {columns.map((column) => (
+        {board.columns.map((column) => (
           <Column key={column.id} column={column} />
         ))}
       </div>

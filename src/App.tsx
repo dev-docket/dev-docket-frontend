@@ -14,6 +14,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { useAppSelector } from "./hooks/storeHook";
 import { useEffect } from "react";
 import { useLogout } from "./hooks/auth/useLogout";
+import { Team } from "./pages/Team";
 
 function App() {
   const token = useAppSelector((state) => state.auth.token);
@@ -52,15 +53,27 @@ function App() {
             path="/dashboard"
             element={token ? <Dashboard /> : <Navigate to="/login" />}
           />
-          <Route path="/projects/:projectName/board" element={<Project />} />
           <Route
-            path="/projects/:projectName/board/tasks/:taskId"
+            path="/projects/:projectSlug/project-dashboard"
             element={<Project />}
+          />
+
+          <Route
+            path="/projects/:projectSlug/teams/:teamId/board"
+            element={<Team />}
+          />
+
+          <Route
+            path="/projects/:projectSlug/teams/:teamId/board/tasks/:taskId"
+            element={<Team />}
           />
 
           {/* Route to auth feature */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
+          {/* Route to error feature */}
+          <Route path="*" element={<Navigate to="/dashboard" />} />
         </Routes>
       </Router>
     </>
