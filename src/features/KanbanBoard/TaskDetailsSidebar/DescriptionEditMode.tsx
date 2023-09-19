@@ -1,19 +1,21 @@
 import { Edit, RemoveRedEyeOutlined } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
-import {
-  setDescriptionInputActive,
-  setDescriptionInputValue,
-} from "../../../store/slices/projectPageSlice";
 import ReactMarkdown from "react-markdown";
 import { useState } from "react";
 import { Task } from "../../../types/Task";
 import { patchTask } from "../../../store/slices/actions/task";
+import {
+  setDescriptionInputActive,
+  setDescriptionInputValue,
+} from "../../../store/slices/teamPageSlice";
 
 export const DescriptionEditMode = () => {
-  const taskId = useAppSelector((state) => state.projectPage.activeTask?.id);
+  const taskId = useAppSelector(
+    (state) => state.teamPage.activeTaskInSidebar?.id,
+  );
 
   const { isDescriptionInputActive, descriptionInputValue } = useAppSelector(
-    (state) => state.projectPage,
+    (state) => state.teamPage,
   );
 
   const [isPreviewActive, setIsPreviewActive] = useState(false);
