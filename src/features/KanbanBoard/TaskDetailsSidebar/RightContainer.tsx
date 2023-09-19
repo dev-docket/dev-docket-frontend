@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { displayStatus } from "../../../types/Task";
 import { deleteTask } from "../../../store/slices/actions/task";
 import { closeTaskDetailsSidebar } from "../../../store/slices/teamPageSlice";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const RightContainer = () => {
   const activeTask = useAppSelector(
@@ -19,6 +20,12 @@ export const RightContainer = () => {
   const divRef = useRef<HTMLDivElement>(null);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const { projectSlug, teamId } = useParams<{
+    projectSlug: string;
+    teamId: string;
+  }>();
 
   const handleCopyUrl = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -28,6 +35,8 @@ export const RightContainer = () => {
   const handleDeleteTask = () => {
     dispatch(deleteTask());
     dispatch(closeTaskDetailsSidebar());
+
+    navigate(`/projects/${projectSlug}/teams/${teamId}/board`);
     setIsDeleteTaskModalOpen(false);
   };
 
