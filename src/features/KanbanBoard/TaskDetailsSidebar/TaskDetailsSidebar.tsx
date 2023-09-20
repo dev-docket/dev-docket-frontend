@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Task } from "../../../types/Task";
 import { Close } from "@mui/icons-material";
 import { LeftContainer } from "./LeftContainer";
@@ -31,7 +31,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
   const sidebarRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
 
-  const handleUpdateTaskName = () => {
+  const handleUpdateTaskName = useCallback(() => {
     dispatch(
       patchTask({
         taskId: Number(taskId),
@@ -42,7 +42,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
       }),
     );
     setIsInputTaskNameActive(false);
-  };
+  }, [dispatch, taskId, taskName]);
 
   useEffect(() => {
     setTaskName(name);
