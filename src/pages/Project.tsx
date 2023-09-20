@@ -6,6 +6,8 @@ import { fetchTeamsByProjectSlug } from "../store/slices/actions/team";
 import { TeamCard } from "../features/Project/TeamCard";
 import { SmallButton } from "../components/common/buttons/SmallButton";
 import { CreateNewTeamModal } from "../features/Project/CreateNewTeam/CreateNewTeamModal";
+import { setActiveTeam } from "../store/slices/teamSlice";
+import { Team } from "../types/Team";
 
 export const Project = () => {
   const { teams, loading } = useAppSelector((state) => state.team);
@@ -24,8 +26,10 @@ export const Project = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleNavigateToTeamPage = (teamId: number) => {
-    navigate(`/projects/${projectSlug}/teams/${teamId}/board`);
+  const handleNavigateToTeamPage = (team: Partial<Team>) => {
+    navigate(`/projects/${projectSlug}/teams/${team.id}/board`);
+
+    dispatch(setActiveTeam(team as Team));
   };
 
   useEffect(() => {
