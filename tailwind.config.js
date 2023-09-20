@@ -11,6 +11,11 @@ export default {
           primary: "#161819",
         },
 
+        highlight: {
+          primary: "#5437DC",
+          secondary: "#2f81f7d9",
+        },
+
         "dark-background": "#161819",
         "secondary-background": "#383838",
         "header-background": "#292929",
