@@ -17,8 +17,8 @@ export const SmallWideButton = (props: Props) => {
   return (
     <button
       onClick={onClick}
-      className={`${className[customHoverBgColor]} bg-primary-background text-whit h-10 w-full rounded-md px-2
-      text-left transition-colors ease-in-out hover:bg-button-hover-dark hover:bg-opacity-80 active:bg-opacity-100`}
+      className={`${className[customHoverBgColor]} h-10 w-full rounded-md px-2 text-left
+      text-white transition-colors ease-in-out hover:bg-button-hover-dark hover:bg-opacity-80 active:bg-opacity-100`}
     >
       {children}
     </button>

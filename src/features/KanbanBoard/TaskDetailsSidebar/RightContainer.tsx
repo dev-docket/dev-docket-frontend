@@ -59,7 +59,7 @@ export const RightContainer = () => {
   // }, []);
 
   return (
-    <div className="w-full max-w-[34%]">
+    <div className="w-full max-w-[34%] max-md:max-w-full">
       {/* <div className="relative border-b border-border-dark-primary px-5 py-5">
         <div className="flex items-center justify-between">
           <dt>Status</dt>
