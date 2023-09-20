@@ -4,21 +4,18 @@ import {
   fetchTeamsByProjectId,
   fetchTeamsByProjectSlug,
 } from "./actions/team";
-
-interface Team {
-  id?: number;
-  name: string;
-  projectId: number;
-}
+import { Team } from "../../types/Team";
 
 interface TeamSlice {
   teams: Team[];
   loading: "idle" | "pending" | "succeeded" | "failed";
+  activeTeam?: Team;
 }
 
 const initialState: TeamSlice = {
   teams: [],
   loading: "idle",
+  activeTeam: undefined,
 };
 
 const teamSlice = createSlice({
@@ -36,6 +33,12 @@ const teamSlice = createSlice({
         (team) => team.id === payload.payload.id,
       );
       state.teams[index] = payload.payload;
+    },
+    setActiveTeam: (state, payload: PayloadAction<Team>) => {
+      state.activeTeam = payload.payload;
+    },
+    clearActiveTeam: (state) => {
+      state.activeTeam = undefined;
     },
   },
   extraReducers(builder) {
@@ -72,5 +75,11 @@ const teamSlice = createSlice({
   },
 });
 
-export const { addTeam, removeTeam, updateTeam } = teamSlice.actions;
+export const {
+  addTeam,
+  removeTeam,
+  updateTeam,
+  setActiveTeam,
+  clearActiveTeam,
+} = teamSlice.actions;
 export default teamSlice.reducer;

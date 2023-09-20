@@ -70,7 +70,7 @@ const projectSlice = createSlice({
       }
     },
 
-    removeActiveProject: (state) => {
+    clearActiveProject: (state) => {
       state.activeProject = undefined;
     },
   },
@@ -100,6 +100,6 @@ export const {
   setActiveProject,
   setActiveProjectBySlug,
   setActiveProjectByName,
-  removeActiveProject,
+  clearActiveProject,
 } = projectSlice.actions;
 export default projectSlice.reducer;

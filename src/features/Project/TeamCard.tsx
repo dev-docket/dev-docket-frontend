@@ -3,7 +3,7 @@ import { Team } from "../../types/Team";
 
 interface Props {
   team: Partial<Team>;
-  onNavigateToTeamPage: (teamId: number) => void;
+  onNavigateToTeamPage: (team: Partial<Team>) => void;
 }
 
 export const TeamCard = ({ team, onNavigateToTeamPage }: Props) => {
@@ -12,7 +12,7 @@ export const TeamCard = ({ team, onNavigateToTeamPage }: Props) => {
   const handleNavigateToTeamPage = () => {
     if (!id) return;
 
-    onNavigateToTeamPage(id);
+    onNavigateToTeamPage(team);
   };
   return (
     <div

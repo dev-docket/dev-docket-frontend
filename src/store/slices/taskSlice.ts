@@ -102,20 +102,6 @@ const taskSlice = createSlice({
     builder.addCase(patchTask.pending, (state) => {
       state.loading = "pending";
     });
-    builder.addCase(createTask.pending, (state) => {
-      state.loading = "pending";
-    });
-    builder.addCase(
-      createTask.fulfilled,
-      (state, action: PayloadAction<Task>) => {
-        state.loading = "idle";
-        state.tasks.push(action.payload);
-      },
-    );
-    builder.addCase(createTask.rejected, (state, action) => {
-      state.loading = "failed";
-      state.error = action.payload as string;
-    });
     builder.addCase(
       patchTask.fulfilled,
       (state, action: PayloadAction<Task>) => {
@@ -129,6 +115,20 @@ const taskSlice = createSlice({
       },
     );
     builder.addCase(patchTask.rejected, (state, action) => {
+      state.loading = "failed";
+      state.error = action.payload as string;
+    });
+    builder.addCase(createTask.pending, (state) => {
+      state.loading = "pending";
+    });
+    builder.addCase(
+      createTask.fulfilled,
+      (state, action: PayloadAction<Task>) => {
+        state.loading = "idle";
+        state.tasks.push(action.payload);
+      },
+    );
+    builder.addCase(createTask.rejected, (state, action) => {
       state.loading = "failed";
       state.error = action.payload as string;
     });

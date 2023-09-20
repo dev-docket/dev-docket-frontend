@@ -1,9 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Task } from "../../../types/Task";
 import { Close } from "@mui/icons-material";
 import { LeftContainer } from "./LeftContainer";
 import { RightContainer } from "./RightContainer";
-import { useAppSelector } from "../../../hooks/storeHook";
+import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
+import { patchTask } from "../../../store/slices/actions/task";
+import { useParams } from "react-router-dom";
 
 interface TaskDetailsSidebarProps {
   task?: Task;
@@ -16,10 +18,35 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
   show,
   onHide,
 }) => {
-  const activeProject = useAppSelector((state) => state.project.activeProject);
-
   const { name } = task || {};
+
+  const activeProject = useAppSelector((state) => state.project.activeProject);
+  const activeTeam = useAppSelector((state) => state.team.activeTeam);
+
+  const [taskName, setTaskName] = useState<string | undefined>(name);
+  const [isInputTaskNameActive, setIsInputTaskNameActive] = useState(false);
+
+  const { taskId } = useParams<{ taskId: string }>();
+
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const dispatch = useAppDispatch();
+
+  const handleUpdateTaskName = () => {
+    dispatch(
+      patchTask({
+        taskId: Number(taskId),
+        task: {
+          id: Number(taskId),
+          name: taskName,
+        },
+      }),
+    );
+    setIsInputTaskNameActive(false);
+  };
+
+  useEffect(() => {
+    setTaskName(name);
+  }, [name]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -42,26 +69,6 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
     };
   }, [show, onHide]);
 
-  const sidebarHeader = () => {
-    return (
-      <div className="mt-5 border-b border-gray-600">
-        <div className="flex items-center justify-between px-5">
-          <h2 className="text-sm">{activeProject?.name}</h2>
-
-          <Close className="cursor-pointer" onClick={onHide} />
-        </div>
-
-        <div className="flex items-center justify-between px-5">
-          <h2 className="mb-4 text-xl font-bold">{name ?? "Loading ..."}</h2>
-
-          <button className="rounded-md px-2 py-1 text-sm hover:bg-icon-gray hover:bg-opacity-20">
-            Edit title
-          </button>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div
       ref={sidebarRef}
@@ -69,7 +76,39 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
         show ? "translate-x-0" : "translate-x-full"
       }`}
     >
-      {sidebarHeader()}
+      <div className="mt-5 border-b border-gray-600">
+        <div className="flex items-center justify-between px-5">
+          <h2 className="text-sm">
+            {activeProject?.name} {">"} {activeTeam?.name}
+          </h2>
+
+          <Close className="cursor-pointer" onClick={onHide} />
+        </div>
+
+        <div className="flex items-center justify-between px-5">
+          <div className="py-2">
+            {isInputTaskNameActive ? (
+              <input
+                autoFocus
+                value={taskName}
+                onChange={(e) => setTaskName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleUpdateTaskName();
+                }}
+                className="w-full rounded-md border border-highlight-secondary bg-transparent px-2 py-1 text-sm"
+              />
+            ) : (
+              <h2 className="mb-4 text-xl font-bold">{taskName}</h2>
+            )}
+          </div>
+          <button
+            onClick={() => setIsInputTaskNameActive((prev) => !prev)}
+            className="rounded-md px-2 py-1 text-sm hover:bg-icon-gray hover:bg-opacity-20"
+          >
+            {isInputTaskNameActive ? "Save name" : "Edit name"}
+          </button>
+        </div>
+      </div>
 
       <div className="flex h-full w-full max-md:flex-col">
         <LeftContainer task={task} />
