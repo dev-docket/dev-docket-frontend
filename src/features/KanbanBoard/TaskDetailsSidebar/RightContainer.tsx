@@ -3,8 +3,8 @@ import { SmallWideButton } from "./SmallWideButton";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
 import { DeleteTaskModal } from "./DeleteTaskModal";
-import { useEffect, useRef, useState } from "react";
-import { displayStatus } from "../../../types/Task";
+import { useState } from "react";
+// import { displayStatus } from "../../../types/Task";
 import { deleteTask } from "../../../store/slices/actions/task";
 import { closeTaskDetailsSidebar } from "../../../store/slices/teamPageSlice";
 import { useNavigate, useParams } from "react-router-dom";
@@ -15,9 +15,9 @@ export const RightContainer = () => {
   );
 
   const [isDeleteTaskModalOpen, setIsDeleteTaskModalOpen] = useState(false);
-  const [isDivVisible, setIsDivVisible] = useState(false);
+  // const [isDivVisible, setIsDivVisible] = useState(false);
 
-  const divRef = useRef<HTMLDivElement>(null);
+  // const divRef = useRef<HTMLDivElement>(null);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -40,27 +40,27 @@ export const RightContainer = () => {
     setIsDeleteTaskModalOpen(false);
   };
 
-  const handleDivClick = () => {
-    setIsDivVisible((prev) => !prev);
-  };
+  // const handleDivClick = () => {
+  //   setIsDivVisible((prev) => !prev);
+  // };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (divRef.current && !divRef.current.contains(event.target as Node)) {
-        setIsDivVisible(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event: MouseEvent) => {
+  //     if (divRef.current && !divRef.current.contains(event.target as Node)) {
+  //       setIsDivVisible(false);
+  //     }
+  //   };
 
-    document.addEventListener("mousedown", handleClickOutside);
+  //   document.addEventListener("mousedown", handleClickOutside);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, []);
 
   return (
     <div className="w-full max-w-[34%]">
-      <div className="relative border-b border-border-dark-primary px-5 py-5">
+      {/* <div className="relative border-b border-border-dark-primary px-5 py-5">
         <div className="flex items-center justify-between">
           <dt>Status</dt>
           <dd
@@ -78,7 +78,7 @@ export const RightContainer = () => {
             <div className="bg-dark-background p-5">test</div>
           </div>
         )}
-      </div>
+      </div> */}
       <div className="mt-2 px-2">
         <SmallWideButton onClick={handleCopyUrl}>
           <>
