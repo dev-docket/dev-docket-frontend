@@ -109,7 +109,14 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
             )}
           </div>
           <button
-            onClick={() => setIsInputTaskNameActive((prev) => !prev)}
+            onClick={() =>
+              setIsInputTaskNameActive((prev) => {
+                if (prev) {
+                  handleUpdateTaskName();
+                }
+                return !prev;
+              })
+            }
             className="rounded-md px-2 py-1 text-sm hover:bg-icon-gray hover:bg-opacity-20"
           >
             {isInputTaskNameActive ? "Save name" : "Edit name"}
