@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Task } from "../../../types/Task";
 import { Close } from "@mui/icons-material";
 import { LeftContainer } from "./LeftContainer";
@@ -6,6 +6,7 @@ import { RightContainer } from "./RightContainer";
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
 import { patchTask } from "../../../store/slices/actions/task";
 import { useParams } from "react-router-dom";
+import { updateActiveTeam } from "../../../store/slices/actions/team";
 
 interface TaskDetailsSidebarProps {
   task?: Task;
@@ -26,12 +27,12 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
   const [taskName, setTaskName] = useState<string | undefined>(name);
   const [isInputTaskNameActive, setIsInputTaskNameActive] = useState(false);
 
-  const { taskId } = useParams<{ taskId: string }>();
+  const { teamId, taskId } = useParams<{ teamId: string; taskId: string }>();
 
   const sidebarRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
 
-  const handleUpdateTaskName = () => {
+  const handleUpdateTaskName = useCallback(() => {
     dispatch(
       patchTask({
         taskId: Number(taskId),
@@ -42,7 +43,13 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
       }),
     );
     setIsInputTaskNameActive(false);
-  };
+  }, [dispatch, taskId, taskName]);
+
+  useEffect(() => {
+    if (!activeTeam) {
+      dispatch(updateActiveTeam(Number(teamId)));
+    }
+  }, [activeTeam, dispatch, teamId]);
 
   useEffect(() => {
     setTaskName(name);
