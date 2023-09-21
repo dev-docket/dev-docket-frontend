@@ -3,6 +3,7 @@ import {
   createTeam,
   fetchTeamsByProjectId,
   fetchTeamsByProjectSlug,
+  updateActiveTeam,
 } from "./actions/team";
 import { Team } from "../../types/Team";
 
@@ -70,6 +71,16 @@ const teamSlice = createSlice({
       state.loading = "succeeded";
     });
     builder.addCase(createTeam.rejected, (state) => {
+      state.loading = "failed";
+    });
+    builder.addCase(updateActiveTeam.pending, (state) => {
+      state.loading = "pending";
+    });
+    builder.addCase(updateActiveTeam.fulfilled, (state, action) => {
+      state.activeTeam = action.payload;
+      state.loading = "succeeded";
+    });
+    builder.addCase(updateActiveTeam.rejected, (state) => {
       state.loading = "failed";
     });
   },

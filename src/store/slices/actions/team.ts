@@ -82,6 +82,38 @@ export const fetchTeamsByProjectSlug = createAsyncThunk(
   },
 );
 
+export const updateActiveTeam = createAsyncThunk(
+  "teams/updateActiveTeam",
+  async (teamId: number, { getState, rejectWithValue }) => {
+    const { auth } = getState() as RootState;
+    const token = auth.token;
+
+    if (!token) {
+      return rejectWithValue("Please login first");
+    }
+
+    try {
+      const response = await axios.get(`${apiUrl}/teams/${teamId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status !== 200) {
+        throw new Error("Something went wrong!");
+      }
+
+      return await response.data;
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+        return rejectWithValue(err.message);
+      }
+      return rejectWithValue("Something went wrong!");
+    }
+  },
+);
+
 export const createTeam = createAsyncThunk(
   "teams/createTeam",
   async (
