@@ -8,6 +8,7 @@ import { SmallButton } from "../components/common/buttons/SmallButton";
 import { CreateNewTeamModal } from "../features/Project/CreateNewTeam/CreateNewTeamModal";
 import { setActiveTeam } from "../store/slices/teamSlice";
 import { Team } from "../types/Team";
+import { NewTeamCard } from "../features/Project/NewTeamCard";
 
 export const Project = () => {
   const { teams, loading } = useAppSelector((state) => state.team);
@@ -62,14 +63,20 @@ export const Project = () => {
         <div className="mt-7">
           <div className="mt-10 flex gap-3 overflow-auto pb-4">
             {loading == "succeeded" ? (
-              teams.map((team) => (
-                <div key={team.id} className="w-[13rem]">
-                  <TeamCard
-                    team={team}
-                    onNavigateToTeamPage={handleNavigateToTeamPage}
-                  />
-                </div>
-              ))
+              teams.length > 0 ? (
+                teams.map((team) => (
+                  <div key={team.id} className="w-[13rem]">
+                    <TeamCard
+                      team={team}
+                      onNavigateToTeamPage={handleNavigateToTeamPage}
+                    />
+                  </div>
+                ))
+              ) : (
+                <NewTeamCard
+                  onClick={() => setIsCreateNewTeamModalOpen(true)}
+                />
+              )
             ) : (
               <div
                 className="inline-block h-6 w-6 animate-spin rounded-full border-[3px] border-current border-t-transparent pl-2 text-blue-600"
