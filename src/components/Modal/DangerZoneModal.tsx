@@ -64,6 +64,14 @@ export const DangerZoneModal = ({
           <input
             value={value}
             onChange={(e) => setValue(e.target.value)}
+            type="text"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleDeleteProject();
+
+              if (e.key === "Escape") closeModal();
+
+              if (e.key === "Tab") e.preventDefault();
+            }}
             className="mt-2 w-full rounded-md border-2 border-red-600 bg-[#0d1117] p-2 text-sm focus:border-indigo-500 focus:outline-none"
           />
           <button
