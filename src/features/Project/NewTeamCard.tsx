@@ -12,7 +12,6 @@ export const NewTeamCard = ({ onClick }: Props) => {
     >
       {/* <p>members image</p> */}
       <p className="text-xl">You don't have any team</p>
-      {/* <p className="text-lg">Create now!</p> */}
       <p className="mt-auto flex justify-end text-sm">
         Create now here!
         <Add />
