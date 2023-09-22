@@ -32,6 +32,7 @@ export const Team = () => {
 
   useEffect(() => {
     if (!taskId) {
+      dispatch(closeTaskDetailsSidebar());
       return;
     }
 
