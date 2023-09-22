@@ -9,16 +9,15 @@ import {
 import { useEffect } from "react";
 
 interface Props {
-  task?: Task;
+  task: Task;
 }
 
-export const LeftContainer = (props: Props) => {
-  const { task } = props;
-  const {
-    isDescriptionInputActive,
-    descriptionInputValue,
-    activeTaskInSidebar,
-  } = useAppSelector((state) => state.teamPage);
+export const LeftContainer = ({ task }: Props) => {
+  const { description } = task;
+
+  const { isDescriptionInputActive, activeTaskInSidebar } = useAppSelector(
+    (state) => state.teamPage,
+  );
 
   const dispatch = useAppDispatch();
 
@@ -49,12 +48,12 @@ export const LeftContainer = (props: Props) => {
       return <DescriptionEditMode />;
     }
 
-    if (descriptionInputValue) {
+    if (description) {
       return (
         <>
           {profileWithEditButton()}
           <ReactMarkdown className="markdown-preview prose prose-slate text-white">
-            {`${descriptionInputValue ?? ""}`}
+            {`${description ?? ""}`}
           </ReactMarkdown>
         </>
       );

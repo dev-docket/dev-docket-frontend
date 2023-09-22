@@ -19,6 +19,9 @@ const teamPageSlice = createSlice({
   name: "teamPage",
   initialState,
   reducers: {
+    setActiveTaskInSidebar: (state, payload: PayloadAction<Task>) => {
+      state.activeTaskInSidebar = payload.payload;
+    },
     openTaskDetailsSidebar: (state, payload: PayloadAction<Task>) => {
       state.activeTaskInSidebar = payload.payload;
       state.isTaskDetailsSidebarOpen = true;
@@ -37,6 +40,7 @@ const teamPageSlice = createSlice({
 });
 
 export const {
+  setActiveTaskInSidebar,
   openTaskDetailsSidebar,
   closeTaskDetailsSidebar,
   setDescriptionInputActive,
