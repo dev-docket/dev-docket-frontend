@@ -1,12 +1,12 @@
 import { Edit, RemoveRedEyeOutlined } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
 import ReactMarkdown from "react-markdown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Task } from "../../../types/Task";
 import { patchTask } from "../../../store/slices/actions/task";
 import {
+  setActiveTaskInSidebar,
   setDescriptionInputActive,
-  setDescriptionInputValue,
 } from "../../../store/slices/teamPageSlice";
 
 export const DescriptionEditMode = () => {
@@ -14,11 +14,17 @@ export const DescriptionEditMode = () => {
     (state) => state.teamPage.activeTaskInSidebar?.id,
   );
 
-  const { isDescriptionInputActive, descriptionInputValue } = useAppSelector(
+  const activeTask = useAppSelector(
+    (state) => state.teamPage.activeTaskInSidebar,
+  );
+  const { isDescriptionInputActive } = useAppSelector(
     (state) => state.teamPage,
   );
 
   const [isPreviewActive, setIsPreviewActive] = useState(false);
+  const [newDescription, setNewDescription] = useState(
+    activeTask?.description ?? "",
+  );
 
   const dispatch = useAppDispatch();
 
@@ -26,11 +32,22 @@ export const DescriptionEditMode = () => {
     if (!taskId) return;
 
     const task: Partial<Task> = {
-      description: descriptionInputValue,
+      description: newDescription,
     };
     dispatch(patchTask({ taskId, task }));
     dispatch(setDescriptionInputActive(false));
+
+    dispatch(
+      setActiveTaskInSidebar({
+        ...activeTask,
+        description: newDescription,
+      } as Task),
+    );
   };
+
+  useEffect(() => {
+    setNewDescription(activeTask?.description ?? "");
+  }, [activeTask]);
 
   return (
     <div className="flex flex-col gap-2">
@@ -53,7 +70,7 @@ export const DescriptionEditMode = () => {
 
       {isPreviewActive ? (
         <ReactMarkdown className="markdown-preview prose prose-slate text-white">
-          {`${descriptionInputValue ?? ""}`}
+          {`${newDescription ?? ""}`}
         </ReactMarkdown>
       ) : (
         <textarea
@@ -66,8 +83,8 @@ export const DescriptionEditMode = () => {
               target.selectionEnd = target.value.length;
             }, 0);
           }}
-          value={descriptionInputValue ?? ""}
-          onChange={(e) => dispatch(setDescriptionInputValue(e.target.value))}
+          value={newDescription ?? ""}
+          onChange={(e) => setNewDescription(e.target.value)}
           className="m-0 h-4 min-h-[7rem] w-full rounded-md border-b border-none border-[#2f81f7d9] bg-transparent p-2"
         />
       )}

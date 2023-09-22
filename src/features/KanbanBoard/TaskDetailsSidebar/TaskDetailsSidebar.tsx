@@ -125,7 +125,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
       </div>
 
       <div className="flex h-full w-full max-md:flex-col">
-        <LeftContainer task={task} />
+        {task && <LeftContainer task={task} />}
 
         <RightContainer />
       </div>
