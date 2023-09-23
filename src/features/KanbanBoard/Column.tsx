@@ -32,7 +32,7 @@ export const Column = ({ column }: Props) => {
       return;
     }
 
-    if(!teamId) {
+    if (!teamId) {
       toast.error("Team id is not defined");
       return;
     }
@@ -61,13 +61,13 @@ export const Column = ({ column }: Props) => {
   };
 
   return (
-    <div className="bg-secondary-background text-white">
+    <div className="flex flex-col bg-secondary-background text-white">
       <Droppable droppableId={column.id}>
         {(provided) => (
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className="w-64 rounded p-4"
+            className="h-full w-64 p-4"
           >
             <h2 className="mb-4 text-xl font-bold text-white">
               {column.title}
@@ -81,7 +81,7 @@ export const Column = ({ column }: Props) => {
       </Droppable>
 
       {isNewTaskInputActive ? (
-        <div className="mb-4 px-4">
+        <div className="mb-4 flex w-full max-w-full flex-col px-4 ">
           <textarea
             value={newTaskName}
             onChange={(e) => setNewTaskName(e.target.value)}
@@ -92,20 +92,22 @@ export const Column = ({ column }: Props) => {
               }
             }}
             placeholder="Enter title to new task"
-            className="w-full resize-none rounded-md border-none bg-dark-background"
+            className="mb-2 block max-w-full resize-none rounded-md border-none bg-dark-background"
           />
-          <button
-            onClick={() => handleAddNewTask(column.title)}
-            className="inline-flex items-center justify-center rounded bg-blue-500 px-4 py-2 text-white"
-          >
-            Add new task
-          </button>
-          <button
-            onClick={handleCancelNewTask}
-            className="mx-2 rounded-md px-4 py-2 hover:bg-gray-500 hover:bg-opacity-40"
-          >
-            <Close />
-          </button>
+          <div className="flex justify-between">
+            <button
+              onClick={() => handleAddNewTask(column.title)}
+              className="inline-flex items-center justify-center rounded bg-blue-500 px-4 py-2 text-white"
+            >
+              Add new task
+            </button>
+            <button
+              onClick={handleCancelNewTask}
+              className="rounded-md px-4 py-2 hover:bg-gray-500 hover:bg-opacity-40"
+            >
+              <Close />
+            </button>
+          </div>
         </div>
       ) : (
         <div className="mx-4">
