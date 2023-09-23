@@ -41,7 +41,7 @@ export const createProject = createAsyncThunk(
         throw new Error("Something went wrong!");
       }
 
-      navigate(`/projects/${response.data.slug}/project-dashboard`);
+      navigate(`/projects/${response.data.slug}/dashboard`);
 
       return response.data;
     } catch (err) {

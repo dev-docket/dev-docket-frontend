@@ -31,7 +31,7 @@ export const DropdownMenu = ({ title }: Props) => {
     <Link
       onClick={() => setIsOpen(false)}
       key={project.id}
-      to={`/projects/${project.slug}/project-dashboard`}
+      to={`/projects/${project.slug}/dashboard`}
       className="text-md block rounded-md px-4 py-2 text-white hover:bg-secondary-background"
       role="menuitem"
     >

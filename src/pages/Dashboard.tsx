@@ -9,8 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { setActiveProject } from "../store/slices/projectSlice";
 import { removeTasks } from "../store/slices/taskSlice";
 import { BackpackOutlined, CreateNewFolder } from "@mui/icons-material";
-import { ProjectSettingDropdown } from "../features/Dashboard/ProjectSettingDropdown";
 import { DangerZoneModal } from "../components/Modal/DangerZoneModal";
+import { DashboardSettingDropdown } from "../features/Dashboard/DashboardSettingDropdown";
 
 export const Dashboard = () => {
   const userId = useAppSelector((state) => state.user.user?.id);
@@ -32,7 +32,7 @@ export const Dashboard = () => {
   const handleOpenBoard = (project: Project) => {
     dispatch(removeTasks());
     dispatch(setActiveProject(project));
-    navigate(`/projects/${project.slug}/project-dashboard`);
+    navigate(`/projects/${project.slug}/dashboard`);
   };
 
   const handleOpenDangerZoneModal = (project?: Project) => {
@@ -96,7 +96,7 @@ export const Dashboard = () => {
                 )}
               </div>
               <>
-                <ProjectSettingDropdown
+                <DashboardSettingDropdown
                   openDangerZoneModal={() => handleOpenDangerZoneModal(project)}
                 />
               </>
