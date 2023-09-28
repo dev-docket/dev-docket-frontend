@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { RootState } from "../../store";
+import { ProjectInvitation } from "../../../types/Project";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -94,7 +95,7 @@ export const generateProjectInvitationLink = createAsyncThunk(
     }
 
     try {
-      const response = await axios.post(
+      const response = await axios.post<ProjectInvitation>(
         `${apiUrl}/projects/${projectSlug}/members/invites?creatorId=${userId}`,
         {
           email,

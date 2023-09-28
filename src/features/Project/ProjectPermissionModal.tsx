@@ -25,12 +25,15 @@ interface Props {
 }
 
 export const ProjectPermissionModal = ({ showModal, onCloseModal }: Props) => {
-  const { activeProject, projectInvitation, projectInvitations } =
-    useAppSelector((state) => state.project);
+  const { activeProject, projectInvitations } = useAppSelector(
+    (state) => state.project,
+  );
 
   const [shouldRemove, setShouldRemove] = useState(false);
   const [emailToInvite, setEmailToInvite] = useState("");
   const [emailError, setEmailError] = useState<string | null>(null);
+  const [projectInvitation, setProjectInvitation] =
+    useState<ProjectInvitation | null>(null);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { projectSlug } = useParams<{ projectSlug: string }>();
@@ -72,10 +75,15 @@ export const ProjectPermissionModal = ({ showModal, onCloseModal }: Props) => {
     ).then((userData) => {
       if (userData.meta.requestStatus === "fulfilled") {
         toast.success("Invitation link generated!", { autoClose: 1000 });
+
+        if (userData.payload) {
+          setProjectInvitation(userData.payload as ProjectInvitation);
+        }
       }
       if (userData.meta.requestStatus === "rejected") {
-        console.log(userData.payload);
-        setEmailError(userData.payload);
+        if (!userData.payload) return;
+
+        setEmailError(userData.payload as string);
       }
     });
   };

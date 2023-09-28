@@ -3,13 +3,13 @@ import { Project, ProjectInvitation, ProjectMember } from "../../types/Project";
 import {
   createProject,
   deleteProject,
+  fetchProjectBySlugAndSetAsActive,
   fetchProjectMembersByProjectSlug,
 } from "./actions/project";
 import {
   deleteProjectInvitation,
   fetchProjectInvitation,
   fetchProjectInvitations,
-  generateProjectInvitationLink,
 } from "./actions/projectInvitations";
 
 export interface ProjectState {
@@ -105,6 +105,12 @@ const projectSlice = createSlice({
       },
     );
     builder.addCase(
+      fetchProjectBySlugAndSetAsActive.fulfilled,
+      (state, action) => {
+        state.activeProject = action.payload;
+      },
+    );
+    builder.addCase(
       createProject.fulfilled,
       (state, action: PayloadAction<Project>) => {
         state.projects.push(action.payload);
@@ -122,12 +128,12 @@ const projectSlice = createSlice({
         state.projectInvitation = action.payload;
       },
     );
-    builder.addCase(
-      generateProjectInvitationLink.fulfilled,
-      (state, action: PayloadAction<ProjectInvitation>) => {
-        state.projectInvitation = action.payload;
-      },
-    );
+    // builder.addCase(
+    //   generateProjectInvitationLink.fulfilled,
+    //   (state, action: PayloadAction<ProjectInvitation>) => {
+    //     state.projectInvitation = action.payload;
+    //   },
+    // );
     builder.addCase(
       deleteProjectInvitation.fulfilled,
       (state, action: PayloadAction<string>) => {

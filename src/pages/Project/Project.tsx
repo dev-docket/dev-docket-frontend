@@ -6,7 +6,10 @@ import { CreateNewTeamModal } from "../../features/Project/CreateNewTeam/CreateN
 import { setActiveTeam } from "../../store/slices/teamSlice";
 import { Team } from "../../types/Team";
 import { ProjectSidebar } from "../../features/Project/ProjectSidebar";
-import { fetchProjectMembersByProjectSlug } from "../../store/slices/actions/project";
+import {
+  fetchProjectBySlugAndSetAsActive,
+  fetchProjectMembersByProjectSlug,
+} from "../../store/slices/actions/project";
 import { ProjectPermissionModal } from "../../features/Project/ProjectPermissionModal";
 import { Header } from "../../features/Project/components/Header";
 import { ProjectRoles } from "../../features/Project/components/ProjectRoles";
@@ -70,6 +73,16 @@ export const Project = () => {
     if (!projectSlug) return;
 
     dispatch(fetchTeamsByProjectSlug(projectSlug));
+  }, [dispatch, projectSlug]);
+
+  useEffect(() => {
+    if (!projectSlug) return;
+
+    dispatch(
+      fetchProjectBySlugAndSetAsActive({
+        projectSlug,
+      }),
+    );
   }, [dispatch, projectSlug]);
 
   return (
