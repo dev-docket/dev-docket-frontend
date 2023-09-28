@@ -23,7 +23,7 @@ export const CreateNewTeamModal = ({ closeModal }: Props) => {
   };
 
   return (
-    <div className="absolute z-30 flex h-screen w-screen bg-background-primary max-md:flex-col">
+    <div className="absolute left-0 top-0 z-50 flex h-screen w-screen bg-background-primary text-white max-md:flex-col">
       <div className="flex h-full w-2/4 flex-col bg-dark-background p-4 max-md:h-1/2 max-md:w-full">
         <Close
           onClick={closeModal}
