@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/storeHook";
+import { useAppDispatch, useAppSelector } from "../../hooks/storeHook";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchTeamsByProjectSlug } from "../store/slices/actions/team";
-import { TeamCard } from "../features/Project/TeamCard";
-import { SmallButton } from "../components/common/buttons/SmallButton";
-import { CreateNewTeamModal } from "../features/Project/CreateNewTeam/CreateNewTeamModal";
-import { setActiveTeam } from "../store/slices/teamSlice";
-import { Team } from "../types/Team";
-import { NewTeamCard } from "../features/Project/NewTeamCard";
-import { ProjectSidebar } from "../features/Project/ProjectSidebar";
+import { fetchTeamsByProjectSlug } from "../../store/slices/actions/team";
+import { TeamCard } from "../../features/Project/TeamCard";
+import { SmallButton } from "../../components/common/buttons/SmallButton";
+import { CreateNewTeamModal } from "../../features/Project/CreateNewTeam/CreateNewTeamModal";
+import { setActiveTeam } from "../../store/slices/teamSlice";
+import { Team } from "../../types/Team";
+import { NewTeamCard } from "../../features/Project/NewTeamCard";
+import { ProjectSidebar } from "../../features/Project/ProjectSidebar";
 import { AddCircleRounded, ArrowDropDown, Security } from "@mui/icons-material";
-import { fetchProjectMembersByProjectSlug } from "../store/slices/actions/project";
-import { ProjectPermissionModal } from "../features/Project/ProjectPermissionModal";
+import { fetchProjectMembersByProjectSlug } from "../../store/slices/actions/project";
+import { ProjectPermissionModal } from "../../features/Project/ProjectPermissionModal";
 
 export const Project = () => {
   const { teams, loading } = useAppSelector((state) => state.team);
