@@ -7,6 +7,44 @@ import { Project } from "../../../types/Project";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
+export const fetchProjectMembersByProjectSlug = createAsyncThunk(
+  "project/fetchProjectMembersByProjectSlug",
+  async (
+    { projectSlug }: { projectSlug: string },
+    { getState, rejectWithValue },
+  ) => {
+    const { user, auth } = getState() as RootState;
+    const userId = user.userId;
+
+    if (!userId) {
+      return rejectWithValue("Please login first");
+    }
+
+    try {
+      const response = await axios.get(
+        `${apiUrl}/projects/${projectSlug}/members`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        },
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Something went wrong!");
+      }
+
+      return response.data;
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+        return rejectWithValue(err.message);
+      }
+      return rejectWithValue("Something went wrong!");
+    }
+  },
+);
+
 export const createProject = createAsyncThunk(
   "project/createProject",
   async (
