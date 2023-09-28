@@ -18,7 +18,7 @@ export interface ProjectInvitation {
   token?: string;
   projectId?: number;
   creatorId?: number;
-  projectName?: string;
+  project: Project;
   user: User;
   // expiry?:
 }
