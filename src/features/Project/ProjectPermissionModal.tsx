@@ -152,7 +152,7 @@ export const ProjectPermissionModal = ({ showModal, onCloseModal }: Props) => {
           </div>
         </div>
         <div className="p-4">
-          <p>Invite team member via email:</p>
+          <p>Invite project member via email:</p>
           <div className="rounded-md border border-white border-opacity-30 p-2">
             <div className="mt-2 flex items-center gap-4">
               <div className="flex w-full items-center justify-center text-sm">
@@ -258,10 +258,6 @@ export const ProjectPermissionModal = ({ showModal, onCloseModal }: Props) => {
               </List>
             </div>
           </div>
-          {/* 
-          <div>
-            <p className="mt-2">Or share this link:</p>
-          </div> */}
         </div>
       </div>
     </div>
