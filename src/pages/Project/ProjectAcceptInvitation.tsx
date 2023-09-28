@@ -32,7 +32,9 @@ export const ProjectAcceptInvitation = () => {
       acceptProjectInvitation({
         token: projectInvitation?.token,
       }),
-    );
+    ).then(() => {
+      navigate(`/projects/${projectInvitation?.project.slug}/dashboard`);
+    });
   };
 
   const handleFetchUser = useCallback(
@@ -48,8 +50,6 @@ export const ProjectAcceptInvitation = () => {
       handleFetchUser(projectInvitation.creatorId);
     }
   }, [projectInvitation?.creatorId, handleFetchUser, invitationCreator]);
-
-  // console.log(projectInvitation);
 
   useEffect(() => {
     if (token) {
@@ -75,7 +75,7 @@ export const ProjectAcceptInvitation = () => {
 
           <p>
             You've been invited by {invitationCreator?.email} to join project:{" "}
-            <span className="font-bold">{projectInvitation?.projectName}</span>
+            <span className="font-bold">{projectInvitation?.project.name}</span>
           </p>
           <p>Would you like to accept the invite?</p>
 
