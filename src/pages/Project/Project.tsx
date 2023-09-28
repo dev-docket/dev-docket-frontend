@@ -2,16 +2,15 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/storeHook";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchTeamsByProjectSlug } from "../../store/slices/actions/team";
-import { TeamCard } from "../../features/Project/TeamCard";
 import { CreateNewTeamModal } from "../../features/Project/CreateNewTeam/CreateNewTeamModal";
 import { setActiveTeam } from "../../store/slices/teamSlice";
 import { Team } from "../../types/Team";
-import { NewTeamCard } from "../../features/Project/NewTeamCard";
 import { ProjectSidebar } from "../../features/Project/ProjectSidebar";
 import { fetchProjectMembersByProjectSlug } from "../../store/slices/actions/project";
 import { ProjectPermissionModal } from "../../features/Project/ProjectPermissionModal";
-import { AddMemberButton } from "../../features/Project/components/AddMemberButton";
 import { Header } from "../../features/Project/components/Header";
+import { ProjectRoles } from "../../features/Project/components/ProjectRoles";
+import TeamsSection from "../../features/Project/components/TeamsSection";
 
 export const Project = () => {
   const { teams, loading } = useAppSelector((state) => state.team);
@@ -90,67 +89,17 @@ export const Project = () => {
           />
 
           <div className="pl-4">
-            <div>
-              <>
-                <h3 className="text-2xl">Roles in project</h3>
-                <p>
-                  Add members to your project to give them access to the project
-                </p>
-              </>
+            <ProjectRoles
+              onAddMember={() => setIsProjectPermissionModalOpen(true)}
+              projectMembers={projectMembers}
+            />
 
-              <div className="mt-4 flex items-center">
-                <AddMemberButton
-                  onAddMember={() => setIsProjectPermissionModalOpen(true)}
-                />
-
-                <div className="flex items-center">
-                  {projectMembers && projectMembers?.length > 0 ? (
-                    <>
-                      {projectMembers.map((member) => (
-                        <div
-                          key={member.userId}
-                          className="flex cursor-pointer items-center justify-center rounded-md p-2 text-white hover:bg-icon-gray hover:bg-opacity-30"
-                        >
-                          <p className="text-base">{member?.user?.email}</p>
-                        </div>
-                      ))}
-                    </>
-                  ) : (
-                    <div className="flex items-center justify-center rounded-md p-2 hover:bg-icon-gray hover:bg-opacity-30">
-                      <p className="text-sm">Members: 0</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="my-8">
-              <h3 className="mb-2 text-2xl">Teams in project</h3>
-              <div className="flex gap-3 overflow-auto pb-4">
-                {loading == "succeeded" ? (
-                  teams.length > 0 ? (
-                    teams.map((team) => (
-                      <div key={team.id} className="w-[13rem]">
-                        <TeamCard
-                          team={team}
-                          onNavigateToTeamPage={handleNavigateToTeamPage}
-                        />
-                      </div>
-                    ))
-                  ) : (
-                    <NewTeamCard
-                      onClick={() => setIsCreateNewTeamModalOpen(true)}
-                    />
-                  )
-                ) : (
-                  <div
-                    className="inline-block h-6 w-6 animate-spin rounded-full border-[3px] border-current border-t-transparent pl-2 text-blue-600"
-                    role="status"
-                    aria-label="loading"
-                  />
-                )}
-              </div>
-            </div>
+            <TeamsSection
+              teams={teams}
+              loading={loading}
+              onNavigateToTeamPage={handleNavigateToTeamPage}
+              onOpenCreateTeamModal={() => setIsCreateNewTeamModalOpen(true)}
+            />
           </div>
         </div>
       </div>
