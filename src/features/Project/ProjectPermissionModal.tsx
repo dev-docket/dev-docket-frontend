@@ -30,7 +30,7 @@ export const ProjectPermissionModal = ({ showModal, onCloseModal }: Props) => {
 
   const [shouldRemove, setShouldRemove] = useState(false);
   const [emailToInvite, setEmailToInvite] = useState("");
-  const [isEmailError, setIsEmailError] = useState(false);
+  const [emailError, setEmailError] = useState<string | null>(null);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { projectSlug } = useParams<{ projectSlug: string }>();
@@ -62,17 +62,20 @@ export const ProjectPermissionModal = ({ showModal, onCloseModal }: Props) => {
     }
 
     if (!emailToInvite) {
-      setIsEmailError(true);
+      setEmailError("Email cannot be empty!");
       return;
     }
 
-    setIsEmailError(false);
     setEmailToInvite("");
     dispatch(
       generateProjectInvitationLink({ projectSlug, email: emailToInvite }),
     ).then((userData) => {
       if (userData.meta.requestStatus === "fulfilled") {
         toast.success("Invitation link generated!", { autoClose: 1000 });
+      }
+      if (userData.meta.requestStatus === "rejected") {
+        console.log(userData.payload);
+        setEmailError(userData.payload);
       }
     });
   };
@@ -157,7 +160,7 @@ export const ProjectPermissionModal = ({ showModal, onCloseModal }: Props) => {
                 <div className="ml-2 w-full">
                   <input
                     value={emailToInvite}
-                    onFocus={() => setIsEmailError(false)}
+                    onFocus={() => setEmailError(null)}
                     onChange={(e) => setEmailToInvite(e.target.value)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
@@ -167,9 +170,9 @@ export const ProjectPermissionModal = ({ showModal, onCloseModal }: Props) => {
                     className="w-full rounded-md bg-transparent text-sm outline-none"
                     type="text"
                   />
-                  {isEmailError && (
+                  {emailError && (
                     <div className="mt-2 text-xs text-red-500">
-                      Email cannot be empty!
+                      {emailError}
                     </div>
                   )}
                 </div>
@@ -233,7 +236,7 @@ export const ProjectPermissionModal = ({ showModal, onCloseModal }: Props) => {
                           onClick={() => {
                             handleCopyLinkToInvitation(invitation.token);
                           }}
-                          className="rounded-md hover:bg-white hover:bg-opacity-10 p-4"
+                          className="rounded-md p-4 hover:bg-white hover:bg-opacity-10"
                           primary={
                             <Typography variant="body1" className="text-white">
                               {invitation.user?.email}
