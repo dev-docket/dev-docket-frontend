@@ -16,6 +16,10 @@ export default {
           secondary: "#2f81f7d9",
         },
 
+        link: {
+          primary: "#292929",
+        },
+
         "dark-background": "#161819",
         "secondary-background": "#383838",
         "header-background": "#292929",
@@ -29,6 +33,7 @@ export default {
 
         icon: {
           gray: "#7d8590",
+          "dark-gray": "#646A73",
         },
       },
 
