@@ -77,7 +77,7 @@ export const Project = () => {
       <div className="flex h-screen bg-dark-background text-white">
         <ProjectSidebar />
 
-        <div className="mt-4 w-full transition-all max-md:w-full">
+        <div className="w-full pt-4 transition-all">
           <Header
             activeProject={activeProject}
             onOpenCreateTeamModal={() => setIsCreateNewTeamModalOpen(true)}

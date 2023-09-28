@@ -1,7 +1,5 @@
 import { SmallButton } from "../../../components/common/buttons/SmallButton";
-import { ArrowDropDown } from "@mui/icons-material";
 import { Project } from "../../../types/Project";
-import { DropdownMenu } from "./DropdownMenu";
 
 interface Props {
   activeProject?: Project;
@@ -15,8 +13,6 @@ export const Header = ({
   activeProject,
   onOpenCreateTeamModal,
   dropdownRef,
-  isDropDownProjectSettingsOpen,
-  onToggleDropDown,
 }: Props) => {
   return (
     <div className="mb-4 flex justify-between border-b border-white border-opacity-30 px-4 pb-2">
@@ -26,11 +22,11 @@ export const Header = ({
           <h3 className="text-sm">You can find your teams here in project</h3>
         </div>
         <div ref={dropdownRef} className="relative">
-          <ArrowDropDown
+          {/* <ArrowDropDown
             onClick={onToggleDropDown}
             className="hover:cursor-pointer"
-          />
-          <DropdownMenu isOpen={isDropDownProjectSettingsOpen} />
+          /> */}
+          {/* <DropdownMenu isOpen={isDropDownProjectSettingsOpen} /> */}
         </div>
       </div>
       <div className="w-[8rem]">
