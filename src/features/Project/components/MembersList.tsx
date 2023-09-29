@@ -73,12 +73,15 @@ export const MembersList = ({ members }: Props) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className="absolute left-1/2 top-1/2 w-96 -translate-x-1/2 -translate-y-1/2 transform border-none bg-background-primary text-white shadow-lg outline-none">
+        <Box className="absolute left-1/2 top-1/2 w-96 -translate-x-1/2 -translate-y-1/2 transform rounded-md border-none bg-background-primary text-white shadow-lg outline-none">
           <div className="flex flex-col items-center justify-center">
             <div className="flex w-full items-center justify-between border-b-2 border-white px-2 py-2">
               <div className="h-8 w-12" />
               <p className="text-2xl">Member Details</p>
-              <div className="rounded-full p-2 hover:bg-link-primary">
+              <div
+                onClick={handleClose}
+                className="rounded-full p-2 hover:bg-link-primary"
+              >
                 <Close className="h-8 w-8 cursor-pointer" />
               </div>
             </div>
