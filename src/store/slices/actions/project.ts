@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { RootState } from "../../store";
 import { NavigateFunction } from "react-router-dom";
@@ -161,6 +161,52 @@ export const deleteProject = createAsyncThunk(
       toast.success("Project deleted successfully!");
       return projectSlug;
     } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+        return rejectWithValue(err.message);
+      }
+      return rejectWithValue("Something went wrong!");
+    }
+  },
+);
+
+export const deleteProjectMember = createAsyncThunk(
+  "project/deleteProjectMember",
+  async (
+    {
+      projectSlug,
+      userIdToDelete,
+    }: { projectSlug: string; userIdToDelete: number },
+    { getState, rejectWithValue },
+  ) => {
+    const { auth, user } = getState() as RootState;
+    const token = auth.token;
+    const userId = user.userId;
+
+    if (!token) {
+      return rejectWithValue("Please login first");
+    }
+
+    try {
+      const response = await axios.delete(
+        `${apiUrl}/users/${userId}/projects/${projectSlug}/members/${userIdToDelete}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.status !== 204) {
+        throw new Error("Something went wrong!");
+      }
+
+      return userId;
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        toast.error(err.response?.data?.error);
+        return rejectWithValue(err.response?.data?.error);
+      }
       if (err instanceof Error) {
         toast.error(err.message);
         return rejectWithValue(err.message);
