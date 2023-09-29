@@ -18,6 +18,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ProjectInvitation } from "../../types/Project";
+import { addProjectInvitation } from "../../store/slices/projectSlice";
 
 interface Props {
   showModal: boolean;
@@ -78,6 +79,7 @@ export const ProjectPermissionModal = ({ showModal, onCloseModal }: Props) => {
 
         if (userData.payload) {
           setProjectInvitation(userData.payload as ProjectInvitation);
+          dispatch(addProjectInvitation(userData.payload as ProjectInvitation));
         }
       }
       if (userData.meta.requestStatus === "rejected") {
@@ -145,7 +147,7 @@ export const ProjectPermissionModal = ({ showModal, onCloseModal }: Props) => {
     <div
       ref={dropdownRef}
       onTransitionEnd={handleTransitionEnd}
-      className={`fixed inset-0 flex items-center justify-center bg-white bg-opacity-10 text-white transition-opacity ${
+      className={`fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white transition-opacity ${
         showModal ? "opacity-100" : "opacity-0"
       }`}
     >
@@ -219,7 +221,14 @@ export const ProjectPermissionModal = ({ showModal, onCloseModal }: Props) => {
             )}
 
             <div className="mt-2">
-              <List dense sx={{ width: "100%" }}>
+              {projectInvitations.length === 0 ? (
+                <p className="text-sm">
+                  You don't have any invitations yet. Generate one!
+                </p>
+              ) : (
+                <p>Invitations:</p>
+              )}
+              <List dense sx={{ width: "100%", padding: 0 }}>
                 {projectInvitations.map((invitation: ProjectInvitation) => {
                   const labelId = `checkbox-list-secondary-label-${invitation.token}`;
                   return (
