@@ -96,6 +96,20 @@ const projectSlice = createSlice({
     ) => {
       state.projectInvitation = action.payload;
     },
+
+    /**
+     * Add or update a project invitation in the projectInvitations array
+     */
+    addProjectInvitation: (state, action: PayloadAction<ProjectInvitation>) => {
+      const index = state.projectInvitations.findIndex(
+        (projectInvitation) => projectInvitation.token === action.payload.token,
+      );
+      if (index !== -1) {
+        state.projectInvitations[index] = action.payload;
+      } else {
+        state.projectInvitations.push(action.payload);
+      }
+    },
   },
   extraReducers(builder) {
     builder.addCase(
@@ -163,5 +177,6 @@ export const {
   setActiveProjectByName,
   clearActiveProject,
   setProjectInvitation,
+  addProjectInvitation,
 } = projectSlice.actions;
 export default projectSlice.reducer;
