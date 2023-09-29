@@ -7,7 +7,7 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { Project } from "./pages/Project";
+import { Project } from "./pages/Project/Project";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Dashboard } from "./pages/Dashboard";
@@ -17,6 +17,7 @@ import { useLogout } from "./hooks/auth/useLogout";
 import { Team } from "./pages/Team";
 import ProjectSettings from "./pages/ProjectSettings";
 import { Error } from "./pages/Error";
+import { ProjectAcceptInvitation } from "./pages/Project/ProjectAcceptInvitation";
 
 function App() {
   const token = useAppSelector((state) => state.auth.token);
@@ -56,14 +57,20 @@ function App() {
             element={token ? <Dashboard /> : <Navigate to="/login" />}
           />
 
+          {/* Route to project feature */}
           <Route
             path="/projects/:projectSlug/dashboard"
             element={<Project />}
           />
-
           <Route
             path="/projects/:projectSlug/settings"
             element={<ProjectSettings />}
+          />
+          <Route
+            path="/projects/invitation"
+            element={
+              token ? <ProjectAcceptInvitation /> : <Navigate to="/login" />
+            }
           />
 
           <Route

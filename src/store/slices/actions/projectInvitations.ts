@@ -2,13 +2,12 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { RootState } from "../../store";
-import { NavigateFunction } from "react-router-dom";
-import { Project } from "../../../types/Project";
+import { ProjectInvitation } from "../../../types/Project";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-export const fetchProjectMembersByProjectSlug = createAsyncThunk(
-  "project/fetchProjectMembersByProjectSlug",
+export const fetchProjectInvitations = createAsyncThunk(
+  "project/fetchProjectInvitations",
   async (
     { projectSlug }: { projectSlug: string },
     { getState, rejectWithValue },
@@ -22,7 +21,7 @@ export const fetchProjectMembersByProjectSlug = createAsyncThunk(
 
     try {
       const response = await axios.get(
-        `${apiUrl}/projects/${projectSlug}/members`,
+        `${apiUrl}/projects/${projectSlug}/members/invites`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -45,10 +44,47 @@ export const fetchProjectMembersByProjectSlug = createAsyncThunk(
   },
 );
 
-export const fetchProjectBySlugAndSetAsActive = createAsyncThunk(
-  "project/fetchProjectBySlugAndSetAsActive",
+export const fetchProjectInvitation = createAsyncThunk(
+  "project/fetchProjectInvitation",
+  async ({ token }: { token: string }, { getState, rejectWithValue }) => {
+    const { user, auth } = getState() as RootState;
+    const userId = user.userId;
+
+    if (!userId) {
+      return rejectWithValue("Please login first");
+    }
+
+    try {
+      const response = await axios.get(
+        `${apiUrl}/projects/members/invites/${token}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        },
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Something went wrong!");
+      }
+
+      console.log(response.data);
+
+      return response.data;
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+        return rejectWithValue(err.message);
+      }
+      return rejectWithValue("Something went wrong!");
+    }
+  },
+);
+
+export const generateProjectInvitationLink = createAsyncThunk(
+  "project/generateProjectInvitationLink",
   async (
-    { projectSlug }: { projectSlug: string },
+    { projectSlug, email }: { projectSlug: string; email: string },
     { getState, rejectWithValue },
   ) => {
     const { user, auth } = getState() as RootState;
@@ -59,56 +95,14 @@ export const fetchProjectBySlugAndSetAsActive = createAsyncThunk(
     }
 
     try {
-      const response = await axios.get<Project>(
-        `${apiUrl}/users/${userId}/projects/${projectSlug}`,
+      const response = await axios.post<ProjectInvitation>(
+        `${apiUrl}/projects/${projectSlug}/members/invites?creatorId=${userId}`,
+        {
+          email,
+        },
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
-          },
-        },
-      );
-
-      if (response.status !== 200) {
-        throw new Error("Something went wrong!");
-      }
-
-      return response.data;
-    } catch (err) {
-      if (err instanceof Error) {
-        toast.error(err.message);
-        return rejectWithValue(err.message);
-      }
-      return rejectWithValue("Something went wrong!");
-    }
-  },
-);
-
-export const createProject = createAsyncThunk(
-  "project/createProject",
-  async (
-    {
-      projectName,
-      navigate,
-    }: { projectName: string; navigate: NavigateFunction },
-    { getState, rejectWithValue },
-  ) => {
-    const { user, auth } = getState() as RootState;
-    const userId = user.userId;
-    const token = auth.token;
-
-    if (!userId || !token) {
-      return rejectWithValue("Please login first");
-    }
-
-    try {
-      const response = await axios.post<Project>(
-        `${apiUrl}/users/${userId}/projects`,
-        {
-          name: projectName,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
           },
         },
       );
@@ -117,10 +111,52 @@ export const createProject = createAsyncThunk(
         throw new Error("Something went wrong!");
       }
 
-      navigate(`/projects/${response.data.slug}/dashboard`);
+      return response.data;
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        toast.error(err.response?.data?.error);
+        return rejectWithValue(err.response?.data?.error);
+      }
+      if (err instanceof Error) {
+        toast.error(err.message);
+        return rejectWithValue(err.message);
+      }
+      return rejectWithValue("Something went wrong!");
+    }
+  },
+);
+
+export const acceptProjectInvitation = createAsyncThunk(
+  "project/acceptProjectInvitation",
+  async ({ token }: { token: string }, { getState, rejectWithValue }) => {
+    const { user, auth } = getState() as RootState;
+    const userId = user.userId;
+
+    if (!userId) {
+      return rejectWithValue("Please login first");
+    }
+
+    try {
+      const response = await axios.post(
+        `${apiUrl}/projects/members/invites/accept?token=${token}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        },
+      );
+
+      if (response.status !== 204) {
+        throw new Error("Something went wrong!");
+      }
 
       return response.data;
     } catch (err) {
+      if (err instanceof AxiosError) {
+        toast.error(err.response?.data?.error);
+        return rejectWithValue(err.response?.data?.error);
+      }
       if (err instanceof Error) {
         toast.error(err.message);
         return rejectWithValue(err.message);
@@ -130,26 +166,22 @@ export const createProject = createAsyncThunk(
   },
 );
 
-export const deleteProject = createAsyncThunk(
-  "project/deleteProject",
-  async (
-    { projectSlug }: { projectSlug: string },
-    { getState, rejectWithValue },
-  ) => {
+export const deleteProjectInvitation = createAsyncThunk(
+  "project/declineProjectInvitation",
+  async ({ token }: { token: string }, { getState, rejectWithValue }) => {
     const { user, auth } = getState() as RootState;
     const userId = user.userId;
-    const token = auth.token;
 
-    if (!userId || !token) {
+    if (!userId) {
       return rejectWithValue("Please login first");
     }
 
     try {
       const response = await axios.delete(
-        `${apiUrl}/users/${userId}/projects/${projectSlug}`,
+        `${apiUrl}/projects/members/invites/${token}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${auth.token}`,
           },
         },
       );
@@ -158,50 +190,7 @@ export const deleteProject = createAsyncThunk(
         throw new Error("Something went wrong!");
       }
 
-      toast.success("Project deleted successfully!");
-      return projectSlug;
-    } catch (err) {
-      if (err instanceof Error) {
-        toast.error(err.message);
-        return rejectWithValue(err.message);
-      }
-      return rejectWithValue("Something went wrong!");
-    }
-  },
-);
-
-export const deleteProjectMember = createAsyncThunk(
-  "project/deleteProjectMember",
-  async (
-    {
-      projectSlug,
-      userIdToDelete,
-    }: { projectSlug: string; userIdToDelete: number },
-    { getState, rejectWithValue },
-  ) => {
-    const { auth, user } = getState() as RootState;
-    const token = auth.token;
-    const userId = user.userId;
-
-    if (!token) {
-      return rejectWithValue("Please login first");
-    }
-
-    try {
-      const response = await axios.delete(
-        `${apiUrl}/users/${userId}/projects/${projectSlug}/members/${userIdToDelete}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      if (response.status !== 204) {
-        throw new Error("Something went wrong!");
-      }
-
-      return userId;
+      return token;
     } catch (err) {
       if (err instanceof AxiosError) {
         toast.error(err.response?.data?.error);

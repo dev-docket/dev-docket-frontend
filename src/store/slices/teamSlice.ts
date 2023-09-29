@@ -1,22 +1,25 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import {
   createTeam,
+  fetchTeamMembersByTeamId,
   fetchTeamsByProjectId,
   fetchTeamsByProjectSlug,
   updateActiveTeam,
 } from "./actions/team";
-import { Team } from "../../types/Team";
+import { Team, TeamMember } from "../../types/Team";
 
 interface TeamSlice {
   teams: Team[];
   loading: "idle" | "pending" | "succeeded" | "failed";
   activeTeam?: Team;
+  teamMembers?: TeamMember[];
 }
 
 const initialState: TeamSlice = {
   teams: [],
   loading: "idle",
   activeTeam: undefined,
+  teamMembers: undefined,
 };
 
 const teamSlice = createSlice({
@@ -61,6 +64,16 @@ const teamSlice = createSlice({
       state.loading = "succeeded";
     });
     builder.addCase(fetchTeamsByProjectSlug.rejected, (state) => {
+      state.loading = "failed";
+    });
+    builder.addCase(fetchTeamMembersByTeamId.pending, (state) => {
+      state.loading = "pending";
+    });
+    builder.addCase(fetchTeamMembersByTeamId.fulfilled, (state, action) => {
+      state.teamMembers = action.payload;
+      state.loading = "succeeded";
+    });
+    builder.addCase(fetchTeamMembersByTeamId.rejected, (state) => {
       state.loading = "failed";
     });
     builder.addCase(createTeam.pending, (state) => {

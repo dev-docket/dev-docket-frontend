@@ -9,11 +9,16 @@ export default {
       colors: {
         background: {
           primary: "#161819",
+          secondary: "#383838",
         },
 
         highlight: {
           primary: "#5437DC",
           secondary: "#2f81f7d9",
+        },
+
+        link: {
+          primary: "#292929",
         },
 
         "dark-background": "#161819",
@@ -29,6 +34,7 @@ export default {
 
         icon: {
           gray: "#7d8590",
+          "dark-gray": "#646A73",
         },
       },
 

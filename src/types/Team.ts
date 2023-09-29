@@ -3,3 +3,9 @@ export interface Team {
   name: string;
   projectId: number;
 }
+
+export interface TeamMember {
+  userId: number;
+  teamId: number;
+  role: string;
+}
