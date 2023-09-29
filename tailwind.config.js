@@ -9,6 +9,7 @@ export default {
       colors: {
         background: {
           primary: "#161819",
+          secondary: "#383838",
         },
 
         highlight: {
