@@ -21,9 +21,9 @@ export const Project = () => {
     (state) => state.project,
   );
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCreateNewTeamModalOpen, setIsCreateNewTeamModalOpen] =
     useState(false);
-
   const [isProjectPermissionModalOpen, setIsProjectPermissionModalOpen] =
     useState(false);
   const [isDropDownProjectSettingsOpen, setIsDropDownProjectSettingsOpen] =
@@ -88,10 +88,15 @@ export const Project = () => {
   return (
     <>
       <div className="flex h-screen bg-dark-background text-white">
-        <ProjectSidebar />
+        <ProjectSidebar
+          isSidebarOpen={isSidebarOpen}
+          setSidebarOpen={setIsSidebarOpen}
+        />
 
         <div className="w-full pt-4 transition-all">
           <Header
+            isSidebarOpen={isSidebarOpen}
+            setSidebarOpen={setIsSidebarOpen}
             activeProject={activeProject}
             onOpenCreateTeamModal={() => setIsCreateNewTeamModalOpen(true)}
             dropdownRef={dropdownRef}
