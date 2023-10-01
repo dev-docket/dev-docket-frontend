@@ -17,7 +17,7 @@ const TeamsSection = ({
   return (
     <div className="my-8">
       <h3 className="mb-2 text-2xl">Teams in project</h3>
-      <div className="flex gap-3 overflow-auto pb-4">
+      <div className="flex gap-3 pb-4">
         <TeamsList
           teams={teams}
           loading={loading}

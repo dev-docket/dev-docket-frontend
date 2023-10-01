@@ -46,7 +46,7 @@ export const MembersList = ({ members }: Props) => {
   };
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center overflow-auto">
       {members && members.length > 0 ? (
         <>
           {members.map((member) => (
