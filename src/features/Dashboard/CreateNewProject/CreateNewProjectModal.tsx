@@ -21,6 +21,7 @@ export const CreateNewProjectModal = ({ closeModal }: Props) => {
 
     if (!name) {
       toast.error("Please enter a project name");
+      setIsLoading(false);
       return;
     }
 
