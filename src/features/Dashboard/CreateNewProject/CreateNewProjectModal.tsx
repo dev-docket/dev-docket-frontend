@@ -16,7 +16,7 @@ export const CreateNewProjectModal = ({ closeModal }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleCreateProject = () => {
+  const handleCreateProject = async () => {
     setIsLoading(true);
 
     if (!name) {
@@ -25,8 +25,13 @@ export const CreateNewProjectModal = ({ closeModal }: Props) => {
       return;
     }
 
-    dispatch(createProject({ projectName: name, navigate }));
-    setIsLoading(false);
+    await dispatch(createProject({ projectName: name, navigate })).then(
+      (result) => {
+        if (result.meta.requestStatus === "fulfilled") {
+          setIsLoading(false);
+        }
+      },
+    );
   };
 
   return (
