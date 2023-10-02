@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAppDispatch } from "../../../hooks/storeHook";
 import { createProject } from "../../../store/slices/actions/project";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface Props {
   closeModal: () => void;
@@ -10,12 +11,21 @@ interface Props {
 
 export const CreateNewProjectModal = ({ closeModal }: Props) => {
   const [name, setName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleCreateProject = () => {
+    setIsLoading(true);
+
+    if (!name) {
+      toast.error("Please enter a project name");
+      return;
+    }
+
     dispatch(createProject({ projectName: name, navigate }));
+    setIsLoading(false);
   };
 
   return (
@@ -50,9 +60,10 @@ export const CreateNewProjectModal = ({ closeModal }: Props) => {
           />
           <button
             onClick={handleCreateProject}
+            disabled={isLoading}
             className="text-md mt-4 rounded-md bg-[#2ea043] px-3 py-2 hover:bg-[#3ab450]"
           >
-            Create project
+            {isLoading ? "Creating..." : "Create project"}
           </button>
         </div>
       </div>
