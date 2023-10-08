@@ -26,7 +26,7 @@ export const useLogin = () => {
         password,
       });
 
-      dispatch(addToken(data.token));
+      dispatch(addToken(data.access_token));
       dispatch(setUser(data.user));
 
       toast.update(toastId, {
