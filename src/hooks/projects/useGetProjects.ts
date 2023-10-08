@@ -19,7 +19,7 @@ export const useGetProjects = (userId: number, jwt: string) => {
 
       try {
         const { data, status } = await axios.get(
-          `${apiUrl}/users/${userId}/projects`,
+          `${apiUrl}/projects/users/${userId}`,
           {
             headers: {
               "Content-Type": "application/json",
