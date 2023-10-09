@@ -51,7 +51,7 @@ export const MembersList = ({ members }: Props) => {
         <>
           {members.map((member) => (
             <div
-              key={member.userId}
+              key={member.user?.id}
               onClick={() => {
                 handleOpen(member);
               }}
