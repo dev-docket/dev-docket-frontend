@@ -21,7 +21,7 @@ export const fetchProjectInvitations = createAsyncThunk(
 
     try {
       const response = await axios.get(
-        `${apiUrl}/projects/${projectSlug}/members/invites`,
+        `${apiUrl}/projects/${projectSlug}/invitations`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,

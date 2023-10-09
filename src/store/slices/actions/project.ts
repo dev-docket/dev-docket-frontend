@@ -60,7 +60,7 @@ export const fetchProjectBySlugAndSetAsActive = createAsyncThunk(
 
     try {
       const response = await axios.get<Project>(
-        `${apiUrl}/users/${userId}/projects/${projectSlug}`,
+        `${apiUrl}/projects/${projectSlug}`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
