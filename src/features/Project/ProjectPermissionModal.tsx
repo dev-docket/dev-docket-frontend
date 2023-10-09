@@ -221,7 +221,7 @@ export const ProjectPermissionModal = ({ showModal, onCloseModal }: Props) => {
             )}
 
             <div className="mt-2">
-              {projectInvitations.length === 0 ? (
+              {projectInvitations && projectInvitations.length === 0 ? (
                 <p className="text-sm">
                   You don't have any invitations yet. Generate one!
                 </p>
@@ -229,49 +229,54 @@ export const ProjectPermissionModal = ({ showModal, onCloseModal }: Props) => {
                 <p>Invitations:</p>
               )}
               <List dense sx={{ width: "100%", padding: 0 }}>
-                {projectInvitations.map((invitation: ProjectInvitation) => {
-                  const labelId = `checkbox-list-secondary-label-${invitation.token}`;
-                  return (
-                    <ListItem
-                      key={invitation.token}
-                      secondaryAction={
-                        <Tooltip title="Delete invitation" arrow>
-                          <IconButton
-                            onClick={() => handleDeleteInvitation(invitation)}
-                            aria-label="comment"
-                          >
-                            <Delete className="text-red-500" />
-                          </IconButton>
-                        </Tooltip>
-                      }
-                      disablePadding
-                    >
-                      <ListItemButton>
-                        <ListItemText
-                          disableTypography
-                          id={labelId}
-                          onClick={() => {
-                            handleCopyLinkToInvitation(invitation.token);
-                          }}
-                          className="rounded-md p-4 hover:bg-white hover:bg-opacity-10"
-                          primary={
-                            <Typography variant="body1" className="text-white">
-                              {invitation.user?.email}
-                            </Typography>
-                          }
-                          // secondary={
-                          //   <Typography
-                          //     variant="body2"
-                          //     style={{ color: "#FFFFFF" }}
-                          //   >
-                          //     {invitation.token}
-                          //   </Typography>
-                          // }
-                        />
-                      </ListItemButton>
-                    </ListItem>
-                  );
-                })}
+                {projectInvitations &&
+                  projectInvitations.length === 0 &&
+                  projectInvitations.map((invitation: ProjectInvitation) => {
+                    const labelId = `checkbox-list-secondary-label-${invitation.token}`;
+                    return (
+                      <ListItem
+                        key={invitation.token}
+                        secondaryAction={
+                          <Tooltip title="Delete invitation" arrow>
+                            <IconButton
+                              onClick={() => handleDeleteInvitation(invitation)}
+                              aria-label="comment"
+                            >
+                              <Delete className="text-red-500" />
+                            </IconButton>
+                          </Tooltip>
+                        }
+                        disablePadding
+                      >
+                        <ListItemButton>
+                          <ListItemText
+                            disableTypography
+                            id={labelId}
+                            onClick={() => {
+                              handleCopyLinkToInvitation(invitation.token);
+                            }}
+                            className="rounded-md p-4 hover:bg-white hover:bg-opacity-10"
+                            primary={
+                              <Typography
+                                variant="body1"
+                                className="text-white"
+                              >
+                                {invitation.user?.email}
+                              </Typography>
+                            }
+                            // secondary={
+                            //   <Typography
+                            //     variant="body2"
+                            //     style={{ color: "#FFFFFF" }}
+                            //   >
+                            //     {invitation.token}
+                            //   </Typography>
+                            // }
+                          />
+                        </ListItemButton>
+                      </ListItem>
+                    );
+                  })}
               </List>
             </div>
           </div>
