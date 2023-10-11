@@ -101,14 +101,11 @@ export const fetchTaskAndOpenDetailsSidebar = createAsyncThunk(
     }
 
     try {
-      const response = await axios.get(
-        `${apiUrl}/users/${userId}/tasks/${taskId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.get(`${apiUrl}/tasks/${taskId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       if (response.status !== 200) {
         throw new Error("Something went wrong!");
