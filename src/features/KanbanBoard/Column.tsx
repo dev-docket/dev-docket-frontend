@@ -1,6 +1,6 @@
 import { Droppable } from "react-beautiful-dnd";
 import { Card } from "./Card";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Add, Close } from "@mui/icons-material";
 import { useAppDispatch } from "../../hooks/storeHook";
 import { toast } from "react-toastify";
@@ -16,11 +16,13 @@ type ColumnType = {
 
 interface Props {
   column: ColumnType;
+  placeholderIndex: number | null;
 }
 
-export const Column = ({ column }: Props) => {
+export const Column = ({ column, placeholderIndex }: Props) => {
   const [isNewTaskInputActive, setIsNewTaskInputActive] = useState(false);
   const [newTaskName, setNewTaskName] = useState("");
+  // const [placeholderIndex, setPlaceholderIndex] = useState<number | null>(null);
 
   const { teamId } = useParams<{ teamId: string }>();
 
@@ -62,7 +64,7 @@ export const Column = ({ column }: Props) => {
 
   return (
     <div className="flex flex-col bg-secondary-background text-white">
-      <Droppable droppableId={column.id}>
+      {/* <Droppable droppableId={column.id}>
         {(provided) => (
           <div
             ref={provided.innerRef}
@@ -75,6 +77,35 @@ export const Column = ({ column }: Props) => {
             {column.cards.map((task: Task, index: number) => (
               <Card key={task.id} task={task} index={index} />
             ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable> */}
+
+      <Droppable droppableId={column.id} type="task">
+        {(provided) => (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className={`p-4`}
+          >
+            <h3>{column.title}</h3>
+            {column.cards.map((task, index) => (
+              <React.Fragment key={task.id}>
+                {index === placeholderIndex && (
+                  <div className="mb-2 border bg-gray-400 px-2 py-5">
+                    {/* Miejsce na zadanie */}
+                  </div>
+                )}
+                <Card task={task} index={index} />
+              </React.Fragment>
+            ))}
+            {column.cards.length === placeholderIndex && (
+              <div className="mb-2 border bg-gray-400 px-2 py-4">
+                {/* Miejsce na zadanie */}
+              </div>
+            )}
+
             {provided.placeholder}
           </div>
         )}
