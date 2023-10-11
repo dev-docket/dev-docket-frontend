@@ -9,7 +9,6 @@ import { handleError } from "../../utils/handleError";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export const useUpdateStatusOfTask = () => {
-  const userId = useAppSelector((state) => state.user.user?.id);
   const token = useAppSelector((state) => state.auth.token);
   const [state, setState] = useState({
     isLoading: false,
@@ -22,13 +21,13 @@ export const useUpdateStatusOfTask = () => {
     try {
       setState({ ...state, isLoading: true, error: null });
       const response = await axios.patch(
-        `${apiUrl}/users/${userId}/tasks/${taskId}`,
-        { status },
+        `${apiUrl}/tasks/${taskId}`,
+        { id: taskId, status },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.status !== 200) {
