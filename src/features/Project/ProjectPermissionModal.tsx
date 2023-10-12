@@ -104,14 +104,18 @@ export const ProjectPermissionModal = ({ showModal, onCloseModal }: Props) => {
     );
   };
 
-  const handleCopyLinkToInvitation = (token?: string) => {
+  const handleCopyLinkToInvitation = (projectSlug?: string, token?: string) => {
     if (!token) {
+      return;
+    }
+
+    if (!projectSlug) {
       return;
     }
 
     toast.success("Link copied to clipboard!", { autoClose: 1000 });
     navigator.clipboard.writeText(
-      `${window.location.origin}/projects/invitation?token=${token}`,
+      `${window.location.origin}/projects/${projectSlug}/invitation?token=${token}`,
     );
   };
 
@@ -229,8 +233,7 @@ export const ProjectPermissionModal = ({ showModal, onCloseModal }: Props) => {
                 <p>Invitations:</p>
               )}
               <List dense sx={{ width: "100%", padding: 0 }}>
-                {projectInvitations &&
-                  projectInvitations.length === 0 &&
+                {projectInvitations?.length > 0 &&
                   projectInvitations.map((invitation: ProjectInvitation) => {
                     const labelId = `checkbox-list-secondary-label-${invitation.token}`;
                     return (
@@ -253,7 +256,10 @@ export const ProjectPermissionModal = ({ showModal, onCloseModal }: Props) => {
                             disableTypography
                             id={labelId}
                             onClick={() => {
-                              handleCopyLinkToInvitation(invitation.token);
+                              handleCopyLinkToInvitation(
+                                projectSlug,
+                                invitation.token,
+                              );
                             }}
                             className="rounded-md p-4 hover:bg-white hover:bg-opacity-10"
                             primary={

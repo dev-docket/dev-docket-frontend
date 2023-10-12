@@ -75,8 +75,6 @@ export const Project = () => {
   useEffect(() => {
     if (!projectSlug) return;
 
-    console.log("Project.tsx: projectSlug: ", projectSlug);
-
     dispatch(fetchTeamsByProjectSlug(projectSlug)).then((result) => {
       if (result.meta.requestStatus === "fulfilled") {
         setTeamsLoading("succeeded");

@@ -46,7 +46,10 @@ export const fetchProjectInvitations = createAsyncThunk(
 
 export const fetchProjectInvitation = createAsyncThunk(
   "project/fetchProjectInvitation",
-  async ({ token }: { token: string }, { getState, rejectWithValue }) => {
+  async (
+    { token, projectSlug }: { token: string; projectSlug: string },
+    { getState, rejectWithValue },
+  ) => {
     const { user, auth } = getState() as RootState;
     const userId = user.userId;
 
@@ -56,7 +59,7 @@ export const fetchProjectInvitation = createAsyncThunk(
 
     try {
       const response = await axios.get(
-        `${apiUrl}/projects/members/invites/${token}`,
+        `${apiUrl}/projects/${projectSlug}/invitations/${token}`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,

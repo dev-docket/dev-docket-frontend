@@ -1,8 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/storeHook";
-import { useUser } from "../../hooks/user/useUser";
-import { User } from "../../types/User";
 import {
   acceptProjectInvitation,
   fetchProjectInvitation,
@@ -13,15 +11,14 @@ export const ProjectAcceptInvitation = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
 
+  const { projectSlug } = useParams<{ projectSlug: string }>();
+
   const projectInvitation = useAppSelector(
     (state) => state.project.projectInvitation,
   );
 
-  const [invitationCreator, setInvitationCreator] = useState<User | null>(null);
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { fetchUser } = useUser();
 
   const handleAcceptInvitation = () => {
     if (!projectInvitation?.token) {
@@ -37,25 +34,12 @@ export const ProjectAcceptInvitation = () => {
     });
   };
 
-  const handleFetchUser = useCallback(
-    async (creatorId: number) => {
-      const user = await fetchUser(creatorId);
-      setInvitationCreator(user);
-    },
-    [fetchUser],
-  );
-
   useEffect(() => {
-    if (projectInvitation?.creatorId && !invitationCreator) {
-      handleFetchUser(projectInvitation.creatorId);
-    }
-  }, [projectInvitation?.creatorId, handleFetchUser, invitationCreator]);
-
-  useEffect(() => {
-    if (token) {
+    if (token && projectSlug) {
       dispatch(
         fetchProjectInvitation({
           token,
+          projectSlug,
         }),
       );
 
@@ -63,7 +47,7 @@ export const ProjectAcceptInvitation = () => {
       searchParams.delete("token");
       navigate({ search: searchParams.toString() }, { replace: true });
     }
-  }, [dispatch, navigate, searchParams, token]);
+  }, [dispatch, navigate, projectSlug, searchParams, token]);
 
   return (
     <div className="h-screen w-screen bg-background-primary text-white">
@@ -74,8 +58,12 @@ export const ProjectAcceptInvitation = () => {
           {/* <p className="text-white">{projectInvitation?.token}</p> */}
 
           <p>
-            You've been invited by {invitationCreator?.email} to join project:{" "}
-            <span className="font-bold">{projectInvitation?.project.name}</span>
+            You've been invited by{" "}
+            <span className="font-bold">{projectInvitation?.user.email}</span>{" "}
+            to join project:{" "}
+            <span className="font-bold">
+              {projectInvitation?.project?.name}
+            </span>
           </p>
           <p>Would you like to accept the invite?</p>
 
