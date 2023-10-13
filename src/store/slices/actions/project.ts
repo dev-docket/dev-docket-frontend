@@ -102,9 +102,14 @@ export const createProject = createAsyncThunk(
 
     try {
       const response = await axios.post<Project>(
-        `${apiUrl}/users/${userId}/projects`,
+        `${apiUrl}/projects`,
         {
-          name: projectName,
+          project: {
+            name: projectName,
+          },
+          user: {
+            id: userId,
+          },
         },
         {
           headers: {
