@@ -146,10 +146,12 @@ export const createTask = createAsyncThunk(
 
     try {
       const response = await axios.post(
-        `${apiUrl}/users/${userId}/teams/${teamId}/tasks`,
+        `${apiUrl}/tasks`,
         {
           name: name.trim(),
           status,
+          teamId,
+          userId,
         },
         {
           headers: {
@@ -189,7 +191,7 @@ export const patchTask = createAsyncThunk(
 
     try {
       const response = await axios.patch(
-        `${apiUrl}/users/${userId}/tasks/${taskId}`,
+        `${apiUrl}/tasks/${taskId}`,
         {
           ...task,
         },
