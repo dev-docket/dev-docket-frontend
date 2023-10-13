@@ -235,7 +235,7 @@ export const deleteTask = createAsyncThunk(
 
     try {
       const response = await axios.delete(
-        `${apiUrl}/users/${userId}/tasks/${taskId}`,
+        `${apiUrl}/tasks/${taskId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
