@@ -234,19 +234,17 @@ export const deleteTask = createAsyncThunk(
     }
 
     try {
-      const response = await axios.delete(
-        `${apiUrl}/tasks/${taskId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.delete(`${apiUrl}/tasks/${taskId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       if (response.status !== 204) {
         throw new Error("Something went wrong!");
       }
 
+      toast.success("Task deleted successfully");
       return taskId;
     } catch (err) {
       if (err instanceof Error) {
