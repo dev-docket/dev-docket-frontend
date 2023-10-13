@@ -99,9 +99,10 @@ export const generateProjectInvitationLink = createAsyncThunk(
 
     try {
       const response = await axios.post<ProjectInvitation>(
-        `${apiUrl}/projects/${projectSlug}/members/invites?creatorId=${userId}`,
+        `${apiUrl}/projects/${projectSlug}/invitations`,
         {
           email,
+          creatorId: userId,
         },
         {
           headers: {
@@ -131,7 +132,10 @@ export const generateProjectInvitationLink = createAsyncThunk(
 
 export const acceptProjectInvitation = createAsyncThunk(
   "project/acceptProjectInvitation",
-  async ({ token }: { token: string }, { getState, rejectWithValue }) => {
+  async (
+    { token, projectSlug }: { token: string; projectSlug: string },
+    { getState, rejectWithValue },
+  ) => {
     const { user, auth } = getState() as RootState;
     const userId = user.userId;
 
@@ -141,7 +145,7 @@ export const acceptProjectInvitation = createAsyncThunk(
 
     try {
       const response = await axios.post(
-        `${apiUrl}/projects/members/invites/accept?token=${token}`,
+        `${apiUrl}/projects/${projectSlug}/invitations/${token}/accept`,
         {},
         {
           headers: {

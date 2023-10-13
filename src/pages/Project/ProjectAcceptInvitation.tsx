@@ -25,12 +25,19 @@ export const ProjectAcceptInvitation = () => {
       return;
     }
 
+    if (!projectSlug) {
+      return;
+    }
+
     dispatch(
       acceptProjectInvitation({
         token: projectInvitation?.token,
+        projectSlug,
       }),
-    ).then(() => {
-      navigate(`/projects/${projectInvitation?.project.slug}/dashboard`);
+    ).then((result) => {
+      if (result.meta.requestStatus === "fulfilled") {
+        navigate(`/projects/${projectInvitation?.project.slug}/dashboard`);
+      }
     });
   };
 

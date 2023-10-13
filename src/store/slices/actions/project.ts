@@ -194,7 +194,7 @@ export const deleteProjectMember = createAsyncThunk(
 
     try {
       const response = await axios.delete(
-        `${apiUrl}/users/${userId}/projects/${projectSlug}/members/${userIdToDelete}`,
+        `${apiUrl}/projects/${projectSlug}/members/${userIdToDelete}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
