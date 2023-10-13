@@ -26,7 +26,7 @@ export const useLogin = () => {
         password,
       });
 
-      dispatch(addToken(data.token));
+      dispatch(addToken(data.access_token));
       dispatch(setUser(data.user));
 
       toast.update(toastId, {
@@ -38,7 +38,7 @@ export const useLogin = () => {
 
       navigate("/dashboard");
 
-      return data.token;
+      return data.access_token;
     } catch (err) {
       if (axios.isAxiosError(err)) {
         toast.update(toastId, {
