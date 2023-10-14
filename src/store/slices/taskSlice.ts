@@ -59,6 +59,8 @@ const taskSlice = createSlice({
       const index = state.tasks.findIndex((task) => task.id === id);
       if (index !== -1) {
         state.tasks[index].status = status;
+        const updatedTask = state.tasks.splice(index, 1)[0]; // Remove the updated task from its current position
+        state.tasks.push(updatedTask); // Add the updated task to the bottom of the list
       }
     },
 
