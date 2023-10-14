@@ -169,9 +169,11 @@ export const createTeam = createAsyncThunk(
 
     try {
       const response = await axios.post(
-        `${apiUrl}/users/${userId}/projects/${projectSlug}/teams`,
+        `${apiUrl}/teams`,
         {
           name,
+          projectSlug,
+          userId,
         },
         {
           headers: {

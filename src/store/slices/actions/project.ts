@@ -60,7 +60,7 @@ export const fetchProjectBySlugAndSetAsActive = createAsyncThunk(
 
     try {
       const response = await axios.get<Project>(
-        `${apiUrl}/users/${userId}/projects/${projectSlug}`,
+        `${apiUrl}/projects/${projectSlug}`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -102,9 +102,14 @@ export const createProject = createAsyncThunk(
 
     try {
       const response = await axios.post<Project>(
-        `${apiUrl}/users/${userId}/projects`,
+        `${apiUrl}/projects`,
         {
-          name: projectName,
+          project: {
+            name: projectName,
+          },
+          user: {
+            id: userId,
+          },
         },
         {
           headers: {
@@ -145,14 +150,11 @@ export const deleteProject = createAsyncThunk(
     }
 
     try {
-      const response = await axios.delete(
-        `${apiUrl}/users/${userId}/projects/${projectSlug}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.delete(`${apiUrl}/projects/${projectSlug}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       if (response.status !== 204) {
         throw new Error("Something went wrong!");
@@ -189,7 +191,7 @@ export const deleteProjectMember = createAsyncThunk(
 
     try {
       const response = await axios.delete(
-        `${apiUrl}/users/${userId}/projects/${projectSlug}/members/${userIdToDelete}`,
+        `${apiUrl}/projects/${projectSlug}/members/${userIdToDelete}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

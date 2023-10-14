@@ -101,14 +101,11 @@ export const fetchTaskAndOpenDetailsSidebar = createAsyncThunk(
     }
 
     try {
-      const response = await axios.get(
-        `${apiUrl}/users/${userId}/tasks/${taskId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.get(`${apiUrl}/tasks/${taskId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       if (response.status !== 200) {
         throw new Error("Something went wrong!");
@@ -149,10 +146,12 @@ export const createTask = createAsyncThunk(
 
     try {
       const response = await axios.post(
-        `${apiUrl}/users/${userId}/teams/${teamId}/tasks`,
+        `${apiUrl}/tasks`,
         {
           name: name.trim(),
           status,
+          teamId,
+          userId,
         },
         {
           headers: {
@@ -192,7 +191,7 @@ export const patchTask = createAsyncThunk(
 
     try {
       const response = await axios.patch(
-        `${apiUrl}/users/${userId}/tasks/${taskId}`,
+        `${apiUrl}/tasks/${taskId}`,
         {
           ...task,
         },
@@ -235,19 +234,17 @@ export const deleteTask = createAsyncThunk(
     }
 
     try {
-      const response = await axios.delete(
-        `${apiUrl}/users/${userId}/tasks/${taskId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.delete(`${apiUrl}/tasks/${taskId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       if (response.status !== 204) {
         throw new Error("Something went wrong!");
       }
 
+      toast.success("Task deleted successfully");
       return taskId;
     } catch (err) {
       if (err instanceof Error) {

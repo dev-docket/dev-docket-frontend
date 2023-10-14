@@ -16,11 +16,14 @@ import { ProjectRoles } from "../../features/Project/components/ProjectRoles";
 import TeamsSection from "../../features/Project/components/TeamsSection";
 
 export const Project = () => {
-  const { teams, loading } = useAppSelector((state) => state.team);
+  const { teams } = useAppSelector((state) => state.team);
   const { activeProject, projectMembers } = useAppSelector(
     (state) => state.project,
   );
 
+  const [teamsLoading, setTeamsLoading] = useState<
+    "idle" | "pending" | "succeeded" | "failed"
+  >("idle");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCreateNewTeamModalOpen, setIsCreateNewTeamModalOpen] =
     useState(false);
@@ -72,7 +75,15 @@ export const Project = () => {
   useEffect(() => {
     if (!projectSlug) return;
 
-    dispatch(fetchTeamsByProjectSlug(projectSlug));
+    dispatch(fetchTeamsByProjectSlug(projectSlug)).then((result) => {
+      if (result.meta.requestStatus === "fulfilled") {
+        setTeamsLoading("succeeded");
+      }
+
+      if (result.meta.requestStatus === "rejected") {
+        setTeamsLoading("failed");
+      }
+    });
   }, [dispatch, projectSlug]);
 
   useEffect(() => {
@@ -114,7 +125,7 @@ export const Project = () => {
 
             <TeamsSection
               teams={teams}
-              loading={loading}
+              loading={teamsLoading}
               onNavigateToTeamPage={handleNavigateToTeamPage}
               onOpenCreateTeamModal={() => setIsCreateNewTeamModalOpen(true)}
             />

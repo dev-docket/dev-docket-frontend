@@ -1,4 +1,4 @@
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, DragUpdate, DropResult } from "react-beautiful-dnd";
 import { Column } from "./Column";
 import { useUpdateStatusOfTask } from "../../hooks/tasks/useUpdateStatusOfTask";
 import { Task, TaskStatus } from "../../types/Task";
@@ -42,6 +42,11 @@ export const KanbanBoard = () => {
   const [board, setBoard] = useState<BoardType>({
     ...initialBoard,
   });
+
+  const [placeholderIndex, setPlaceholderIndex] = useState<number | null>(null);
+  const [placeholderColumnId, setPlaceholderColumnId] = useState<string | null>(
+    null,
+  );
 
   const { teamId } = useParams<{ teamId: string }>();
 
@@ -106,6 +111,21 @@ export const KanbanBoard = () => {
         columns: newColumns,
       };
     });
+
+    setPlaceholderIndex(null);
+    setPlaceholderColumnId(null);
+  };
+
+  const onDragUpdate = (update: DragUpdate) => {
+    const { destination } = update;
+
+    if (destination) {
+      setPlaceholderIndex(destination.index);
+      setPlaceholderColumnId(destination.droppableId);
+    } else {
+      setPlaceholderIndex(null);
+      setPlaceholderColumnId(null);
+    }
   };
 
   useEffect(() => {
@@ -133,10 +153,16 @@ export const KanbanBoard = () => {
   }, [dispatch, teamId]);
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
+    <DragDropContext onDragEnd={handleDragEnd} onDragUpdate={onDragUpdate}>
       <div className="flex space-x-4">
         {board.columns.map((column) => (
-          <Column key={column.id} column={column} />
+          <Column
+            key={column.id}
+            column={column}
+            placeholderIndex={
+              placeholderColumnId === column.id ? placeholderIndex : null
+            }
+          />
         ))}
       </div>
     </DragDropContext>

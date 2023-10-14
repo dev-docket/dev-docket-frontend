@@ -67,7 +67,7 @@ function App() {
             element={<ProjectSettings />}
           />
           <Route
-            path="/projects/invitation"
+            path="/projects/:projectSlug/invitation"
             element={
               token ? <ProjectAcceptInvitation /> : <Navigate to="/login" />
             }
