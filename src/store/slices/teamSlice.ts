@@ -10,14 +10,20 @@ import { Team, TeamMember } from "../../types/Team";
 
 interface TeamSlice {
   teams: Team[];
-  loading: "idle" | "pending" | "succeeded" | "failed";
+  loading: {
+    teams: "idle" | "pending" | "succeeded" | "failed";
+    teamMembers: "idle" | "pending" | "succeeded" | "failed";
+  };
   activeTeam?: Team;
   teamMembers?: TeamMember[];
 }
 
 const initialState: TeamSlice = {
   teams: [],
-  loading: "idle",
+  loading: {
+    teams: "idle",
+    teamMembers: "idle",
+  },
   activeTeam: undefined,
   teamMembers: undefined,
 };
@@ -47,54 +53,40 @@ const teamSlice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(fetchTeamsByProjectId.pending, (state) => {
-      state.loading = "pending";
+      state.loading.teams = "pending";
     });
     builder.addCase(fetchTeamsByProjectId.fulfilled, (state, action) => {
       state.teams = action.payload;
-      state.loading = "succeeded";
+      state.loading.teams = "succeeded";
     });
     builder.addCase(fetchTeamsByProjectId.rejected, (state) => {
-      state.loading = "failed";
+      state.loading.teams = "failed";
     });
     builder.addCase(fetchTeamsByProjectSlug.pending, (state) => {
-      state.loading = "pending";
+      state.loading.teams = "pending";
     });
     builder.addCase(fetchTeamsByProjectSlug.fulfilled, (state, action) => {
       state.teams = action.payload;
-      state.loading = "succeeded";
+      state.loading.teams = "succeeded";
     });
     builder.addCase(fetchTeamsByProjectSlug.rejected, (state) => {
-      state.loading = "failed";
+      state.loading.teams = "failed";
     });
     builder.addCase(fetchTeamMembersByTeamId.pending, (state) => {
-      state.loading = "pending";
+      state.loading.teamMembers = "pending";
     });
     builder.addCase(fetchTeamMembersByTeamId.fulfilled, (state, action) => {
       state.teamMembers = action.payload;
-      state.loading = "succeeded";
+      state.loading.teamMembers = "succeeded";
     });
     builder.addCase(fetchTeamMembersByTeamId.rejected, (state) => {
-      state.loading = "failed";
-    });
-    builder.addCase(createTeam.pending, (state) => {
-      state.loading = "pending";
+      state.loading.teamMembers = "failed";
     });
     builder.addCase(createTeam.fulfilled, (state, action) => {
       state.teams.push(action.payload);
-      state.loading = "succeeded";
-    });
-    builder.addCase(createTeam.rejected, (state) => {
-      state.loading = "failed";
-    });
-    builder.addCase(updateActiveTeam.pending, (state) => {
-      state.loading = "pending";
     });
     builder.addCase(updateActiveTeam.fulfilled, (state, action) => {
       state.activeTeam = action.payload;
-      state.loading = "succeeded";
-    });
-    builder.addCase(updateActiveTeam.rejected, (state) => {
-      state.loading = "failed";
     });
   },
 });
