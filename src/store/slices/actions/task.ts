@@ -178,7 +178,11 @@ export const createTask = createAsyncThunk(
 export const patchTask = createAsyncThunk(
   "tasks/patchTask",
   async (
-    { taskId, task }: { taskId: number; task: Partial<Task> },
+    {
+      taskId,
+      task,
+      teamId,
+    }: { taskId: number; task: Partial<Task>; teamId: number },
     { getState, rejectWithValue },
   ) => {
     const { user, auth } = getState() as RootState;
@@ -193,7 +197,10 @@ export const patchTask = createAsyncThunk(
       const response = await axios.patch(
         `${apiUrl}/tasks/${taskId}`,
         {
+          id: taskId,
           ...task,
+          userId,
+          teamId,
         },
         {
           headers: {
