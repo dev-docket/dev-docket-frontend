@@ -117,10 +117,12 @@ export const LeftContainer = ({ task }: Props) => {
               {taskActivity &&
                 taskActivity?.length > 0 &&
                 taskActivity?.map((activity) => (
-                  <div key={activity.id} className="mb-2 flex items-center mt-4">
+                  <div
+                    key={activity.id}
+                    className="mb-2 mt-4 flex items-center"
+                  >
                     <div className="mr-2 h-6 w-6">
                       <img
-                        // src={activity.user.id}
                         src="https://avatars.githubusercontent.com/u/2918581?v=4"
                         alt="profile"
                         className="h-full w-full rounded-full"
@@ -128,7 +130,6 @@ export const LeftContainer = ({ task }: Props) => {
                     </div>
 
                     <div className="flex items-center text-center text-sm">
-                      {/* <span className="text-gray-400">{activity.user.id}</span>{" "} */}
                       <span className="mr-2 text-xl text-gray-400">
                         {activity.user?.username}
                       </span>{" "}
