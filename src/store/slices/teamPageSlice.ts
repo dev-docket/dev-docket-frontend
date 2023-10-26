@@ -1,11 +1,26 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Task } from "../../types/Task";
+import { fetchAllActivitiesInTask } from "./actions/taskActivity";
+
+interface TaskActivity {
+  id: string;
+  description: string;
+  createdAt: string;
+  user: {
+    id: string;
+    username: string;
+  };
+  task: {
+    id: string;
+  };
+}
 
 interface TeamPageState {
   isTaskDetailsSidebarOpen: boolean;
   activeTaskInSidebar?: Task;
   isDescriptionInputActive?: boolean;
   descriptionInputValue?: string;
+  taskActivity?: TaskActivity[];
 }
 
 const initialState: TeamPageState = {
@@ -13,6 +28,7 @@ const initialState: TeamPageState = {
   activeTaskInSidebar: undefined,
   isDescriptionInputActive: false,
   descriptionInputValue: undefined,
+  taskActivity: undefined,
 };
 
 const teamPageSlice = createSlice({
@@ -36,6 +52,17 @@ const teamPageSlice = createSlice({
     setDescriptionInputValue: (state, payload: PayloadAction<string>) => {
       state.descriptionInputValue = payload.payload;
     },
+    addTaskActivity: (state, payload: PayloadAction<TaskActivity>) => {
+      state.taskActivity?.unshift(payload.payload);
+    },
+  },
+  extraReducers(builder) {
+    builder.addCase(
+      fetchAllActivitiesInTask.fulfilled,
+      (state, action: PayloadAction<TaskActivity[]>) => {
+        state.taskActivity = action.payload;
+      },
+    );
   },
 });
 
@@ -45,5 +72,6 @@ export const {
   closeTaskDetailsSidebar,
   setDescriptionInputActive,
   setDescriptionInputValue,
+  addTaskActivity,
 } = teamPageSlice.actions;
 export default teamPageSlice.reducer;
