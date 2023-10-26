@@ -8,6 +8,8 @@ import {
   setActiveTaskInSidebar,
   setDescriptionInputActive,
 } from "../../../store/slices/teamPageSlice";
+import { useParams } from "react-router-dom";
+import { fetchAllActivitiesInTask } from "../../../store/slices/actions/taskActivity";
 
 export const DescriptionEditMode = () => {
   const taskId = useAppSelector(
@@ -20,6 +22,8 @@ export const DescriptionEditMode = () => {
   const { isDescriptionInputActive } = useAppSelector(
     (state) => state.teamPage,
   );
+
+  const { teamId } = useParams<{ teamId: string }>();
 
   const [isPreviewActive, setIsPreviewActive] = useState(false);
   const [newDescription, setNewDescription] = useState(
@@ -34,7 +38,13 @@ export const DescriptionEditMode = () => {
     const task: Partial<Task> = {
       description: newDescription,
     };
-    dispatch(patchTask({ taskId, task }));
+
+    dispatch(patchTask({ taskId, task, teamId: Number(teamId) })).then(
+      (data) => {
+        data.meta.requestStatus === "fulfilled" &&
+          dispatch(fetchAllActivitiesInTask(taskId));
+      },
+    );
     dispatch(setDescriptionInputActive(false));
 
     dispatch(

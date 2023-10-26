@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
 import { patchTask } from "../../../store/slices/actions/task";
 import { useParams } from "react-router-dom";
 import { updateActiveTeam } from "../../../store/slices/actions/team";
+import { fetchAllActivitiesInTask } from "../../../store/slices/actions/taskActivity";
 
 interface TaskDetailsSidebarProps {
   task?: Task;
@@ -40,10 +41,16 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
           id: Number(taskId),
           name: taskName,
         },
+        teamId: Number(teamId),
       }),
-    );
+    ).then((data) => {
+      if (data.meta.requestStatus === "fulfilled") {
+        dispatch(fetchAllActivitiesInTask(Number(taskId)));
+      }
+    });
+
     setIsInputTaskNameActive(false);
-  }, [dispatch, taskId, taskName]);
+  }, [dispatch, taskId, taskName, teamId]);
 
   useEffect(() => {
     if (!activeTeam) {
