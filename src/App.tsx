@@ -18,9 +18,25 @@ import { Team } from "./pages/Team";
 import ProjectSettings from "./pages/ProjectSettings";
 import { Error } from "./pages/Error";
 import { ProjectAcceptInvitation } from "./pages/Project/ProjectAcceptInvitation";
+import { CompleteProfile } from "./pages/CompleteProfile/CompleteProfile";
+
+function PrivateRoute({
+  condition,
+  redirectPath,
+  children,
+}: {
+  condition: boolean;
+  redirectPath: string;
+  children: React.ReactNode;
+}) {
+  return condition ? children : <Navigate to={redirectPath} />;
+}
 
 function App() {
   const token = useAppSelector((state) => state.auth.token);
+  const isProfileComplete = useAppSelector(
+    (state) => state.user.isProfileComplete,
+  );
 
   const { logoutUser } = useLogout();
 
@@ -50,6 +66,19 @@ function App() {
         <ToastContainer />
         <Routes>
           <Route path="/" element={<Navigate to="/dashboard" />} />
+
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute
+                condition={isProfileComplete ?? false}
+                redirectPath="/complete-profile"
+                children={<Dashboard />}
+              />
+            }
+          />
+
+          <Route path="/complete-profile" element={<CompleteProfile />} />
 
           {/* Route to main feature */}
           <Route
