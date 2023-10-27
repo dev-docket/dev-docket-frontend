@@ -53,11 +53,11 @@ function App() {
       return false;
     };
 
-    if (!token) return;
-
-    if (!isTokenExpired(token)) return;
-
-    logoutUser();
+    if (token) {
+      if (isTokenExpired(token)) {
+        logoutUser();
+      }
+    }
   }, [logoutUser, token]);
 
   return (
@@ -71,7 +71,7 @@ function App() {
             path="/dashboard"
             element={
               <PrivateRoute
-                condition={isProfileComplete ?? false}
+                condition={isProfileComplete || !token}
                 redirectPath="/complete-profile"
                 children={<Dashboard />}
               />
