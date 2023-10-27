@@ -23,6 +23,8 @@ const userSlice = createSlice({
     },
     removeUser: (state) => {
       state.user = null;
+      state.userId = null;
+      state.isProfileComplete = undefined;
     },
     setProfileComplete: (state, action) => {
       state.isProfileComplete = action.payload;
