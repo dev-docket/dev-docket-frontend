@@ -4,13 +4,13 @@ import { User } from "../../types/User";
 export interface UserState {
   user: User | null;
   userId: number | null;
-  isProfileComplete?: boolean;
+  isProfileCompleted?: boolean;
 }
 
 const initialState: UserState = {
   user: null,
   userId: null,
-  isProfileComplete: undefined,
+  isProfileCompleted: undefined,
 };
 
 const userSlice = createSlice({
@@ -24,10 +24,10 @@ const userSlice = createSlice({
     removeUser: (state) => {
       state.user = null;
       state.userId = null;
-      state.isProfileComplete = undefined;
+      state.isProfileCompleted = undefined;
     },
     setProfileComplete: (state, action) => {
-      state.isProfileComplete = action.payload;
+      state.isProfileCompleted = action.payload;
     },
   },
 });
