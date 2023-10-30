@@ -12,10 +12,6 @@ export const Team = () => {
     (state) => state.teamPage,
   );
 
-  const isMenuSidebarOpen = useAppSelector(
-    (state) => state.globalSettings.isMenuSidebarOpen,
-  );
-
   const { projectSlug, teamId, taskId } = useParams<{
     projectSlug: string;
     teamId: string;
@@ -48,13 +44,7 @@ export const Team = () => {
     <div className="h-screen bg-background-primary text-white">
       <Navbar />
 
-      <div
-        className={`flex flex-col ${
-          isMenuSidebarOpen ? "ml-[20%] w-[80%]" : "ml-0 w-full"
-        } overflow-auto p-4 transition-all`}
-      >
-        <KanbanBoard />
-      </div>
+      <KanbanBoard />
 
       <TaskDetailsSidebar
         task={activeTaskInSidebar}

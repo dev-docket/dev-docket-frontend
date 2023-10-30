@@ -153,18 +153,20 @@ export const KanbanBoard = () => {
   }, [dispatch, teamId]);
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd} onDragUpdate={onDragUpdate}>
-      <div className="flex space-x-4">
-        {board.columns.map((column) => (
-          <Column
-            key={column.id}
-            column={column}
-            placeholderIndex={
-              placeholderColumnId === column.id ? placeholderIndex : null
-            }
-          />
-        ))}
-      </div>
-    </DragDropContext>
+    <div className="m-4 flex flex-col overflow-x-auto overflow-y-hidden pb-4">
+      <DragDropContext onDragEnd={handleDragEnd} onDragUpdate={onDragUpdate}>
+        <div className="flex space-x-4">
+          {board.columns.map((column) => (
+            <Column
+              key={column.id}
+              column={column}
+              placeholderIndex={
+                placeholderColumnId === column.id ? placeholderIndex : null
+              }
+            />
+          ))}
+        </div>
+      </DragDropContext>
+    </div>
   );
 };
