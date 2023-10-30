@@ -12,10 +12,6 @@ export const Team = () => {
     (state) => state.teamPage,
   );
 
-  const isMenuSidebarOpen = useAppSelector(
-    (state) => state.globalSettings.isMenuSidebarOpen,
-  );
-
   const { projectSlug, teamId, taskId } = useParams<{
     projectSlug: string;
     teamId: string;
