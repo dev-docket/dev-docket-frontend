@@ -8,6 +8,7 @@ import {
 } from "../../../store/slices/teamPageSlice";
 import { useEffect } from "react";
 import { fetchAllActivitiesInTask } from "../../../store/slices/actions/taskActivity";
+import { DateTime } from "luxon";
 
 interface Props {
   task: Task;
@@ -21,30 +22,12 @@ export const LeftContainer = ({ task }: Props) => {
 
   const dispatch = useAppDispatch();
 
-  const handleHowLongAgo = (date: string) => {
-    const dateNow = new Date();
-    const dateThen = new Date(date);
+  function handleHowLongAgo(parsedDate: DateTime) {
+    const now = DateTime.now();
 
-    const diff = dateNow.getTime() - dateThen.getTime();
-
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-
-    if (hours > 24) {
-      return `${Math.floor(hours / 24)} days ago`;
-    }
-
-    if (hours > 0) {
-      return `${hours} hours ago`;
-    }
-
-    if (minutes > 0) {
-      return `${minutes} minutes ago`;
-    }
-
-    return `${seconds} seconds ago`;
-  };
+    // Oblicz, ile czasu minęło od parsedDate do teraz i zwróć czytelny ciąg znaków
+    return parsedDate.toRelative({ base: now });
+  }
 
   useEffect(() => {
     if (!activeTaskInSidebar?.description) return;
@@ -141,9 +124,7 @@ export const LeftContainer = ({ task }: Props) => {
                       {/*  */}
                       <div>
                         <span className="text-gray-400">
-                          {handleHowLongAgo(
-                            new Date(activity.createdAt).toLocaleString(),
-                          )}
+                          {handleHowLongAgo(activity.createdAtFormatted)}
                         </span>
                       </div>
                     </div>
