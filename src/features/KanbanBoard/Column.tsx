@@ -63,25 +63,7 @@ export const Column = ({ column, placeholderIndex }: Props) => {
   };
 
   return (
-    <div className="flex flex-col bg-secondary-background text-white">
-      {/* <Droppable droppableId={column.id}>
-        {(provided) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            className="h-full w-64 p-4"
-          >
-            <h2 className="mb-4 text-xl font-bold text-white">
-              {column.title}
-            </h2>
-            {column.cards.map((task: Task, index: number) => (
-              <Card key={task.id} task={task} index={index} />
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable> */}
-
+    <div className="flex w-[300px] min-w-[300px] flex-col bg-secondary-background text-white">
       <Droppable droppableId={column.id} type="task">
         {(provided) => (
           <div

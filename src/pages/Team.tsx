@@ -48,13 +48,7 @@ export const Team = () => {
     <div className="h-screen bg-background-primary text-white">
       <Navbar />
 
-      <div
-        className={`flex flex-col ${
-          isMenuSidebarOpen ? "ml-[20%] w-[80%]" : "ml-0 w-full"
-        } overflow-auto p-4 transition-all`}
-      >
-        <KanbanBoard />
-      </div>
+      <KanbanBoard />
 
       <TaskDetailsSidebar
         task={activeTaskInSidebar}
