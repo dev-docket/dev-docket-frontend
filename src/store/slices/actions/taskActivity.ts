@@ -1,5 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
+import axios from "axios";
+import { TaskActivity } from "../teamPageSlice";
+import { DateTime } from "luxon";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -14,17 +17,27 @@ export const fetchAllActivitiesInTask = createAsyncThunk(
     }
 
     try {
-      const response = await fetch(`${apiUrl}/tasks/${taskId}/activities`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.get<TaskActivity[]>(
+        `${apiUrl}/tasks/${taskId}/activities`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       if (response.status !== 200) {
         throw new Error("Something went wrong!");
       }
 
-      return await response.json();
+      const data = response.data;
+
+      // in data there is createdAt field which is a string. Format to DateTime luxon object
+      data.forEach((activity) => {
+        activity.createdAtFormatted = DateTime.fromISO(activity.createdAt);
+      });
+
+      return data;
     } catch (err) {
       if (err instanceof Error) {
         return rejectWithValue(err.message);

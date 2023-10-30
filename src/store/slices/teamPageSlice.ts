@@ -1,11 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Task } from "../../types/Task";
 import { fetchAllActivitiesInTask } from "./actions/taskActivity";
+import { DateTime } from "luxon";
 
-interface TaskActivity {
+export interface TaskActivity {
   id: string;
   description: string;
   createdAt: string;
+  createdAtFormatted: DateTime;
   user: {
     id: string;
     username: string;
