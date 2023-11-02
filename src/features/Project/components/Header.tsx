@@ -20,7 +20,7 @@ export const Header = ({
   onOpenCreateTeamModal,
   dropdownRef,
 }: Props) => {
-  const isMdTailwindScreen = useMediaQuery("(max-width: 768px)");
+  const isMdTailwindScreen = useMediaQuery("(max-width: 1024px)");
 
   useEffect(() => {
     if (isMdTailwindScreen) {
