@@ -9,7 +9,7 @@ export const ExpandableProjectList = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="flex w-full flex-col justify-start">
+    <div className="flex w-full flex-col mt-4 justify-start">
       <div
         onClick={(e) => {
           e.preventDefault();
@@ -18,7 +18,7 @@ export const ExpandableProjectList = () => {
         }}
         className="w-full rounded-md py-1 hover:cursor-pointer hover:bg-[#262836]"
       >
-        <div className="flex h-[2rem] items-center text-sm opacity-40">
+        <div className="flex h-[2rem] items-center text-sm opacity-40 pl-2">
           <span className="pl-1">Your projects</span>
           <div className="flex h-[2rem] w-[2rem] items-center">
             {isExpanded ? (
