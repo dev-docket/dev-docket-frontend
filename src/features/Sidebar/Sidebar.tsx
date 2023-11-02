@@ -80,7 +80,7 @@ export const Sidebar = ({ isSidebarOpen, setSidebarOpen }: Props) => {
       {isSidebarOpen && (
         <motion.div
           ref={sidebarRef}
-          className={`flex h-screen w-[220px] flex-col items-start overflow-y-auto border-r border-white border-opacity-30 bg-background-primary max-xl:fixed max-md:left-0`}
+          className={`flex pt-4 h-screen w-[220px] flex-col items-start overflow-y-auto border-r border-white border-opacity-30 bg-background-primary max-xl:fixed max-md:left-0`}
           initial="closed"
           animate="open"
           exit="closed"
