@@ -5,7 +5,6 @@ import { fetchTeamsByProjectSlug } from "../../store/slices/actions/team";
 import { CreateNewTeamModal } from "../../features/Project/CreateNewTeam/CreateNewTeamModal";
 import { setActiveTeam } from "../../store/slices/teamSlice";
 import { Team } from "../../types/Team";
-import { ProjectSidebar } from "../../features/Project/ProjectSidebar";
 import {
   fetchProjectBySlugAndSetAsActive,
   fetchProjectMembersByProjectSlug,
@@ -14,6 +13,7 @@ import { ProjectPermissionModal } from "../../features/Project/ProjectPermission
 import { Header } from "../../features/Project/components/Header";
 import { ProjectRoles } from "../../features/Project/components/ProjectRoles";
 import TeamsSection from "../../features/Project/components/TeamsSection";
+import { Sidebar } from "../../features/Sidebar/Sidebar";
 
 export const Project = () => {
   const { teams, loading } = useAppSelector((state) => state.team);
@@ -88,7 +88,7 @@ export const Project = () => {
   return (
     <>
       <div className="flex h-screen bg-dark-background text-white">
-        <ProjectSidebar
+        <Sidebar
           isSidebarOpen={isSidebarOpen}
           setSidebarOpen={setIsSidebarOpen}
         />
