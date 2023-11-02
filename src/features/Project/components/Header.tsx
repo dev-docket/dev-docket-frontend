@@ -2,7 +2,6 @@ import { Menu } from "@mui/icons-material";
 import { SmallButton } from "../../../components/common/buttons/SmallButton";
 import { Project } from "../../../types/Project";
 import { useMediaQuery } from "@mui/material";
-import { useEffect } from "react";
 
 interface Props {
   isSidebarOpen: boolean;
@@ -20,15 +19,7 @@ export const Header = ({
   onOpenCreateTeamModal,
   dropdownRef,
 }: Props) => {
-  const isMdTailwindScreen = useMediaQuery("(max-width: 768px)");
-
-  useEffect(() => {
-    if (isMdTailwindScreen) {
-      setSidebarOpen(false);
-    } else {
-      setSidebarOpen(true);
-    }
-  }, [isMdTailwindScreen, setSidebarOpen]);
+  const isMdTailwindScreen = useMediaQuery("(max-width: 1280px)");
 
   return (
     <div className="mb-4 flex justify-between border-b border-white border-opacity-30 px-4 pb-2">

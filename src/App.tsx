@@ -29,7 +29,6 @@ function PrivateRoute({
   redirectPath: string;
   children: React.ReactNode;
 }) {
-  console.log(condition, redirectPath, children);
   return condition ? children : <Navigate to={redirectPath} />;
 }
 
