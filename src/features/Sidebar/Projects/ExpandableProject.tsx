@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Team } from "../../../types/Team";
 import { useAppSelector } from "../../../hooks/storeHook";
@@ -12,30 +12,30 @@ interface Props {
 }
 
 export const ExpandableProject = ({ name, slug }: Props) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [teamsInProject, setTeamsInProject] = useState<Team[]>([]);
   const token = useAppSelector((state) => state.auth.token);
 
-  useEffect(() => {
-    const fetchTeams = async () => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [teamsInProject, setTeamsInProject] = useState<Team[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchTeams = useCallback(async () => {
+    try {
       const response = await axios.get(`${apiUrl}/projects/${slug}/teams`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      if (response.status !== 200) {
-        throw new Error("Something went wrong!");
-      }
-
       setTeamsInProject(response.data);
-    };
-
-    fetchTeams();
+    } catch (error) {
+      setError("Failed to load teams.");
+    }
   }, [slug, token]);
 
-  if (!name || !slug) return null;
+  useEffect(() => {
+    fetchTeams();
+  }, [fetchTeams]);
 
+  if (!name || !slug) return null;
   return (
     <div className="w-full">
       <div
@@ -76,6 +76,7 @@ export const ExpandableProject = ({ name, slug }: Props) => {
       {isExpanded && (
         <div>
           <div className="flex flex-col pl-8">
+            {error && <div className="text-xs opacity-70">{error}</div>}
             {teamsInProject.length === 0 ? (
               <div className="text-xs opacity-70">No teams in this project</div>
             ) : (
