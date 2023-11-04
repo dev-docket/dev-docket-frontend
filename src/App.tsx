@@ -25,7 +25,7 @@ function PrivateRoute({
   redirectPath,
   children,
 }: {
-  condition: boolean;
+  condition?: boolean;
   redirectPath: string;
   children: React.ReactNode;
 }) {
@@ -37,6 +37,8 @@ function App() {
   const isProfileCompleted = useAppSelector(
     (state) => state.user.isProfileCompleted,
   );
+
+  const isAuthenticated = !!token;
 
   const { logoutUser } = useLogout();
 
@@ -71,8 +73,8 @@ function App() {
             path="/dashboard"
             element={
               <PrivateRoute
-                condition={isProfileCompleted || !token}
-                redirectPath="/complete-profile"
+                condition={isAuthenticated && isProfileCompleted}
+                redirectPath="/login"
                 children={<Dashboard />}
               />
             }
