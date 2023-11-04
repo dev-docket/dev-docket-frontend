@@ -25,7 +25,7 @@ function PrivateRoute({
   redirectPath,
   children,
 }: {
-  condition: boolean;
+  condition?: boolean;
   redirectPath: string;
   children: React.ReactNode;
 }) {
@@ -37,6 +37,8 @@ function App() {
   const isProfileCompleted = useAppSelector(
     (state) => state.user.isProfileCompleted,
   );
+
+  const isAuthenticated = !!token;
 
   const { logoutUser } = useLogout();
 
@@ -70,15 +72,28 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <PrivateRoute
-                condition={isProfileCompleted || !token}
-                redirectPath="/complete-profile"
-                children={<Dashboard />}
-              />
+              !isProfileCompleted && isAuthenticated ? (
+                <Navigate to="/complete-profile" />
+              ) : (
+                <PrivateRoute
+                  condition={isAuthenticated}
+                  redirectPath="/login"
+                  children={<Dashboard />}
+                />
+              )
             }
           />
 
-          <Route path="/complete-profile" element={<CompleteProfile />} />
+          <Route
+            path="/complete-profile"
+            element={
+              <PrivateRoute
+                condition={isAuthenticated}
+                redirectPath="/login"
+                children={<CompleteProfile />}
+              />
+            }
+          />
 
           {/* Route to main feature */}
           <Route
@@ -113,8 +128,16 @@ function App() {
           />
 
           {/* Route to auth feature */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route
+            path="/login"
+            element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />}
+          />
+          <Route
+            path="/register"
+            element={
+              isAuthenticated ? <Navigate to="/dashboard" /> : <Register />
+            }
+          />
 
           {/* Route to error feature */}
           <Route path="*" element={<Error />} />
