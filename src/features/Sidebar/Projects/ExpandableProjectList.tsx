@@ -11,6 +11,7 @@ export const ExpandableProjectList = () => {
   const toggleExpand = (e: React.MouseEvent<HTMLButtonElement>
      ) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsExpanded((prev) => !prev);
   };
 
