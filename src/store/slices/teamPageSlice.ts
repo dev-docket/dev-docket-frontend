@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Task } from "../../types/Task";
+import { Task, TaskStatus } from "../../types/Task";
 import { fetchAllActivitiesInTask } from "./actions/taskActivity";
 import { DateTime } from "luxon";
 
@@ -40,6 +40,11 @@ const teamPageSlice = createSlice({
     setActiveTaskInSidebar: (state, payload: PayloadAction<Task>) => {
       state.activeTaskInSidebar = payload.payload;
     },
+    updateStatusOfActiveTask: (state, payload: PayloadAction<TaskStatus>) => {
+      if (state.activeTaskInSidebar) {
+        state.activeTaskInSidebar.status = payload.payload;
+      }
+    },
     openTaskDetailsSidebar: (state, payload: PayloadAction<Task>) => {
       state.activeTaskInSidebar = payload.payload;
       state.isTaskDetailsSidebarOpen = true;
@@ -70,6 +75,7 @@ const teamPageSlice = createSlice({
 
 export const {
   setActiveTaskInSidebar,
+  updateStatusOfActiveTask,
   openTaskDetailsSidebar,
   closeTaskDetailsSidebar,
   setDescriptionInputActive,
