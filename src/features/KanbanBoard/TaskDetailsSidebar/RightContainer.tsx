@@ -16,7 +16,11 @@ import IcOutlineCircle from "../../../assets/icons/IcOutlineCircle";
 import { PhCircleDashed } from "../../../assets/icons/PhCircleDashed";
 import AntDesignCheckCircleOutlined from "../../../assets/icons/AntDesignCheckCircleOutlined";
 import MdiProgressHelper from "../../../assets/icons/MdiProgressHelper";
-import { displayStatus } from "../../../types/Task";
+import {
+  TaskPriority,
+  displayStatus,
+  getPriorityByIndex,
+} from "../../../types/Task";
 
 export const RightContainer = () => {
   const activeTask = useAppSelector(
@@ -74,7 +78,21 @@ export const RightContainer = () => {
     setIsStatusDropdownOpen(false);
   };
 
-  // const handleUpdatePriority = () => {};
+  const handleUpdatePriority = (priority: TaskPriority) => {
+    if (!activeTask?.id) return;
+    if (!teamId) return;
+
+    console.log(priority);
+
+    // dispatch(
+    //   patchTask({
+    //     task: { id: activeTask.id, priority },
+    //     taskId: activeTask.id,
+    //     teamId: Number(teamId),
+    //   }),
+    // );
+    // setIsPriorityDropdownOpen(false);
+  };
 
   return (
     <div className="w-full max-w-[34%] max-md:max-w-full">
@@ -142,6 +160,9 @@ export const RightContainer = () => {
               label="No priority"
               options={[
                 <div className="flex items-center gap-2">
+                  <span>...</span> No priority
+                </div>,
+                <div className="flex items-center gap-2">
                   <WarningAmber /> Urgent
                 </div>,
                 <div className="flex items-center gap-2">
@@ -187,7 +208,11 @@ export const RightContainer = () => {
                   Low
                 </div>,
               ]}
-              onSelect={(option) => console.log(option)}
+              onSelect={(index: number) => {
+                const priority = getPriorityByIndex(index);
+
+                priority && handleUpdatePriority(priority);
+              }}
               isDropdownOpen={isPriorityDropdownOpen}
               setIsDropdownOpen={setIsPriorityDropdownOpen}
             />
