@@ -4,7 +4,7 @@ import useOnClickOutside from "../../../hooks/useOnClickOutside";
 interface Props {
   label: string;
   options: ReactNode[];
-  onSelect: (option: string) => void;
+  onSelect: (index: number) => void;
   isDropdownOpen: boolean;
   setIsDropdownOpen: (value: boolean) => void;
 }
@@ -38,7 +38,7 @@ export const DropdownButton = ({
               key={index}
               className="cursor-pointer rounded-md px-4 py-2 hover:bg-[#313240]"
               onClick={() => {
-                onSelect(index.toString());
+                onSelect(index);
                 setIsDropdownOpen(false);
               }}
             >
