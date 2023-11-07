@@ -2,12 +2,13 @@ export interface Task {
   id: number;
   name: string;
   description?: string;
-  status?: TaskStatus;
+  status: TaskStatus;
 }
 
-export type TaskStatus = "TODO" | "IN_PROGRESS" | "DONE";
+export type TaskStatus = "BACKLOG" | "TODO" | "IN_PROGRESS" | "DONE";
 
 const StatusEnum = {
+  BACKLOG: "BACKLOG",
   TODO: "TODO",
   IN_PROGRESS: "IN_PROGRESS",
   DONE: "DONE",
@@ -19,6 +20,8 @@ export function displayStatus(status?: TaskStatus) {
   }
 
   switch (status) {
+    case StatusEnum.BACKLOG:
+      return "Backlog";
     case StatusEnum.TODO:
       return "To do";
     case StatusEnum.IN_PROGRESS:
