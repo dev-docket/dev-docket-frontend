@@ -8,12 +8,24 @@ export interface Task {
 
 export type TaskStatus = "BACKLOG" | "TODO" | "IN_PROGRESS" | "DONE";
 
-const StatusEnum = {
-  BACKLOG: "BACKLOG",
-  TODO: "TODO",
-  IN_PROGRESS: "IN_PROGRESS",
-  DONE: "DONE",
-};
+// const StatusEnum = {
+//   BACKLOG: "BACKLOG",
+//   TODO: "TODO",
+//   IN_PROGRESS: "IN_PROGRESS",
+//   DONE: "DONE",
+// };
+
+export enum TaskStatusEnum {
+  BACKLOG = "BACKLOG",
+  TODO = "TODO",
+  IN_PROGRESS = "IN_PROGRESS",
+  DONE = "DONE",
+}
+
+export function getStatusByIndex(index: number): TaskStatus | undefined {
+  const statuses = Object.values(TaskStatusEnum);
+  return statuses[index];
+}
 
 export enum TaskPriority {
   No_Priority = "NO_PRIORITY",
@@ -34,13 +46,13 @@ export function displayStatus(status?: TaskStatus) {
   }
 
   switch (status) {
-    case StatusEnum.BACKLOG:
+    case TaskStatusEnum.BACKLOG:
       return "Backlog";
-    case StatusEnum.TODO:
+    case TaskStatusEnum.TODO:
       return "To do";
-    case StatusEnum.IN_PROGRESS:
+    case TaskStatusEnum.IN_PROGRESS:
       return "In progress";
-    case StatusEnum.DONE:
+    case TaskStatusEnum.DONE:
       return "DONE";
     default:
       return status;

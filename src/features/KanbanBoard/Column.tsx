@@ -5,7 +5,7 @@ import { Add, Close } from "@mui/icons-material";
 import { useAppDispatch } from "../../hooks/storeHook";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { Task, TaskStatus } from "../../types/Task";
+import { Task, getStatusByIndex } from "../../types/Task";
 import { createTask } from "../../store/slices/actions/task";
 
 type ColumnType = {
@@ -39,12 +39,9 @@ export const Column = ({ column, placeholderIndex }: Props) => {
       return;
     }
 
-    const status: TaskStatus =
-      taskStatus === "Todo"
-        ? "TODO"
-        : taskStatus === "In Progress"
-        ? "IN_PROGRESS"
-        : "DONE";
+    const status = getStatusByIndex(Number(taskStatus));
+
+    if (!status) return;
 
     dispatch(
       createTask({
@@ -101,7 +98,7 @@ export const Column = ({ column, placeholderIndex }: Props) => {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
-                handleAddNewTask(column.title);
+                handleAddNewTask(column.id);
               }
             }}
             placeholder="Enter title to new task"
@@ -109,7 +106,7 @@ export const Column = ({ column, placeholderIndex }: Props) => {
           />
           <div className="flex justify-between">
             <button
-              onClick={() => handleAddNewTask(column.title)}
+              onClick={() => handleAddNewTask(column.id)}
               className="inline-flex items-center justify-center rounded bg-blue-500 px-4 py-2 text-white"
             >
               Add new task
