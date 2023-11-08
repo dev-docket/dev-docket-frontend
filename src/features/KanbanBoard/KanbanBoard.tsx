@@ -1,10 +1,12 @@
 import { DragDropContext, DragUpdate, DropResult } from "react-beautiful-dnd";
 import { Column } from "./Column";
-import { useUpdateStatusOfTask } from "../../hooks/tasks/useUpdateStatusOfTask";
 import { Task, TaskStatus } from "../../types/Task";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/storeHook";
-import { fetchAllTasksInTeam } from "../../store/slices/actions/task";
+import {
+  fetchAllTasksInTeam,
+  patchTask,
+} from "../../store/slices/actions/task";
 import { useParams } from "react-router-dom";
 
 export type ColumnType = {
@@ -19,6 +21,11 @@ type BoardType = {
 
 const initialBoard: BoardType = {
   columns: [
+    {
+      id: "0",
+      title: "Backlog",
+      cards: [],
+    },
     {
       id: "1",
       title: "Todo",
@@ -49,8 +56,6 @@ export const KanbanBoard = () => {
   );
 
   const { teamId } = useParams<{ teamId: string }>();
-
-  const { updateStatusOfTask } = useUpdateStatusOfTask();
 
   const dispatch = useAppDispatch();
 
@@ -86,6 +91,10 @@ export const KanbanBoard = () => {
     if (destinationColumn && movedCard) {
       destinationColumn.cards.splice(destination.index, 0, movedCard);
 
+      if (destinationColumn.id === "0") {
+        movedCard = { ...movedCard, status: "BACKLOG" };
+      }
+
       if (destinationColumn.id === "1") {
         movedCard = { ...movedCard, status: "TODO" };
       }
@@ -101,7 +110,15 @@ export const KanbanBoard = () => {
       const taskId = movedCard.id;
       const taskStatus = movedCard.status as TaskStatus;
 
-      updateStatusOfTask(taskId, taskStatus);
+      dispatch(
+        patchTask({
+          taskId,
+          teamId: Number(teamId),
+          task: {
+            status: taskStatus,
+          },
+        }),
+      );
     }
 
     // Update the columns state
@@ -134,14 +151,18 @@ export const KanbanBoard = () => {
       columns: [
         {
           ...prev.columns[0],
-          cards: tasks.filter((task) => task.status === "TODO"),
+          cards: tasks.filter((task) => task.status === "BACKLOG"),
         },
         {
           ...prev.columns[1],
-          cards: tasks.filter((task) => task.status === "IN_PROGRESS"),
+          cards: tasks.filter((task) => task.status === "TODO"),
         },
         {
           ...prev.columns[2],
+          cards: tasks.filter((task) => task.status === "IN_PROGRESS"),
+        },
+        {
+          ...prev.columns[3],
           cards: tasks.filter((task) => task.status === "DONE"),
         },
       ],
