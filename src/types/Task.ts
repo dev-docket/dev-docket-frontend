@@ -16,7 +16,7 @@ const StatusEnum = {
 };
 
 export enum TaskPriority {
-  No_Priority = "No Priority",
+  No_Priority = "NO_PRIORITY",
   URGENT = "URGENT",
   HIGH = "HIGH",
   MEDIUM = "MEDIUM",
