@@ -7,7 +7,7 @@ import { useRef, useState } from "react";
 import { deleteTask, patchTask } from "../../../store/slices/actions/task";
 import {
   closeTaskDetailsSidebar,
-  updateStatusOfActiveTask,
+  updateTask,
 } from "../../../store/slices/teamPageSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { DropdownButton } from "./DropdownButton";
@@ -17,7 +17,10 @@ import { PhCircleDashed } from "../../../assets/icons/PhCircleDashed";
 import AntDesignCheckCircleOutlined from "../../../assets/icons/AntDesignCheckCircleOutlined";
 import MdiProgressHelper from "../../../assets/icons/MdiProgressHelper";
 import {
+  Task,
   TaskPriority,
+  TaskStatus,
+  displayPriority,
   displayStatus,
   getPriorityByIndex,
 } from "../../../types/Task";
@@ -61,9 +64,7 @@ export const RightContainer = () => {
     setIsDeleteTaskModalOpen(false);
   };
 
-  const handleUpdateStatus = (
-    status: "BACKLOG" | "TODO" | "IN_PROGRESS" | "DONE",
-  ) => {
+  const handleUpdateStatus = (status: TaskStatus) => {
     if (!activeTask?.id) return;
     if (!teamId) return;
 
@@ -74,7 +75,7 @@ export const RightContainer = () => {
         teamId: Number(teamId),
       }),
     );
-    dispatch(updateStatusOfActiveTask(status));
+    dispatch(updateTask({ status } as Task));
     setIsStatusDropdownOpen(false);
   };
 
@@ -82,16 +83,15 @@ export const RightContainer = () => {
     if (!activeTask?.id) return;
     if (!teamId) return;
 
-    console.log(priority);
-
-    // dispatch(
-    //   patchTask({
-    //     task: { id: activeTask.id, priority },
-    //     taskId: activeTask.id,
-    //     teamId: Number(teamId),
-    //   }),
-    // );
-    // setIsPriorityDropdownOpen(false);
+    dispatch(
+      patchTask({
+        task: { id: activeTask.id, priority },
+        taskId: activeTask.id,
+        teamId: Number(teamId),
+      }),
+    );
+    dispatch(updateTask({ priority } as Task));
+    setIsPriorityDropdownOpen(false);
   };
 
   return (
@@ -157,7 +157,7 @@ export const RightContainer = () => {
           <span>Priority</span>
           <div ref={priorityDropdownRef}>
             <DropdownButton
-              label="No priority"
+              label={displayPriority(activeTask?.priority)}
               options={[
                 <div className="flex items-center gap-2">
                   <svg
