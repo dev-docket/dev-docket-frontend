@@ -40,6 +40,14 @@ const teamPageSlice = createSlice({
     setActiveTaskInSidebar: (state, payload: PayloadAction<Task>) => {
       state.activeTaskInSidebar = payload.payload;
     },
+    updateTask: (state, payload: PayloadAction<Task>) => {
+      if (state.activeTaskInSidebar) {
+        state.activeTaskInSidebar = {
+          ...state.activeTaskInSidebar,
+          ...payload.payload,
+        };
+      }
+    },
     openTaskDetailsSidebar: (state, payload: PayloadAction<Task>) => {
       state.activeTaskInSidebar = payload.payload;
       state.isTaskDetailsSidebarOpen = true;
@@ -70,6 +78,7 @@ const teamPageSlice = createSlice({
 
 export const {
   setActiveTaskInSidebar,
+  updateTask,
   openTaskDetailsSidebar,
   closeTaskDetailsSidebar,
   setDescriptionInputActive,
