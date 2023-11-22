@@ -12,12 +12,15 @@ export const useCompleteProfile = () => {
 
   const completeProfile = async (id: number, username: string) => {
     try {
-      const { status } = await axios.post(`${apiUrl}/users/complete-profile`, {
-        user: {
-          id,
-          username,
+      const { status } = await axios.patch(
+        `${apiUrl}/users/update-completion-status`,
+        {
+          user: {
+            id,
+            username,
+          },
         },
-      });
+      );
 
       if (status !== 200) throw new Error("Error completing profile");
 
