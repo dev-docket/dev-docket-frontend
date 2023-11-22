@@ -8,13 +8,6 @@ export interface Task {
 
 export type TaskStatus = "BACKLOG" | "TODO" | "IN_PROGRESS" | "DONE";
 
-// const StatusEnum = {
-//   BACKLOG: "BACKLOG",
-//   TODO: "TODO",
-//   IN_PROGRESS: "IN_PROGRESS",
-//   DONE: "DONE",
-// };
-
 export enum TaskStatusEnum {
   BACKLOG = "BACKLOG",
   TODO = "TODO",
@@ -22,60 +15,65 @@ export enum TaskStatusEnum {
   DONE = "DONE",
 }
 
-export function getStatusByIndex(index: number): TaskStatus | undefined {
-  const statuses = Object.values(TaskStatusEnum);
-  return statuses[index];
-}
-
 export enum TaskPriority {
-  No_Priority = "NO_PRIORITY",
+  NO_PRIORITY = "NO_PRIORITY",
   URGENT = "URGENT",
   HIGH = "HIGH",
   MEDIUM = "MEDIUM",
   LOW = "LOW",
 }
 
+/**
+ * Returns the status corresponding to the given index.
+ * @param index The index of the status.
+ * @returns The status as a string or undefined if the index is out of range.
+ */
+export function getStatusByIndex(index: number): TaskStatus | undefined {
+  const statuses = Object.values(TaskStatusEnum);
+  return statuses[index];
+}
+
+/**
+ * Returns the priority corresponding to the given index.
+ * @param index The index of the priority.
+ * @returns The priority as a string or undefined if the index is out of range.
+ */
 export function getPriorityByIndex(index: number): TaskPriority | undefined {
   const priorities = Object.values(TaskPriority);
   return priorities[index];
 }
 
-export function displayStatus(status?: TaskStatus) {
-  if (!status) {
-    return "Unknown";
-  }
+const statusDisplayMapping: { [key in TaskStatus]?: string } = {
+  BACKLOG: "Backlog",
+  TODO: "To do",
+  IN_PROGRESS: "In progress",
+  DONE: "DONE",
+};
 
-  switch (status) {
-    case TaskStatusEnum.BACKLOG:
-      return "Backlog";
-    case TaskStatusEnum.TODO:
-      return "To do";
-    case TaskStatusEnum.IN_PROGRESS:
-      return "In progress";
-    case TaskStatusEnum.DONE:
-      return "DONE";
-    default:
-      return status;
-  }
+/**
+ * Returns a human-readable string for the given task status.
+ * @param status The status of the task.
+ * @returns A string representing the status.
+ */
+export function displayStatus(status: TaskStatus = "BACKLOG"): string {
+  return statusDisplayMapping[status] || status;
 }
 
-export function displayPriority(priority?: TaskPriority) {
-  if (!priority) {
-    return "Unknown";
-  }
+const priorityDisplayMapping: { [key in TaskPriority]?: string } = {
+  NO_PRIORITY: "No Priority",
+  LOW: "Low",
+  MEDIUM: "Medium",
+  HIGH: "High",
+  URGENT: "Urgent",
+};
 
-  switch (priority) {
-    case TaskPriority.No_Priority:
-      return "No Priority";
-    case TaskPriority.LOW:
-      return "Low";
-    case TaskPriority.MEDIUM:
-      return "Medium";
-    case TaskPriority.HIGH:
-      return "High";
-    case TaskPriority.URGENT:
-      return "Urgent";
-    default:
-      return priority;
-  }
+/**
+ * Returns a human-readable string for the given task priority.
+ * @param priority The priority of the task.
+ * @returns A string representing the priority.
+ */
+export function displayPriority(
+  priority: TaskPriority = TaskPriority.NO_PRIORITY,
+): string {
+  return priorityDisplayMapping[priority] || priority;
 }
