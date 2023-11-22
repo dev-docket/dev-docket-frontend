@@ -43,12 +43,8 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
         },
         teamId: Number(teamId),
       }),
-    ).then((data) => {
-      if (data.meta.requestStatus === "fulfilled") {
-        dispatch(fetchAllActivitiesInTask(Number(taskId)));
-      }
-    });
-
+    );
+    dispatch(fetchAllActivitiesInTask(Number(taskId)));
     setIsInputTaskNameActive(false);
   }, [dispatch, taskId, taskName, teamId]);
 
