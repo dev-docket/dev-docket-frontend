@@ -11,7 +11,7 @@ interface TaskActivityProps {
 // Mapping for human-friendly task status display
 const humanFriendlyStatus: { [key in TaskStatusEnum]?: string } = {
   [TaskStatusEnum.BACKLOG]: "Backlog",
-  [TaskStatusEnum.TODO]: "To do",
+  [TaskStatusEnum.TODO]: "Todo",
   [TaskStatusEnum.IN_PROGRESS]: "In Progress",
   [TaskStatusEnum.DONE]: "Done",
 };
