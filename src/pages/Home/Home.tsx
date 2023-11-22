@@ -1,6 +1,5 @@
 import { motion, useAnimation } from "framer-motion";
 import "./Home.css";
-import { MouseEvent, useEffect } from "react";
 import { ArrowRight } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
@@ -8,20 +7,6 @@ export const Home = () => {
   const controls = useAnimation();
 
   const navigation = useNavigate();
-
-  const handleScroll = () => {
-    // Zaktualizuj rotację w zależności od przesunięcia
-    const scrollY = window.scrollY;
-    controls.start({ rotate: scrollY });
-  };
-
-  // Dodaj nasłuchiwanie na zdarzenie scroll
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   const handleHoverEnd = () => {
     controls.start({ scale: 1 });
