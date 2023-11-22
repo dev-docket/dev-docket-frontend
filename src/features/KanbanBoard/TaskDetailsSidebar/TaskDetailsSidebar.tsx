@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Task } from "../../../types/Task";
 import { Close } from "@mui/icons-material";
-import { LeftContainer } from "./LeftContainer";
+import { LeftContainer } from "./LeftContainer/LeftContainer";
 import { RightContainer } from "./RightContainer";
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
 import { patchTask } from "../../../store/slices/actions/task";
