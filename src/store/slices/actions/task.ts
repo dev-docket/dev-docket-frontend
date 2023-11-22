@@ -213,6 +213,8 @@ export const patchTask = createAsyncThunk(
         throw new Error("Something went wrong!");
       }
 
+      // teamPage.activeTaskInSidebar = response.data;
+
       return await response.data;
     } catch (err) {
       if (err instanceof Error) {
