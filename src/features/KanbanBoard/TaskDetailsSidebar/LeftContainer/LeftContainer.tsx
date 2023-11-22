@@ -24,8 +24,16 @@ export const LeftContainer = ({ task }: Props) => {
     useAppSelector((state) => state.teamPage);
 
   const handleHowLongAgo = useMemo(
-    () => (parsedDate: DateTime) =>
-      parsedDate.toRelative({ base: DateTime.now() }),
+    () => (parsedDate: DateTime) => {
+      const now = DateTime.local();
+      const diff = now.diff(parsedDate, "minutes").minutes;
+
+      if (diff < 1) {
+        return "just now";
+      }
+
+      return parsedDate.toRelative({ base: DateTime.now() });
+    },
     [],
   );
 
