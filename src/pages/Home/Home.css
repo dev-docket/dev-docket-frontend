@@ -1,0 +1,30 @@
+/* styles.css (lub importuj do pliku React) */
+.glass-container {
+  height: 100vh;
+  background: linear-gradient(to right, #11122b, #13142e);
+  backdrop-filter: blur(10px);
+  /* Dodaj inne właściwości stylu, jeśli są potrzebne */
+}
+
+.gradient-circle {
+  display: flex;
+  flex-direction: column;
+  /* width: 100vw; */
+  /* height: 100%; */
+  background: radial-gradient(circle at top, #161834, #000212);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.gradient-text {
+  position: relative;
+  display: inline-block;
+  background: radial-gradient(circle at right, #ffffff, #000212);
+  -webkit-background-clip: text;
+  color: transparent;
+  background-size: 200% 100%;
+  background-position: 100%;
+  transition: background-position 0.5s;
+}

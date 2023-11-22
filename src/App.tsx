@@ -19,6 +19,7 @@ import ProjectSettings from "./pages/ProjectSettings";
 import { Error } from "./pages/Error";
 import { ProjectAcceptInvitation } from "./pages/Project/ProjectAcceptInvitation";
 import { CompleteProfile } from "./pages/CompleteProfile/CompleteProfile";
+import { Home } from "./pages/Home/Home";
 
 function PrivateRoute({
   condition,
@@ -67,7 +68,10 @@ function App() {
       <Router>
         <ToastContainer />
         <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" />} />
+          <Route
+            path="/"
+            element={isAuthenticated ? <Navigate to="/dashboard" /> : <Home />}
+          />
 
           <Route
             path="/dashboard"
