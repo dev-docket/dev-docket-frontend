@@ -82,7 +82,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
   return (
     <div
       ref={sidebarRef}
-      className={`fixed right-0 top-[72px] h-full w-[60%] transform bg-[#0d1117] text-white shadow-md transition-all duration-300 ease-in-out max-xl:w-[80%] max-lg:w-full ${
+      className={`fixed right-0 top-0 h-full w-[60%] transform bg-[#0d1117] text-white shadow-md transition-all duration-300 ease-in-out max-xl:w-[80%] max-lg:w-full ${
         show ? "translate-x-0" : "translate-x-full"
       }`}
     >
