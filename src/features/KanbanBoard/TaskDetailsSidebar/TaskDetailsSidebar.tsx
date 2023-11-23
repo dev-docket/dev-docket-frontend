@@ -4,6 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { LeftContainer } from "./LeftContainer/LeftContainer";
 import { RightContainer } from "./RightContainer";
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
+import { motion } from "framer-motion";
 
 import { useParams } from "react-router-dom";
 import { updateActiveTeam } from "../../../store/slices/actions/team";
@@ -79,12 +80,24 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
     setIsInputTaskNameActive(!isInputTaskNameActive);
   };
 
+  const sidebarVariants = {
+    hidden: { x: "100%" },
+    visible: { x: 0 },
+  };
+
   return (
-    <div
+    <motion.div
       ref={sidebarRef}
-      className={`fixed right-0 top-0 h-full w-[60%] bg-[#0d1117] text-white shadow-md transition-all duration-300 ease-in-out max-xl:w-[80%] max-lg:w-full ${
-        show ? "translate-x-0" : "translate-x-full"
-      }`}
+      initial="hidden"
+      animate={show ? "visible" : "hidden"}
+      variants={sidebarVariants}
+      transition={{
+        type: "easeInOut",
+        duration: 0.3,
+        stiffness: 100,
+        damping: 30,
+      }}
+      className={`fixed right-0 top-0 h-full w-[60%] bg-[#0d1117] text-white shadow-md transition-all duration-300 ease-in-out max-xl:w-[80%] max-lg:w-full`}
     >
       <div className="mt-5 border-b border-gray-600">
         <div className="flex items-center justify-between px-5">
@@ -121,6 +134,6 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
         {task && <LeftContainer task={task} />}
         <RightContainer />
       </div>
-    </div>
+    </motion.div>
   );
 };
