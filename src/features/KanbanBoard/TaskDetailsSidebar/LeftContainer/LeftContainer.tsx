@@ -72,7 +72,7 @@ export const LeftContainer = ({ task }: Props) => {
   };
 
   return (
-    <div className="w-[66%] border-r border-r-border-dark-primary bg-[#161b22] max-md:w-full">
+    <div className="flex w-[66%] flex-1 flex-col border-r border-r-border-dark-primary bg-[#161b22] max-md:w-full">
       {task && task.id ? (
         <>
           <div className="w-full border-b border-b-border-dark-primary bg-[#0d1117] p-5">
