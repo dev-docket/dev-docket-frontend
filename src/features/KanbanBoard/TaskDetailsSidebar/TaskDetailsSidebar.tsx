@@ -130,7 +130,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
         </div>
       </div>
 
-      <div className="flex w-full max-md:flex-col">
+      <div className="flex w-full max-md:flex-col-reverse">
         {task && <LeftContainer task={task} />}
         <RightContainer />
       </div>
