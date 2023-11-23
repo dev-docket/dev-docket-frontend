@@ -97,7 +97,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
         stiffness: 100,
         damping: 30,
       }}
-      className={`fixed right-0 top-0 h-full w-[60%] bg-[#0d1117] text-white shadow-md transition-all duration-300 ease-in-out max-xl:w-[80%] max-lg:w-full`}
+      className={`fixed right-0 top-0 h-screen w-[60%] overflow-auto bg-[#0d1117] text-white shadow-md transition-all duration-300 ease-in-out max-xl:w-[80%] max-lg:w-full`}
     >
       <div className="mt-5 border-b border-gray-600">
         <div className="flex items-center justify-between px-5">
@@ -130,7 +130,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
         </div>
       </div>
 
-      <div className="flex h-full w-full max-md:flex-col">
+      <div className="flex w-full max-md:flex-col">
         {task && <LeftContainer task={task} />}
         <RightContainer />
       </div>
