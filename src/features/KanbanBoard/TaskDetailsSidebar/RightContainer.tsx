@@ -238,7 +238,7 @@ export const RightContainer = () => {
           <button>Add label</button>
         </div> */}
       </div>
-      <div className="mt-2 px-2">
+      <div className="mt-2 border-b border-border-dark-primary px-2 pb-2">
         <SmallWideButton onClick={handleCopyUrl}>
           <>
             <CopyAll color="inherit" className="mr-2 text-icon-gray" />
