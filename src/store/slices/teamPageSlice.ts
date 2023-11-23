@@ -2,6 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Task } from "../../types/Task";
 import { fetchAllActivitiesInTask } from "./actions/taskActivity";
 import { DateTime } from "luxon";
+import { patchTask } from "./actions/task";
 
 export interface TaskActivity {
   id: string;
@@ -71,6 +72,13 @@ const teamPageSlice = createSlice({
       fetchAllActivitiesInTask.fulfilled,
       (state, action: PayloadAction<TaskActivity[]>) => {
         state.taskActivity = action.payload;
+      },
+    );
+    builder.addCase(
+      patchTask.fulfilled,
+      (state, action: PayloadAction<Task>) => {
+        state.activeTaskInSidebar = action.payload;
+        state.taskActivity = action.payload.activities;
       },
     );
   },

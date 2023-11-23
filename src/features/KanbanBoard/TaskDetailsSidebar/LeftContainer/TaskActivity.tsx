@@ -22,7 +22,7 @@ const TaskActivity: React.FC<TaskActivityProps> = ({
 }) => {
   // Function to style specific parts of the description and convert to lowercase
   const styleDescription = (description: string) => {
-    const styledDescription = description.split(" ").map((word) => {
+    const styledDescription = description.split(" ").map((word, index) => {
       const lowerCaseWord = word.toLowerCase();
       // Convert to uppercase and use type assertion
       const statusKey =
@@ -30,10 +30,16 @@ const TaskActivity: React.FC<TaskActivityProps> = ({
       if (statusKey in TaskStatusEnum) {
         const friendlyStatus = humanFriendlyStatus[statusKey];
         return (
-          <span className="font-bold">{friendlyStatus || lowerCaseWord} </span>
+          <span key={index} className="font-bold">
+            {friendlyStatus || lowerCaseWord}{" "}
+          </span>
         );
       } else {
-        return <span className="text-gray-400">{lowerCaseWord} </span>;
+        return (
+          <span key={index} className="text-gray-400">
+            {lowerCaseWord}{" "}
+          </span>
+        );
       }
     });
 
@@ -50,7 +56,7 @@ const TaskActivity: React.FC<TaskActivityProps> = ({
         activities.map((activity) => (
           <div key={activity.id} className="mb-2 mt-4 flex items-center">
             <span className="pr-4 text-lg font-medium text-gray-400">
-              {activity.user.username}
+              {activity.user?.username}
             </span>
             {styleDescription(activity.description)}
             <span className="mx-2 inline-block font-bold text-gray-400">
