@@ -1,12 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { Task } from "../../../types/Task";
-import { Close } from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
 import { LeftContainer } from "./LeftContainer/LeftContainer";
 import { RightContainer } from "./RightContainer";
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
-import { patchTask } from "../../../store/slices/actions/task";
+
 import { useParams } from "react-router-dom";
 import { updateActiveTeam } from "../../../store/slices/actions/team";
+import { patchTask } from "../../../store/slices/actions/task";
 import { fetchAllActivitiesInTask } from "../../../store/slices/actions/taskActivity";
 
 interface TaskDetailsSidebarProps {
@@ -21,32 +22,14 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
   onHide,
 }) => {
   const { name } = task || {};
-
   const activeProject = useAppSelector((state) => state.project.activeProject);
   const activeTeam = useAppSelector((state) => state.team.activeTeam);
-
   const [taskName, setTaskName] = useState<string | undefined>(name);
-  const [isInputTaskNameActive, setIsInputTaskNameActive] = useState(false);
-
+  const [isInputTaskNameActive, setIsInputTaskNameActive] =
+    useState<boolean>(false);
   const { teamId, taskId } = useParams<{ teamId: string; taskId: string }>();
-
-  const sidebarRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
-
-  const handleUpdateTaskName = useCallback(() => {
-    dispatch(
-      patchTask({
-        taskId: Number(taskId),
-        task: {
-          id: Number(taskId),
-          name: taskName,
-        },
-        teamId: Number(teamId),
-      }),
-    );
-    dispatch(fetchAllActivitiesInTask(Number(taskId)));
-    setIsInputTaskNameActive(false);
-  }, [dispatch, taskId, taskName, teamId]);
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!activeTeam) {
@@ -70,8 +53,6 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
 
     if (show) {
       document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
@@ -79,10 +60,29 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
     };
   }, [show, onHide]);
 
+  const handleUpdateTaskName = useCallback(() => {
+    if (taskName && taskId && teamId) {
+      dispatch(
+        patchTask({
+          taskId: Number(taskId),
+          task: { id: Number(taskId), name: taskName },
+          teamId: Number(teamId),
+        }),
+      );
+      dispatch(fetchAllActivitiesInTask(Number(taskId)));
+      setIsInputTaskNameActive(false);
+    }
+  }, [dispatch, taskId, taskName, teamId]);
+
+  const toggleTaskNameEdit = () => {
+    if (isInputTaskNameActive) handleUpdateTaskName();
+    setIsInputTaskNameActive(!isInputTaskNameActive);
+  };
+
   return (
     <div
       ref={sidebarRef}
-      className={`fixed right-0 top-0 h-full w-[60%] transform bg-[#0d1117] text-white shadow-md transition-all duration-300 ease-in-out max-xl:w-[80%] max-lg:w-full ${
+      className={`fixed right-0 top-0 h-full w-[60%] bg-[#0d1117] text-white shadow-md transition-all duration-300 ease-in-out max-xl:w-[80%] max-lg:w-full ${
         show ? "translate-x-0" : "translate-x-full"
       }`}
     >
@@ -91,8 +91,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
           <h2 className="text-sm">
             {activeProject?.name} {">"} {activeTeam?.name}
           </h2>
-
-          <Close className="cursor-pointer" onClick={onHide} />
+          <CloseIcon className="cursor-pointer" onClick={onHide} />
         </div>
 
         <div className="flex items-center justify-between px-5">
@@ -100,11 +99,9 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
             {isInputTaskNameActive ? (
               <input
                 autoFocus
-                value={taskName}
+                value={taskName ?? ""}
                 onChange={(e) => setTaskName(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleUpdateTaskName();
-                }}
+                onKeyDown={(e) => e.key === "Enter" && handleUpdateTaskName()}
                 className="w-full rounded-md border border-highlight-secondary bg-transparent px-2 py-1 text-sm"
               />
             ) : (
@@ -112,14 +109,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
             )}
           </div>
           <button
-            onClick={() =>
-              setIsInputTaskNameActive((prev) => {
-                if (prev) {
-                  handleUpdateTaskName();
-                }
-                return !prev;
-              })
-            }
+            onClick={toggleTaskNameEdit}
             className="rounded-md px-2 py-1 text-sm hover:bg-icon-gray hover:bg-opacity-20"
           >
             {isInputTaskNameActive ? "Save name" : "Edit name"}
@@ -129,7 +119,6 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
 
       <div className="flex h-full w-full max-md:flex-col">
         {task && <LeftContainer task={task} />}
-
         <RightContainer />
       </div>
     </div>
