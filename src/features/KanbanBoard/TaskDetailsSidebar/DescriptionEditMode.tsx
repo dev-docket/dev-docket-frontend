@@ -99,7 +99,7 @@ export const DescriptionEditMode = () => {
         />
       )}
 
-      <div className="flex justify-between">
+      <div className="flex items-center justify-between gap-2 max-sm:flex-col max-sm:justify-center">
         <div className="flex items-center">
           <a
             href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax"
@@ -122,7 +122,7 @@ export const DescriptionEditMode = () => {
           </a>
           <div className="mx-2 h-full border-l border-icon-gray border-opacity-40" />
         </div>
-        <div>
+        <div className="flex justify-center">
           <button
             onClick={() => dispatch(setDescriptionInputActive(false))}
             className="rounded-md px-2 py-1 text-sm opacity-50 hover:bg-button-hover-dark hover:opacity-100"
