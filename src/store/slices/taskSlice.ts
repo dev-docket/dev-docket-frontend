@@ -10,13 +10,25 @@ import {
 
 interface TaskState {
   tasks: Task[];
-  loading: "idle" | "pending" | "succeeded" | "failed";
+  loading: {
+    fetchAllTasksInTeam: "idle" | "pending" | "failed";
+    fetchAllUserTasks: "idle" | "pending" | "failed";
+    patchTask: "idle" | "pending" | "failed";
+    createTask: "idle" | "pending" | "failed";
+    deleteTask: "idle" | "pending" | "failed";
+  };
   error: string | null;
 }
 
 const initialState: TaskState = {
   tasks: [],
-  loading: "idle",
+  loading: {
+    fetchAllTasksInTeam: "idle",
+    fetchAllUserTasks: "idle",
+    patchTask: "idle",
+    createTask: "idle",
+    deleteTask: "idle",
+  },
   error: null,
 };
 
@@ -73,81 +85,82 @@ const taskSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(fetchAllTasksInTeam.pending, (state) => {
-      state.loading = "pending";
-    });
-    builder.addCase(
-      fetchAllTasksInTeam.fulfilled,
-      (state, action: PayloadAction<Task[]>) => {
-        state.loading = "idle";
-        state.tasks = action.payload;
-      },
-    );
-    builder.addCase(fetchAllTasksInTeam.rejected, (state, action) => {
-      state.loading = "failed";
-      state.error = action.payload as string;
-    });
-    builder.addCase(fetchAllUserTasks.pending, (state) => {
-      state.loading = "pending";
-    });
-    builder.addCase(
-      fetchAllUserTasks.fulfilled,
-      (state, action: PayloadAction<Task[]>) => {
-        state.loading = "idle";
-        state.tasks = action.payload;
-      },
-    );
-    builder.addCase(fetchAllUserTasks.rejected, (state, action) => {
-      state.loading = "failed";
-      state.error = action.payload as string;
-    });
-    builder.addCase(patchTask.pending, (state) => {
-      state.loading = "pending";
-    });
-    builder.addCase(
-      patchTask.fulfilled,
-      (state, action: PayloadAction<Task>) => {
-        state.loading = "idle";
+    builder
+      // Handle fetchAllTasksInTeam
+      .addCase(fetchAllTasksInTeam.pending, (state) => {
+        state.loading.fetchAllTasksInTeam = "pending";
+      })
+      .addCase(
+        fetchAllTasksInTeam.fulfilled,
+        (state, action: PayloadAction<Task[]>) => {
+          state.loading.fetchAllTasksInTeam = "idle";
+          state.tasks = action.payload;
+        },
+      )
+      .addCase(fetchAllTasksInTeam.rejected, (state, action) => {
+        state.loading.fetchAllTasksInTeam = "failed";
+        state.error = action.error.message ?? null;
+      })
+
+      // Handle fetchAllUserTasks
+      .addCase(fetchAllUserTasks.pending, (state) => {
+        state.loading.fetchAllUserTasks = "pending";
+      })
+      .addCase(
+        fetchAllUserTasks.fulfilled,
+        (state, action: PayloadAction<Task[]>) => {
+          state.loading.fetchAllUserTasks = "idle";
+          state.tasks = action.payload;
+        },
+      )
+      .addCase(fetchAllUserTasks.rejected, (state, action) => {
+        state.loading.fetchAllUserTasks = "failed";
+        state.error = action.error.message ?? null;
+      })
+
+      // Handle patchTask
+      .addCase(patchTask.pending, (state) => {
+        state.loading.patchTask = "pending";
+      })
+      .addCase(patchTask.fulfilled, (state, action: PayloadAction<Task>) => {
+        state.loading.patchTask = "idle";
         const index = state.tasks.findIndex(
           (task) => task.id === action.payload.id,
         );
         if (index !== -1) {
           state.tasks[index] = action.payload;
         }
-      },
-    );
-    builder.addCase(patchTask.rejected, (state, action) => {
-      state.loading = "failed";
-      state.error = action.payload as string;
-    });
-    builder.addCase(createTask.pending, (state) => {
-      state.loading = "pending";
-    });
-    builder.addCase(
-      createTask.fulfilled,
-      (state, action: PayloadAction<Task>) => {
-        state.loading = "idle";
+      })
+      .addCase(patchTask.rejected, (state, action) => {
+        state.loading.patchTask = "failed";
+        state.error = action.error.message ?? null;
+      })
+
+      // Handle createTask
+      .addCase(createTask.pending, (state) => {
+        state.loading.createTask = "pending";
+      })
+      .addCase(createTask.fulfilled, (state, action: PayloadAction<Task>) => {
+        state.loading.createTask = "idle";
         state.tasks.push(action.payload);
-      },
-    );
-    builder.addCase(createTask.rejected, (state, action) => {
-      state.loading = "failed";
-      state.error = action.payload as string;
-    });
-    builder.addCase(deleteTask.pending, (state) => {
-      state.loading = "pending";
-    });
-    builder.addCase(
-      deleteTask.fulfilled,
-      (state, action: PayloadAction<number>) => {
-        state.loading = "idle";
+      })
+      .addCase(createTask.rejected, (state, action) => {
+        state.loading.createTask = "failed";
+        state.error = action.error.message ?? null;
+      })
+
+      // Handle deleteTask
+      .addCase(deleteTask.pending, (state) => {
+        state.loading.deleteTask = "pending";
+      })
+      .addCase(deleteTask.fulfilled, (state, action: PayloadAction<number>) => {
+        state.loading.deleteTask = "idle";
         state.tasks = state.tasks.filter((task) => task.id !== action.payload);
-      },
-    );
-    builder.addCase(deleteTask.rejected, (state, action) => {
-      state.loading = "failed";
-      state.error = action.payload as string;
-    });
+      })
+      .addCase(deleteTask.rejected, (state, action) => {
+        state.loading.deleteTask = "failed";
+        state.error = action.error.message ?? null;
+      });
   },
 });
 
