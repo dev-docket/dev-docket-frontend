@@ -43,7 +43,7 @@ const TaskActivity: React.FC<TaskActivityProps> = ({
       }
     });
 
-    return <span className="text-lg">{styledDescription}</span>;
+    return <span>{styledDescription}</span>;
   };
 
   return (
@@ -54,8 +54,11 @@ const TaskActivity: React.FC<TaskActivityProps> = ({
       )}
       {activities &&
         activities.map((activity) => (
-          <div key={activity.id} className="mb-2 mt-4 flex items-center">
-            <span className="pr-4 text-lg font-medium text-gray-400">
+          <div
+            key={activity.id}
+            className="mb-2 mt-4 flex items-center text-sm"
+          >
+            <span className="pr-2 text-base font-medium text-gray-400">
               {activity.user?.username}
             </span>
             {styleDescription(activity.description)}
