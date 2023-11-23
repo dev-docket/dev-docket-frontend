@@ -2,11 +2,12 @@ import { Droppable } from "react-beautiful-dnd";
 import { Card } from "./Card";
 import React, { useState } from "react";
 import { Add, Close } from "@mui/icons-material";
-import { useAppDispatch } from "../../hooks/storeHook";
+import { useAppDispatch, useAppSelector } from "../../hooks/storeHook";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { Task, getStatusByIndex } from "../../types/Task";
 import { createTask } from "../../store/slices/actions/task";
+import Spinner from "./TaskDetailsSidebar/LeftContainer/Spinner";
 
 type ColumnType = {
   id: string;
@@ -22,7 +23,9 @@ interface Props {
 export const Column = ({ column, placeholderIndex }: Props) => {
   const [isNewTaskInputActive, setIsNewTaskInputActive] = useState(false);
   const [newTaskName, setNewTaskName] = useState("");
-  // const [placeholderIndex, setPlaceholderIndex] = useState<number | null>(null);
+  const fetchAllTasksInTeam = useAppSelector(
+    (state) => state.task.loading.fetchAllTasksInTeam,
+  );
 
   const { teamId } = useParams<{ teamId: string }>();
 
@@ -69,6 +72,7 @@ export const Column = ({ column, placeholderIndex }: Props) => {
             className={`p-4`}
           >
             <h3>{column.title}</h3>
+            {fetchAllTasksInTeam === "pending" && <Spinner />}
             {column.cards.map((task, index) => (
               <React.Fragment key={task.id}>
                 {index === placeholderIndex && (
