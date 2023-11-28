@@ -1,4 +1,5 @@
 import { TaskActivity } from "../store/slices/teamPageSlice";
+import { User } from "./User";
 
 export interface Task {
   id: number;
@@ -7,6 +8,7 @@ export interface Task {
   status: TaskStatus;
   priority: TaskPriority;
   activities?: TaskActivity[];
+  assignedUser: User;
 }
 
 export type TaskStatus = "BACKLOG" | "TODO" | "IN_PROGRESS" | "DONE";
