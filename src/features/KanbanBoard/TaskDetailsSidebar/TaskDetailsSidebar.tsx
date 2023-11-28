@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import { Task } from "../../../types/Task";
 import CloseIcon from "@mui/icons-material/Close";
 import { LeftContainer } from "./LeftContainer/LeftContainer";
-import { RightContainer } from "./RightContainer";
+import { RightContainer } from "./RightContainer/RightContainer";
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
 import { motion } from "framer-motion";
 
