@@ -62,7 +62,7 @@ export const FormAuth = ({
   };
 
   return (
-    <div className="h-screen bg-[#141318]">
+    <div className="h-screen bg-gradient-to-b from-[#2c2d3c] via-[#191a23] to-[#191a23]">
       <div className="flex h-full flex-col items-center justify-center">
         <div className="m-4 w-1/3 rounded-lg bg-[#222428] p-8 text-white shadow-lg max-lg:w-auto">
           <h1 className="text-center text-sm uppercase opacity-50">
