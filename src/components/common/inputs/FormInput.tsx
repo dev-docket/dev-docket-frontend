@@ -25,12 +25,18 @@ export const FormInput = (props: Props) => {
   } = props;
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [isFocused, setIsFocused] = useState(false);
+  const [hasInput, setHasInput] = useState(false);
 
   const handlePressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
       enterPressed && enterPressed();
     }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setHasInput(true); // Set hasInput to true when user types
+    onChange(e);
   };
 
   useLayoutEffect(() => {
@@ -58,7 +64,7 @@ export const FormInput = (props: Props) => {
           leave="transform transition ease-in duration-75"
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
-          className="absolute transform right-0 bg-red-500 text-white rounded-md px-2 py-1 mt-2 text-sm overflow-hidden"
+          className="absolute right-0 mt-2 transform overflow-hidden rounded-md bg-red-500 px-2 py-1 text-sm text-white"
           ref={tooltipRef}
           style={{ transform: "translateY(calc(-100%))" }}
         >
@@ -69,21 +75,23 @@ export const FormInput = (props: Props) => {
       <input
         type={type}
         id={id}
-        className="w-full p-2 border bg-[#222428] border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-gray-300"
+        className="w-full rounded-lg border border-gray-300 bg-[#222428] p-2 focus:border-gray-300 focus:outline-none focus:ring-2"
         value={value}
-        onChange={onChange}
+        onChange={handleChange}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         onKeyDown={handlePressEnter}
       />
 
-      <div className="absolute top-1/2 right-2 transform -translate-y-1/2">
-        {isError ? (
-          <GppBadIcon className="text-red-500" />
-        ) : (
-          <CheckCircleOutlineIcon className="text-green-500" />
-        )}
-      </div>
+      {hasInput && (
+        <div className="absolute right-2 top-1/2 -translate-y-1/2 transform">
+          {isError ? (
+            <GppBadIcon className="text-red-500" />
+          ) : (
+            <CheckCircleOutlineIcon className="text-green-500" />
+          )}
+        </div>
+      )}
     </div>
   );
 };
