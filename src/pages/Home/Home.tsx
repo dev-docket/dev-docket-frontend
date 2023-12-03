@@ -30,6 +30,14 @@ export const Home = () => {
             <div className="flex items-center gap-6 text-lg text-white">
               <div className="text-xl font-medium text-white">Dev Docket</div>
               {/* <div>Features</div> */}
+              <a
+                href="https://dev-docket.gitbook.io/product-docs/"
+                target="_blank"
+                rel="noreferrer"
+                className="text-white"
+              >
+                Docs
+              </a>
             </div>
             <div className="flex items-center">
               <div
