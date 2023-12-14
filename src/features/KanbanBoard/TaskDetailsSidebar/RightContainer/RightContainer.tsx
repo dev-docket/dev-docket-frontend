@@ -125,9 +125,7 @@ export const RightContainer = () => {
         />
         <TaskAttributeDropdown
           label="Assignee"
-          dropdownLabel={
-            activeTask?.assignedUser?.username ?? "Unassigned"
-          }
+          dropdownLabel={activeTask?.assignedUser?.username ?? "Unassigned"}
           options={[
             "Unassigned",
             ...members.map((member) => {

@@ -1,7 +1,7 @@
 import React from "react";
 import { TaskActivity as Activity } from "../../../../store/slices/teamPageSlice";
 import { DateTime } from "luxon";
-import { TaskStatusEnum } from "../../../../types/Task";
+import { TaskPriorityEnum, TaskStatusEnum } from "../../../../types/Task";
 
 interface TaskActivityProps {
   activities: Activity[] | undefined;
@@ -16,6 +16,14 @@ const humanFriendlyStatus: { [key in TaskStatusEnum]?: string } = {
   [TaskStatusEnum.DONE]: "Done",
 };
 
+const humanFriendlyPriority: { [key in TaskPriorityEnum]?: string } = {
+  [TaskPriorityEnum.NO_PRIORITY]: "No Priority",
+  [TaskPriorityEnum.URGENT]: "Urgent",
+  [TaskPriorityEnum.HIGH]: "High",
+  [TaskPriorityEnum.MEDIUM]: "Medium",
+  [TaskPriorityEnum.LOW]: "Low",
+};
+
 const TaskActivity: React.FC<TaskActivityProps> = ({
   activities,
   handleHowLongAgo,
@@ -25,13 +33,21 @@ const TaskActivity: React.FC<TaskActivityProps> = ({
     const styledDescription = description.split(" ").map((word, index) => {
       const lowerCaseWord = word.toLowerCase();
       // Convert to uppercase and use type assertion
-      const statusKey =
-        lowerCaseWord.toUpperCase() as keyof typeof TaskStatusEnum;
+      const statusKey = lowerCaseWord.toUpperCase();
       if (statusKey in TaskStatusEnum) {
-        const friendlyStatus = humanFriendlyStatus[statusKey];
+        const friendlyStatus =
+          humanFriendlyStatus[statusKey as keyof typeof TaskStatusEnum];
         return (
           <span key={index} className="font-bold">
             {friendlyStatus || lowerCaseWord}{" "}
+          </span>
+        );
+      } else if (statusKey in TaskPriorityEnum) {
+        const friendlyPriority =
+          humanFriendlyPriority[statusKey as keyof typeof TaskPriorityEnum];
+        return (
+          <span key={index} className="font-bold">
+            {friendlyPriority || lowerCaseWord}{" "}
           </span>
         );
       } else {
