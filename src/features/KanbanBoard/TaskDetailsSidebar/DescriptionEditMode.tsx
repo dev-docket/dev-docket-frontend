@@ -9,7 +9,6 @@ import {
   setDescriptionInputActive,
 } from "../../../store/slices/teamPageSlice";
 import { useParams } from "react-router-dom";
-import { fetchAllActivitiesInTask } from "../../../store/slices/actions/taskActivity";
 
 export const DescriptionEditMode = () => {
   const taskId = useAppSelector(
@@ -39,12 +38,7 @@ export const DescriptionEditMode = () => {
       description: newDescription,
     };
 
-    dispatch(patchTask({ taskId, task, teamId: Number(teamId) })).then(
-      (data) => {
-        data.meta.requestStatus === "fulfilled" &&
-          dispatch(fetchAllActivitiesInTask(taskId));
-      },
-    );
+    dispatch(patchTask({ taskId, task, teamId: Number(teamId) }));
     dispatch(setDescriptionInputActive(false));
 
     dispatch(

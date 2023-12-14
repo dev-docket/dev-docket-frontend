@@ -9,7 +9,6 @@ import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 import { updateActiveTeam } from "../../../store/slices/actions/team";
 import { patchTask } from "../../../store/slices/actions/task";
-import { fetchAllActivitiesInTask } from "../../../store/slices/actions/taskActivity";
 
 interface TaskDetailsSidebarProps {
   task?: Task;
@@ -70,7 +69,7 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
           teamId: Number(teamId),
         }),
       );
-      dispatch(fetchAllActivitiesInTask(Number(taskId)));
+
       setIsInputTaskNameActive(false);
     }
   }, [dispatch, taskId, taskName, teamId]);
