@@ -20,8 +20,12 @@ interface Props {
 
 export const LeftContainer = ({ task }: Props) => {
   const dispatch = useAppDispatch();
-  const { isDescriptionInputActive, activeTaskInSidebar, taskActivity } =
-    useAppSelector((state) => state.teamPage);
+  const {
+    isDescriptionInputActive,
+    activeTaskInSidebar,
+    taskActivity,
+    isTaskDetailsSidebarOpen,
+  } = useAppSelector((state) => state.teamPage);
 
   const handleHowLongAgo = useMemo(
     () => (parsedDate: DateTime) => {
@@ -41,11 +45,13 @@ export const LeftContainer = ({ task }: Props) => {
     if (activeTaskInSidebar?.description) {
       dispatch(setDescriptionInputValue(activeTaskInSidebar.description));
     }
+  }, [activeTaskInSidebar, dispatch, isTaskDetailsSidebarOpen]);
 
-    if (activeTaskInSidebar?.id) {
+  useEffect(() => {
+    if (activeTaskInSidebar?.id && isTaskDetailsSidebarOpen) {
       dispatch(fetchAllActivitiesInTask(activeTaskInSidebar.id));
     }
-  }, [activeTaskInSidebar, dispatch]);
+  }, [activeTaskInSidebar?.id, dispatch, isTaskDetailsSidebarOpen]);
 
   const renderDescription = () => {
     if (isDescriptionInputActive) return <DescriptionEditMode />;
