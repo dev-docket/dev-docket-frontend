@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { deleteTask, patchTask } from "../../../../store/slices/actions/task";
 import {
   closeTaskDetailsSidebar,
+  updateAssigneedUserInActiveTask,
   updateTask,
 } from "../../../../store/slices/teamPageSlice";
 import { useNavigate, useParams } from "react-router-dom";
@@ -89,9 +90,11 @@ export const RightContainer = () => {
     dispatch(updateTask({ priority } as Task));
   };
 
-  const handleAssigneeChange = (userId: number) => {
+  const handleAssigneeChange = async (userId: number) => {
     if (!taskId) return;
-    assignUserToTask(taskId, userId);
+    const assignedTask = await assignUserToTask(taskId, userId);
+    assignedTask &&
+      dispatch(updateAssigneedUserInActiveTask(assignedTask.user));
   };
 
   return (
@@ -125,9 +128,7 @@ export const RightContainer = () => {
         />
         <TaskAttributeDropdown
           label="Assignee"
-          dropdownLabel={
-            activeTask?.assignedUser?.username ?? "Unassigned"
-          }
+          dropdownLabel={activeTask?.assignedUser?.username ?? "Unassigned"}
           options={[
             "Unassigned",
             ...members.map((member) => {

@@ -12,6 +12,7 @@ export interface Task {
 }
 
 export type TaskStatus = "BACKLOG" | "TODO" | "IN_PROGRESS" | "DONE";
+export type TaskPriority = "NO_PRIORITY" | "URGENT" | "HIGH" | "MEDIUM" | "LOW";
 
 export enum TaskStatusEnum {
   BACKLOG = "BACKLOG",
@@ -20,7 +21,7 @@ export enum TaskStatusEnum {
   DONE = "DONE",
 }
 
-export enum TaskPriority {
+export enum TaskPriorityEnum {
   NO_PRIORITY = "NO_PRIORITY",
   URGENT = "URGENT",
   HIGH = "HIGH",
@@ -43,8 +44,10 @@ export function getStatusByIndex(index: number): TaskStatus | undefined {
  * @param index The index of the priority.
  * @returns The priority as a string or undefined if the index is out of range.
  */
-export function getPriorityByIndex(index: number): TaskPriority | undefined {
-  const priorities = Object.values(TaskPriority);
+export function getPriorityByIndex(
+  index: number,
+): TaskPriorityEnum | undefined {
+  const priorities = Object.values(TaskPriorityEnum);
   return priorities[index];
 }
 
@@ -64,7 +67,7 @@ export function displayStatus(status: TaskStatus = "BACKLOG"): string {
   return statusDisplayMapping[status] || status;
 }
 
-const priorityDisplayMapping: { [key in TaskPriority]?: string } = {
+const priorityDisplayMapping: { [key in TaskPriorityEnum]?: string } = {
   NO_PRIORITY: "No Priority",
   LOW: "Low",
   MEDIUM: "Medium",
@@ -78,7 +81,7 @@ const priorityDisplayMapping: { [key in TaskPriority]?: string } = {
  * @returns A string representing the priority.
  */
 export function displayPriority(
-  priority: TaskPriority = TaskPriority.NO_PRIORITY,
+  priority: TaskPriority = TaskPriorityEnum.NO_PRIORITY,
 ): string {
   return priorityDisplayMapping[priority] || priority;
 }
