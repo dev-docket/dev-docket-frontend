@@ -3,6 +3,7 @@ import { Task } from "../../types/Task";
 import { fetchAllActivitiesInTask } from "./actions/taskActivity";
 import { DateTime } from "luxon";
 import { patchTask } from "./actions/task";
+import { User } from "../../types/User";
 
 export interface TaskActivity {
   id: string;
@@ -66,6 +67,14 @@ const teamPageSlice = createSlice({
     addTaskActivity: (state, payload: PayloadAction<TaskActivity>) => {
       state.taskActivity?.unshift(payload.payload);
     },
+    updateAssigneedUserInActiveTask: (state, payload: PayloadAction<User>) => {
+      if (state.activeTaskInSidebar) {
+        state.activeTaskInSidebar = {
+          ...state.activeTaskInSidebar,
+          assignedUser: payload.payload,
+        };
+      }
+    },
   },
   extraReducers(builder) {
     builder.addCase(
@@ -92,5 +101,6 @@ export const {
   setDescriptionInputActive,
   setDescriptionInputValue,
   addTaskActivity,
+  updateAssigneedUserInActiveTask,
 } = teamPageSlice.actions;
 export default teamPageSlice.reducer;
