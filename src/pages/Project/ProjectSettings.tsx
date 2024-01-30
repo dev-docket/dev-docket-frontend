@@ -8,10 +8,13 @@ import { Project } from "../../types/Project";
 import { SmallButton } from "../../components/common/buttons/SmallButton";
 import { updateProject } from "../../store/slices/actions/project";
 import { useNavigate } from "react-router-dom";
+import { Access } from "../../features/Project/ProjectSettings/Access";
 
 export const ProjectSettings = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { activeProject } = useAppSelector((state) => state.project);
+  const { activeProject, projectMembers } = useAppSelector(
+    (state) => state.project,
+  );
   const [activeTab, setActiveTab] = useState<"general" | "access">("general");
   const [newProject, setNewProject] = useState<Project | undefined>(
     activeProject,
@@ -84,6 +87,9 @@ export const ProjectSettings = () => {
 
             {activeTab === "general" && (
               <General project={newProject} setNewProject={setNewProject} />
+            )}
+            {activeTab === "access" && (
+              <Access projectMembers={projectMembers || []} />
             )}
 
             <div className="mt-4 w-fit">
