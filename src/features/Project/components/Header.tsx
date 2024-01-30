@@ -7,10 +7,12 @@ interface Props {
   isSidebarOpen: boolean;
   setSidebarOpen: (value: boolean) => void;
   activeProject?: Project;
-  onOpenCreateTeamModal: () => void;
-  dropdownRef: React.RefObject<HTMLDivElement>;
-  isDropDownProjectSettingsOpen: boolean;
-  onToggleDropDown: () => void;
+  onOpenCreateTeamModal?: () => void;
+  dropdownRef?: React.RefObject<HTMLDivElement>;
+  isDropDownProjectSettingsOpen?: boolean;
+  onToggleDropDown?: () => void;
+  isButtonDisabled?: boolean;
+  underDescription?: string;
 }
 
 export const Header = ({
@@ -18,6 +20,8 @@ export const Header = ({
   activeProject,
   onOpenCreateTeamModal,
   dropdownRef,
+  isButtonDisabled = false,
+  underDescription = "You can find your teams here in project",
 }: Props) => {
   const isMdTailwindScreen = useMediaQuery("(max-width: 1280px)");
 
@@ -40,7 +44,7 @@ export const Header = ({
         )}
         <div>
           <h1 className="text-3xl">{activeProject?.name}</h1>
-          <h3 className="text-sm">You can find your teams here in project</h3>
+          <h3 className="text-sm">{underDescription}</h3>
         </div>
         <div ref={dropdownRef} className="relative">
           {/* <ArrowDropDown
@@ -50,9 +54,14 @@ export const Header = ({
           {/* <DropdownMenu isOpen={isDropDownProjectSettingsOpen} /> */}
         </div>
       </div>
-      <div className="w-[8rem]">
-        <SmallButton title="Create new team" onClick={onOpenCreateTeamModal} />
-      </div>
+      {!isButtonDisabled && (
+        <div className="w-[8rem]">
+          <SmallButton
+            title="Create new team"
+            onClick={onOpenCreateTeamModal}
+          />
+        </div>
+      )}
     </div>
   );
 };

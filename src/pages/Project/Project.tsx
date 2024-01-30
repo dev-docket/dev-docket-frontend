@@ -14,6 +14,7 @@ import { Header } from "../../features/Project/components/Header";
 import { ProjectRoles } from "../../features/Project/components/ProjectRoles";
 import TeamsSection from "../../features/Project/components/TeamsSection";
 import { Sidebar } from "../../features/Sidebar/Sidebar";
+import { ProjectSettings } from "../../features/Project/components/ProjectSettings";
 
 export const Project = () => {
   const { teams, loading } = useAppSelector((state) => state.team);
@@ -111,6 +112,8 @@ export const Project = () => {
               onAddMember={() => setIsProjectPermissionModalOpen(true)}
               projectMembers={projectMembers}
             />
+
+            <ProjectSettings projectSlug={projectSlug} />
 
             <TeamsSection
               teams={teams}

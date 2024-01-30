@@ -15,11 +15,11 @@ import { useAppSelector } from "./hooks/storeHook";
 import { useEffect } from "react";
 import { useLogout } from "./hooks/auth/useLogout";
 import { Team } from "./pages/Team";
-import ProjectSettings from "./pages/ProjectSettings";
 import { Error } from "./pages/Error";
 import { ProjectAcceptInvitation } from "./pages/Project/ProjectAcceptInvitation";
 import { CompleteProfile } from "./pages/CompleteProfile/CompleteProfile";
 import { Home } from "./pages/Home/Home";
+import { ProjectSettings } from "./pages/Project/ProjectSettings";
 
 function PrivateRoute({
   condition,
@@ -120,12 +120,18 @@ function App() {
               token ? <ProjectAcceptInvitation /> : <Navigate to="/login" />
             }
           />
+          <Route
+            path="/projects/:projectSlug/settings"
+            element={<ProjectSettings />}
+          />
 
+          {/* Route to team feature */}
           <Route
             path="/projects/:projectSlug/teams/:teamId/board"
             element={<Team />}
           />
 
+          {/* Route to task feature */}
           <Route
             path="/projects/:projectSlug/teams/:teamId/board/tasks/:taskId"
             element={<Team />}
