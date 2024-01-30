@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from "../../hooks/storeHook";
 import { Settings } from "@mui/icons-material";
 import { General } from "../../features/Project/ProjectSettings/General";
 import { Project } from "../../types/Project";
-import { SmallButton } from "../../components/common/buttons/SmallButton";
 import { updateProject } from "../../store/slices/actions/project";
 import { useNavigate } from "react-router-dom";
 import { Access } from "../../features/Project/ProjectSettings/Access";
@@ -86,15 +85,15 @@ export const ProjectSettings = () => {
             </h2>
 
             {activeTab === "general" && (
-              <General project={newProject} setNewProject={setNewProject} />
+              <General
+                project={newProject}
+                setNewProject={setNewProject}
+                handleUpdateProject={handleUpdateProject}
+              />
             )}
             {activeTab === "access" && (
               <Access projectMembers={projectMembers || []} />
             )}
-
-            <div className="mt-4 w-fit">
-              <SmallButton title="Save changes" onClick={handleUpdateProject} />
-            </div>
           </div>
         </div>
       </div>
