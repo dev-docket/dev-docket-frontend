@@ -5,6 +5,7 @@ import {
   deleteProject,
   fetchProjectBySlugAndSetAsActive,
   fetchProjectMembersByProjectSlug,
+  updateProject,
 } from "./actions/project";
 import {
   deleteProjectInvitation,
@@ -148,6 +149,22 @@ const projectSlice = createSlice({
     //     state.projectInvitation = action.payload;
     //   },
     // );
+    builder.addCase(
+      updateProject.fulfilled,
+      (state, action: PayloadAction<Project>) => {
+        const index = state.projects.findIndex(
+          (project) => project.id === action.payload.id,
+        );
+        if (index !== -1) {
+          state.projects[index] = action.payload;
+        }
+
+        // update active project
+        if (state.activeProject?.id === action.payload.id) {
+          state.activeProject = action.payload;
+        }
+      },
+    );
     builder.addCase(
       deleteProjectInvitation.fulfilled,
       (state, action: PayloadAction<string>) => {

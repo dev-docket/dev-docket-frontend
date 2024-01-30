@@ -135,6 +135,44 @@ export const createProject = createAsyncThunk(
   },
 );
 
+export const updateProject = createAsyncThunk(
+  "project/updateProject",
+  async ({ project }: { project: Project }, { getState, rejectWithValue }) => {
+    const { user, auth } = getState() as RootState;
+    const userId = user.userId;
+    const token = auth.token;
+
+    if (!userId || !token) {
+      return rejectWithValue("Please login first");
+    }
+
+    try {
+      const response = await axios.put<Project>(
+        `${apiUrl}/projects/${project.id}`,
+        project,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Something went wrong!");
+      }
+
+      toast.success("Project updated successfully!");
+      return response.data;
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+        return rejectWithValue(err.message);
+      }
+      return rejectWithValue("Something went wrong!");
+    }
+  },
+);
+
 export const deleteProject = createAsyncThunk(
   "project/deleteProject",
   async (
