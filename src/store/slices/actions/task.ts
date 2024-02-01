@@ -139,6 +139,7 @@ export const createTask = createAsyncThunk(
     const { user, auth } = getState() as RootState;
     const userId = user.userId;
     const token = auth.token;
+    const toastId = toast.loading("Creating task...");
 
     if (!userId || !token) {
       return rejectWithValue("Please login first");
@@ -164,9 +165,23 @@ export const createTask = createAsyncThunk(
         throw new Error("Something went wrong!");
       }
 
+      toast.update(toastId, {
+        render: "You have successfully created a task",
+        type: "success",
+        isLoading: false,
+        autoClose: 1000,
+      });
+
       return await response.data;
     } catch (err) {
       if (err instanceof Error) {
+        toast.update(toastId, {
+          render: "Something went wrong!",
+          type: "error",
+          isLoading: false,
+          autoClose: 2000,
+        });
+
         toast.error(err.message);
         return rejectWithValue(err.message);
       }
