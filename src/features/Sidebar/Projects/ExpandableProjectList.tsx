@@ -5,11 +5,11 @@ import { Header } from "../Header";
 
 export const ExpandableProjectList = () => {
   const projects = useAppSelector((state) => state.project.projects);
+  const { activeProject } = useAppSelector((state) => state.project);
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(activeProject !== null);
 
-  const toggleExpand = (e: React.MouseEvent<HTMLButtonElement>
-     ) => {
+  const toggleExpand = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsExpanded((prev) => !prev);
