@@ -13,8 +13,9 @@ interface Props {
 
 export const ExpandableProject = ({ name, slug }: Props) => {
   const token = useAppSelector((state) => state.auth.token);
+  const { activeProject } = useAppSelector((state) => state.project);
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(activeProject?.slug === slug);
   const [teamsInProject, setTeamsInProject] = useState<Team[]>([]);
   const [error, setError] = useState<string | null>(null);
 
