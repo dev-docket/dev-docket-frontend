@@ -15,7 +15,7 @@ export const ExpandableProject = ({ name, slug }: Props) => {
   const token = useAppSelector((state) => state.auth.token);
   const { activeProject } = useAppSelector((state) => state.project);
 
-  const [isExpanded, setIsExpanded] = useState(activeProject?.slug === slug);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [teamsInProject, setTeamsInProject] = useState<Team[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -35,6 +35,14 @@ export const ExpandableProject = ({ name, slug }: Props) => {
   useEffect(() => {
     fetchTeams();
   }, [fetchTeams]);
+
+  useEffect(() => {
+    if (activeProject?.slug === slug) {
+      setIsExpanded(true);
+    } else {
+      setIsExpanded(false);
+    }
+  }, [activeProject, slug]);
 
   if (!name || !slug) return null;
   return (
