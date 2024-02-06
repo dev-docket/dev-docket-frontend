@@ -34,7 +34,7 @@ export const Home = () => {
                 href="https://dev-docket.gitbook.io/product-docs/"
                 target="_blank"
                 rel="noreferrer"
-                className="text-white"
+                className="text-white max-sm:hidden"
               >
                 Docs
               </a>
