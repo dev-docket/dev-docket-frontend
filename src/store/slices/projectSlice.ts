@@ -65,7 +65,7 @@ const projectSlice = createSlice({
       );
     },
 
-    setActiveProject: (state, action: PayloadAction<Project>) => {
+    setActiveProject: (state, action: PayloadAction<Project | undefined>) => {
       state.activeProject = action.payload;
     },
 

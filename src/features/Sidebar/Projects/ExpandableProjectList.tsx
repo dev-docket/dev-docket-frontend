@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ExpandableProject } from "./ExpandableProject";
 import { useAppSelector } from "../../../hooks/storeHook";
 import { Header } from "../Header";
@@ -7,13 +7,19 @@ export const ExpandableProjectList = () => {
   const projects = useAppSelector((state) => state.project.projects);
   const { activeProject } = useAppSelector((state) => state.project);
 
-  const [isExpanded, setIsExpanded] = useState(activeProject !== null);
+  const [isExpanded, setIsExpanded] = useState(activeProject !== undefined);
 
   const toggleExpand = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsExpanded((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (activeProject) {
+      setIsExpanded(true);
+    }
+  }, [activeProject]);
 
   return (
     <div className="mt-4 flex w-full flex-col justify-start">

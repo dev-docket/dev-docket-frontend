@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navbar } from "../components/Navbar/Navbar";
 import { SmallButton } from "../components/common/buttons/SmallButton";
 import { CreateNewProjectModal } from "../features/Dashboard/CreateNewProject/CreateNewProjectModal";
@@ -41,6 +41,10 @@ export const Dashboard = () => {
     setProjectToDelete(project);
     setIsDangerZoneModalOpen(true);
   };
+
+  useEffect(() => {
+    dispatch(setActiveProject(undefined));
+  }, [dispatch]);
 
   return (
     <div className="flex h-screen bg-dark-background text-white">
