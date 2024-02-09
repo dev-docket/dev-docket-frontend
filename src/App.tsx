@@ -20,24 +20,12 @@ import { ProjectAcceptInvitation } from "./pages/Project/ProjectAcceptInvitation
 import { CompleteProfile } from "./pages/CompleteProfile/CompleteProfile";
 import { Home } from "./pages/Home/Home";
 import { ProjectSettings } from "./pages/Project/ProjectSettings";
-
-function PrivateRoute({
-  condition,
-  redirectPath,
-  children,
-}: {
-  condition?: boolean;
-  redirectPath: string;
-  children: React.ReactNode;
-}) {
-  return condition ? children : <Navigate to={redirectPath} />;
-}
+import { AuthenticatedRoute } from "./route-guards/AuthenticatedRoute";
 
 function App() {
   const token = useAppSelector((state) => state.auth.token);
-  const isProfileCompleted = useAppSelector(
-    (state) => state.user.isProfileCompleted,
-  );
+  const isProfileCompleted =
+    useAppSelector((state) => state.user.isProfileCompleted) || false;
 
   const isAuthenticated = !!token;
 
@@ -68,73 +56,92 @@ function App() {
       <Router>
         <ToastContainer />
         <Routes>
+          {/* Route to home feature */}
           <Route
             path="/"
             element={isAuthenticated ? <Navigate to="/dashboard" /> : <Home />}
           />
 
-          <Route
-            path="/dashboard"
-            element={
-              !isProfileCompleted && isAuthenticated ? (
-                <Navigate to="/complete-profile" />
-              ) : (
-                <PrivateRoute
-                  condition={isAuthenticated}
-                  redirectPath="/login"
-                  children={<Dashboard />}
-                />
-              )
-            }
-          />
-
+          {/* Route to complete profile feature */}
           <Route
             path="/complete-profile"
             element={
-              <PrivateRoute
-                condition={isAuthenticated}
-                redirectPath="/login"
-                children={<CompleteProfile />}
-              />
+              isAuthenticated ? <CompleteProfile /> : <Navigate to="/login" />
             }
           />
 
-          {/* Route to main feature */}
+          {/* Route to dashboard feature */}
           <Route
             path="/dashboard"
-            element={token ? <Dashboard /> : <Navigate to="/login" />}
+            element={
+              <AuthenticatedRoute
+                isAuthenticated={isAuthenticated}
+                isProfileCompleted={isProfileCompleted}
+              >
+                <Dashboard />
+              </AuthenticatedRoute>
+            }
           />
 
           {/* Route to project feature */}
           <Route
             path="/projects/:projectSlug/dashboard"
-            element={<Project />}
-          />
-          <Route
-            path="/projects/:projectSlug/settings"
-            element={<ProjectSettings />}
+            element={
+              <AuthenticatedRoute
+                isAuthenticated={isAuthenticated}
+                isProfileCompleted={isProfileCompleted}
+              >
+                <Project />
+              </AuthenticatedRoute>
+            }
           />
           <Route
             path="/projects/:projectSlug/invitation"
             element={
-              token ? <ProjectAcceptInvitation /> : <Navigate to="/login" />
+              <AuthenticatedRoute
+                isAuthenticated={isAuthenticated}
+                isProfileCompleted={isProfileCompleted}
+              >
+                <ProjectAcceptInvitation />
+              </AuthenticatedRoute>
             }
           />
           <Route
             path="/projects/:projectSlug/settings"
-            element={<ProjectSettings />}
+            element={
+              <AuthenticatedRoute
+                isAuthenticated={isAuthenticated}
+                isProfileCompleted={isProfileCompleted}
+              >
+                <ProjectSettings />
+              </AuthenticatedRoute>
+            }
           />
 
           {/* Route to team feature */}
           <Route
             path="/projects/:projectSlug/teams/:teamId/board"
-            element={<Team />}
+            element={
+              <AuthenticatedRoute
+                isAuthenticated={isAuthenticated}
+                isProfileCompleted={isProfileCompleted}
+              >
+                <Team />
+              </AuthenticatedRoute>
+            }
           />
 
           {/* Route to task feature */}
           <Route
             path="/projects/:projectSlug/teams/:teamId/board/tasks/:taskId"
-            element={<Team />}
+            element={
+              <AuthenticatedRoute
+                isAuthenticated={isAuthenticated}
+                isProfileCompleted={isProfileCompleted}
+              >
+                <Team />
+              </AuthenticatedRoute>
+            }
           />
 
           {/* Route to auth feature */}
