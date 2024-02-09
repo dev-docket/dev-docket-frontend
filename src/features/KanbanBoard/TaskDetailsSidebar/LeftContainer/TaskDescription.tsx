@@ -1,5 +1,5 @@
 import ReactMarkdown from "react-markdown";
-import { DescriptionEditMode } from "../DescriptionEditMode";
+import { DescriptionEditMode } from "./DescriptionEditMode";
 import ProfileWithEditButton from "./ProfileWithEditButton";
 import remarkGfm from "remark-gfm";
 
@@ -34,7 +34,7 @@ export const TaskDescription = ({
   ) : (
     <>
       <ProfileWithEditButton onClick={onEditClick} />
-      <span className="text-sm italic text-gray-500">
+      <span onClick={onEditClick} className="text-sm italic text-gray-500">
         No description provided
       </span>
     </>
