@@ -100,7 +100,7 @@ export const ExpandableProject = ({ name, slug }: Props) => {
         </button>
 
         {/* <Link to={`/projects/${slug}/dashboard`} role="menuitem"> */}
-        <h2 className="text-lg">{name}</h2>
+        <h2 className="truncate text-lg">{name}</h2>
         {/* </Link> */}
       </div>
 
@@ -109,14 +109,16 @@ export const ExpandableProject = ({ name, slug }: Props) => {
           <div className="flex flex-col pl-8">
             {error && <div className="text-xs opacity-70">{error}</div>}
             {teamsInProject.length === 0 ? (
-              <div className="text-xs opacity-70">No teams in this project</div>
+              <div className="p-2 text-xs opacity-70">
+                No teams in this project
+              </div>
             ) : (
               teamsInProject.map((team) => (
                 <Link
                   key={team.id}
                   to={`/projects/${slug}/teams/${team.id}/board`}
                   role="menuitem"
-                  className="rounded-md p-2 text-sm opacity-70 hover:cursor-pointer hover:bg-[#262836]"
+                  className="block w-full truncate rounded-md p-2 text-sm opacity-70 hover:cursor-pointer hover:bg-[#262836]"
                 >
                   {team.name}
                 </Link>
