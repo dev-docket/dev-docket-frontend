@@ -174,7 +174,7 @@ export const KanbanBoard = () => {
   }, [dispatch, teamId]);
 
   return (
-    <div className="m-4 flex flex-col overflow-x-auto overflow-y-hidden pb-4">
+    <div className="overflow-x-auto pb-5">
       <DragDropContext onDragEnd={handleDragEnd} onDragUpdate={onDragUpdate}>
         <div className="flex space-x-4">
           {board.columns.map((column) => (
