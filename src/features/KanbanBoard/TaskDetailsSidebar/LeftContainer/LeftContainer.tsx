@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import ReactMarkdown from "react-markdown";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/storeHook";
 import { Task } from "../../../../types/Task";
 import {
@@ -9,10 +8,9 @@ import {
 import { useEffect } from "react";
 import { fetchAllActivitiesInTask } from "../../../../store/slices/actions/taskActivity";
 import { DateTime } from "luxon";
-import ProfileWithEditButton from "./ProfileWithEditButton";
 import TaskActivity from "./TaskActivity";
 import Spinner from "./Spinner";
-import { DescriptionEditMode } from "../DescriptionEditMode";
+import { TaskDescription } from "./TaskDescription";
 
 interface Props {
   task: Task;
@@ -53,36 +51,16 @@ export const LeftContainer = ({ task }: Props) => {
     }
   }, [activeTaskInSidebar?.id, dispatch, isTaskDetailsSidebarOpen]);
 
-  const renderDescription = () => {
-    if (isDescriptionInputActive) return <DescriptionEditMode />;
-
-    return task.description ? (
-      <>
-        <ProfileWithEditButton
-          onClick={() => dispatch(setDescriptionInputActive(true))}
-        />
-        <ReactMarkdown className="markdown-preview prose prose-slate text-white">
-          {task.description}
-        </ReactMarkdown>
-      </>
-    ) : (
-      <>
-        <ProfileWithEditButton
-          onClick={() => dispatch(setDescriptionInputActive(true))}
-        />
-        <span className="text-sm italic text-gray-500">
-          No description provided
-        </span>
-      </>
-    );
-  };
-
   return (
     <div className="flex w-[66%] flex-1 flex-col border-r border-r-border-dark-primary bg-[#161b22] max-md:w-full">
       {task && task.id ? (
         <>
           <div className="w-full border-b border-b-border-dark-primary bg-[#0d1117] p-5">
-            {renderDescription()}
+            <TaskDescription
+              isDescriptionInputActive={isDescriptionInputActive ?? false}
+              taskDescription={task?.description}
+              onEditClick={() => dispatch(setDescriptionInputActive(true))}
+            />
           </div>
           <TaskActivity
             activities={taskActivity}
