@@ -107,7 +107,7 @@ export const Project = () => {
             }
           />
 
-          <div className="pl-4">
+          <div className="bg-background-primary pl-4">
             <ProjectRoles
               onAddMember={() => setIsProjectPermissionModalOpen(true)}
               projectMembers={projectMembers}

@@ -84,6 +84,7 @@ const teamSlice = createSlice({
     });
     builder.addCase(createTeam.fulfilled, (state, action) => {
       state.teams.push(action.payload);
+      state.activeTeam = action.payload;
     });
     builder.addCase(updateActiveTeam.fulfilled, (state, action) => {
       state.activeTeam = action.payload;

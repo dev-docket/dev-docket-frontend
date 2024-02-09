@@ -1,6 +1,6 @@
 import { Team } from "../../../types/Team";
-import { NewTeamCard } from "../NewTeamCard";
-import { TeamCard } from "../TeamCard";
+import { NewTeamCard } from "./NewTeamCard";
+import { TeamCard } from "./TeamCard";
 
 interface Props {
   teams: Team[];
@@ -26,16 +26,17 @@ export const TeamsList = ({
   }
 
   return (
-    <div className="flex gap-3 overflow-auto pb-4">
-      {teams.length > 0 ? (
-        teams.map((team) => (
-          <div key={team.id} className="w-[13rem]">
-            <TeamCard team={team} onNavigateToTeamPage={onNavigateToTeamPage} />
-          </div>
-        ))
-      ) : (
-        <NewTeamCard onClick={onOpenCreateTeamModal} />
-      )}
+    <div className="flex flex-wrap gap-3 overflow-auto bg-background-primary pb-4">
+      {teams.map((team) => (
+        <div key={team.id} className="w-[13rem]">
+          <TeamCard team={team} onNavigateToTeamPage={onNavigateToTeamPage} />
+        </div>
+      ))}
+
+      <NewTeamCard
+        onClick={onOpenCreateTeamModal}
+        isAnyTeam={teams.length > 0}
+      />
     </div>
   );
 };
