@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ExpandableProject } from "./ExpandableProject";
 import { useAppSelector } from "../../../hooks/storeHook";
-import { Header } from "../Header";
+import { Header } from "./Header";
 
 export const ExpandableProjectList = () => {
   const projects = useAppSelector((state) => state.project.projects);
