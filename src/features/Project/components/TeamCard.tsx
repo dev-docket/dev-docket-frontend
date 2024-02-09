@@ -17,10 +17,10 @@ export const TeamCard = ({ team, onNavigateToTeamPage }: Props) => {
   return (
     <div
       onClick={handleNavigateToTeamPage}
-      className="flex h-[10rem] w-[13rem] flex-col rounded-2xl bg-[#242729] p-4 transition-colors cursor-pointer hover:bg-zinc-950"
+      className="flex h-[10rem] w-[13rem] cursor-pointer flex-col rounded-2xl bg-[#242729] p-4 transition-colors hover:bg-zinc-950"
     >
       {/* <p>members image</p> */}
-      <p className="text-xl">{name}</p>
+      <p className="truncate text-xl">{name}</p>
       <p className="mt-auto flex justify-end text-sm">
         Click to see your team
         <ArrowRightAlt />
