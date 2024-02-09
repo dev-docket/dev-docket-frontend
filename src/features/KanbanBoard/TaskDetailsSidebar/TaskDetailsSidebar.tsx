@@ -117,7 +117,12 @@ export const TaskDetailsSidebar: React.FC<TaskDetailsSidebarProps> = ({
                 className="w-full rounded-md border border-highlight-secondary bg-transparent px-2 py-1 text-sm"
               />
             ) : (
-              <h2 className="mb-4 text-xl font-bold">{taskName}</h2>
+              <h2
+                onClick={toggleTaskNameEdit}
+                className="mb-4 text-xl font-bold"
+              >
+                {taskName}
+              </h2>
             )}
           </div>
           <button

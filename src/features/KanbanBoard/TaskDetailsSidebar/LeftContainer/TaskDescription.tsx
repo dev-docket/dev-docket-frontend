@@ -34,7 +34,7 @@ export const TaskDescription = ({
   ) : (
     <>
       <ProfileWithEditButton onClick={onEditClick} />
-      <span className="text-sm italic text-gray-500">
+      <span onClick={onEditClick} className="text-sm italic text-gray-500">
         No description provided
       </span>
     </>
