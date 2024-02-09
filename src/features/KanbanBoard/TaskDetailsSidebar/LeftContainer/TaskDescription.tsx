@@ -1,5 +1,5 @@
 import ReactMarkdown from "react-markdown";
-import { DescriptionEditMode } from "../DescriptionEditMode";
+import { DescriptionEditMode } from "./DescriptionEditMode";
 import ProfileWithEditButton from "./ProfileWithEditButton";
 import remarkGfm from "remark-gfm";
 

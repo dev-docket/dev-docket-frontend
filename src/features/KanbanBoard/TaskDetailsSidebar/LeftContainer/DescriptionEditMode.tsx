@@ -1,13 +1,13 @@
 import { Edit, RemoveRedEyeOutlined } from "@mui/icons-material";
-import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/storeHook";
 import ReactMarkdown from "react-markdown";
 import { useEffect, useState } from "react";
-import { Task } from "../../../types/Task";
-import { patchTask } from "../../../store/slices/actions/task";
+import { Task } from "../../../../types/Task";
+import { patchTask } from "../../../../store/slices/actions/task";
 import {
   setActiveTaskInSidebar,
   setDescriptionInputActive,
-} from "../../../store/slices/teamPageSlice";
+} from "../../../../store/slices/teamPageSlice";
 import { useParams } from "react-router-dom";
 
 export const DescriptionEditMode = () => {
