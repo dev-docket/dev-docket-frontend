@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Team } from "../../../types/Team";
-import { useAppSelector } from "../../../hooks/storeHook";
+import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
 import axios from "axios";
+import { closeMenuSidebar } from "../../../store/slices/globalSettingsSlice";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -18,6 +19,18 @@ export const ExpandableProject = ({ name, slug }: Props) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [teamsInProject, setTeamsInProject] = useState<Team[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  const [divHover, setDivHover] = useState(false);
+  const [buttonHover, setButtonHover] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const nagivate = useNavigate();
+
+  const handleNavigateToProjectDashboard = () => {
+    nagivate(`/projects/${slug}/dashboard`);
+
+    dispatch(closeMenuSidebar());
+  };
 
   const fetchTeams = useCallback(async () => {
     try {
@@ -48,18 +61,23 @@ export const ExpandableProject = ({ name, slug }: Props) => {
   return (
     <div className="w-full">
       <div
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          setIsExpanded((prev) => !prev);
-        }}
-        className="flex items-center rounded-md px-2 py-1 pl-4 hover:cursor-pointer hover:bg-[#262836]"
+        onClick={handleNavigateToProjectDashboard}
+        className={`flex cursor-pointer items-center rounded-md px-2 py-1 pl-4 ${
+          divHover && !buttonHover ? "bg-[#262836]" : ""
+        }`}
+        onMouseEnter={() => setDivHover(true)}
+        onMouseLeave={() => setDivHover(false)}
       >
-        <Link to={`/projects/${slug}/dashboard`} role="menuitem">
-          {name}
-        </Link>
-
-        <div className="flex h-[2rem] w-[2rem] items-center pl-1">
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsExpanded((prev) => !prev);
+          }}
+          onMouseEnter={() => setButtonHover(true)}
+          onMouseLeave={() => setButtonHover(false)}
+          className={`mx-1 cursor-pointer rounded-md px-2 py-1 hover:bg-[#262836]`}
+        >
           {isExpanded ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -79,7 +97,11 @@ export const ExpandableProject = ({ name, slug }: Props) => {
               <path fill="currentColor" d="m10 17l5-5l-5-5v10Z"></path>
             </svg>
           )}
-        </div>
+        </button>
+
+        {/* <Link to={`/projects/${slug}/dashboard`} role="menuitem"> */}
+        <h2 className="text-lg">{name}</h2>
+        {/* </Link> */}
       </div>
 
       {isExpanded && (
