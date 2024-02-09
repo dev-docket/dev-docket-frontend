@@ -46,7 +46,7 @@ export const Team = () => {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex bg-background-primary">
         <Sidebar
           isSidebarOpen={isSidebarOpen}
           setSidebarOpen={setIsSidebarOpen}
