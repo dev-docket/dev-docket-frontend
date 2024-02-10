@@ -101,6 +101,7 @@ export const Project = () => {
             activeProject={activeProject}
             onOpenCreateTeamModal={() => setIsCreateNewTeamModalOpen(true)}
             dropdownRef={dropdownRef}
+            isButtonDisabled={true}
             isDropDownProjectSettingsOpen={isDropDownProjectSettingsOpen}
             onToggleDropDown={() =>
               setIsDropDownProjectSettingsOpen((prev) => !prev)
