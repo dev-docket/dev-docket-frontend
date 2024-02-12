@@ -43,7 +43,9 @@ export const Header = ({
           </div>
         )}
         <div>
-          <h1 className="w-80 truncate text-3xl">{activeProject?.name}</h1>
+          <h1 className="w-80 truncate text-3xl max-md:w-48">
+            {activeProject?.name}
+          </h1>
           <h3 className="text-sm">{underDescription}</h3>
         </div>
         <div ref={dropdownRef} className="relative">
