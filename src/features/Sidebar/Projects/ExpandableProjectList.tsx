@@ -9,7 +9,7 @@ export const ExpandableProjectList = () => {
 
   const [isExpanded, setIsExpanded] = useState(activeProject !== undefined);
 
-  const toggleExpand = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const toggleExpand = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsExpanded((prev) => !prev);

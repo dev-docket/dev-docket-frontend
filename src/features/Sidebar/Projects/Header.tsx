@@ -3,7 +3,7 @@ import { useState } from "react";
 
 interface Props {
   isExpanded: boolean;
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
 export const Header = ({ isExpanded, onClick }: Props) => {
@@ -21,7 +21,7 @@ export const Header = ({ isExpanded, onClick }: Props) => {
     >
       <div className="flex h-[2rem] items-center pl-2 text-sm">
         <div className="flex h-[2rem] w-[2rem] items-center justify-center">
-          <button
+          <div
             onClick={onClick}
             className={`cursor-pointer rounded-md ${
               buttonHover ? "bg-[#262836]" : ""
@@ -30,7 +30,7 @@ export const Header = ({ isExpanded, onClick }: Props) => {
             onMouseLeave={() => setButtonHover(false)}
           >
             {isExpanded ? <ExpandMore /> : <ChevronRight />}
-          </button>
+          </div>
         </div>
         <span className="pl-1">Your projects</span>
       </div>
