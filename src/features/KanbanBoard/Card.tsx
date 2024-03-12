@@ -48,10 +48,12 @@ export const Card = ({ task, index }: Props) => {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="mb-2 rounded bg-dark-background p-2 shadow"
+          className="mb-2 rounded bg-[#161B22] p-2 shadow"
         >
           <h3
-            className="text-md mb-1 border-b-2 border-blue-600 border-transparent font-semibold text-white transition-colors ease-in-out hover:cursor-pointer hover:border-b-2 hover:border-blue-600 hover:text-blue-600"
+            className="mb-1 border-b-2 border-blue-600 border-transparent text-base font-normal text-white
+                      transition-colors ease-in-out hover:cursor-pointer hover:border-b-2
+                      hover:border-blue-600 hover:text-blue-600"
             style={{ overflowWrap: "break-word", wordBreak: "break-word" }}
           >
             {task.name}

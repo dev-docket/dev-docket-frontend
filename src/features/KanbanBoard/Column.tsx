@@ -12,6 +12,7 @@ import Spinner from "./TaskDetailsSidebar/LeftContainer/Spinner";
 type ColumnType = {
   id: string;
   title: string;
+  subheading: string;
   cards: Task[];
 };
 
@@ -63,7 +64,7 @@ export const Column = ({ column, placeholderIndex }: Props) => {
   };
 
   return (
-    <div className="flex w-[300px] min-w-[300px] flex-col bg-secondary-background text-white">
+    <div className="flex min-h-full w-[300px] min-w-[300px] flex-col bg-[#010409] text-white">
       <Droppable droppableId={column.id} type="task">
         {(provided) => (
           <div
@@ -71,7 +72,13 @@ export const Column = ({ column, placeholderIndex }: Props) => {
             ref={provided.innerRef}
             className={`p-4`}
           >
-            <h3>{column.title}</h3>
+            <div>
+              <h3>{column.title}</h3>
+              <p className="text-sm text-white text-opacity-50">
+                {column.subheading}
+              </p>
+            </div>
+            <div className="mb-5"></div>
             {fetchAllTasksInTeam === "pending" && <Spinner />}
             {column.cards.map((task, index) => (
               <React.Fragment key={task.id}>
