@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 export type ColumnType = {
   id: string;
   title: string;
+  subheading: string;
   cards: Task[];
 };
 
@@ -24,21 +25,25 @@ const initialBoard: BoardType = {
     {
       id: "0",
       title: "Backlog",
+      subheading: "Tasks that are not yet started",
       cards: [],
     },
     {
       id: "1",
       title: "Todo",
+      subheading: "Tasks that are ready to be worked on",
       cards: [],
     },
     {
       id: "2",
       title: "In Progress",
+      subheading: "This is actively being worked on",
       cards: [],
     },
     {
       id: "3",
       title: "Done",
+      subheading: "Tasks that are completed",
       cards: [],
     },
   ],
@@ -174,9 +179,9 @@ export const KanbanBoard = () => {
   }, [dispatch, teamId]);
 
   return (
-    <div className="overflow-x-auto pb-5">
+    <div className="h-full overflow-x-auto pb-5">
       <DragDropContext onDragEnd={handleDragEnd} onDragUpdate={onDragUpdate}>
-        <div className="flex space-x-4">
+        <div className="flex min-h-[50%] space-x-4">
           {board.columns.map((column) => (
             <Column
               key={column.id}
