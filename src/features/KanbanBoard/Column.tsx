@@ -64,13 +64,13 @@ export const Column = ({ column, placeholderIndex }: Props) => {
   };
 
   return (
-    <div className="flex min-h-full w-[300px] min-w-[300px] flex-col bg-[#010409] text-white">
+    <div className="flex min-h-full w-[400px] min-w-[300px] flex-col rounded-md bg-[#010409] text-white">
       <Droppable droppableId={column.id} type="task">
         {(provided) => (
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
-            className={`p-4`}
+            className={`px-4 pt-3`}
           >
             <div>
               <h3>{column.title}</h3>
