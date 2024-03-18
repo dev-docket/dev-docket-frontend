@@ -1,7 +1,7 @@
 import React from "react";
 import { TaskActivity as Activity } from "../../../../store/slices/teamPageSlice";
 import { DateTime } from "luxon";
-import { TaskPriorityEnum, TaskStatusEnum } from "../../../../types/Task";
+import { TaskPriority, TaskStatus } from "../../../../types/Task";
 
 interface TaskActivityProps {
   activities: Activity[] | undefined;
@@ -9,19 +9,19 @@ interface TaskActivityProps {
 }
 
 // Mapping for human-friendly task status display
-const humanFriendlyStatus: { [key in TaskStatusEnum]?: string } = {
-  [TaskStatusEnum.BACKLOG]: "Backlog",
-  [TaskStatusEnum.TODO]: "Todo",
-  [TaskStatusEnum.IN_PROGRESS]: "In Progress",
-  [TaskStatusEnum.DONE]: "Done",
+const humanFriendlyStatus: { [key in TaskStatus]?: string } = {
+  [TaskStatus.BACKLOG]: "Backlog",
+  [TaskStatus.TODO]: "Todo",
+  [TaskStatus.IN_PROGRESS]: "In Progress",
+  [TaskStatus.DONE]: "Done",
 };
 
-const humanFriendlyPriority: { [key in TaskPriorityEnum]?: string } = {
-  [TaskPriorityEnum.NO_PRIORITY]: "No Priority",
-  [TaskPriorityEnum.URGENT]: "Urgent",
-  [TaskPriorityEnum.HIGH]: "High",
-  [TaskPriorityEnum.MEDIUM]: "Medium",
-  [TaskPriorityEnum.LOW]: "Low",
+const humanFriendlyPriority: { [key in TaskPriority]?: string } = {
+  [TaskPriority.NO_PRIORITY]: "No Priority",
+  [TaskPriority.URGENT]: "Urgent",
+  [TaskPriority.HIGH]: "High",
+  [TaskPriority.MEDIUM]: "Medium",
+  [TaskPriority.LOW]: "Low",
 };
 
 const TaskActivity: React.FC<TaskActivityProps> = ({
@@ -34,17 +34,17 @@ const TaskActivity: React.FC<TaskActivityProps> = ({
       const lowerCaseWord = word.toLowerCase();
       // Convert to uppercase and use type assertion
       const statusKey = lowerCaseWord.toUpperCase();
-      if (statusKey in TaskStatusEnum) {
+      if (statusKey in TaskStatus) {
         const friendlyStatus =
-          humanFriendlyStatus[statusKey as keyof typeof TaskStatusEnum];
+          humanFriendlyStatus[statusKey as keyof typeof TaskStatus];
         return (
           <span key={index} className="font-bold">
             {friendlyStatus || lowerCaseWord}{" "}
           </span>
         );
-      } else if (statusKey in TaskPriorityEnum) {
+      } else if (statusKey in TaskPriority) {
         const friendlyPriority =
-          humanFriendlyPriority[statusKey as keyof typeof TaskPriorityEnum];
+          humanFriendlyPriority[statusKey as keyof typeof TaskPriority];
         return (
           <span key={index} className="font-bold">
             {friendlyPriority || lowerCaseWord}{" "}

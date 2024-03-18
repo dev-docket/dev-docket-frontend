@@ -11,14 +11,7 @@ import {
   updateTask,
 } from "../../../../store/slices/teamPageSlice";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  Task,
-  TaskPriority,
-  TaskStatus,
-  displayPriority,
-  displayStatus,
-  getPriorityByIndex,
-} from "../../../../types/Task";
+import {getPriorityByIndex, Task, TaskPriority, TaskStatus} from "../../../../types/Task";
 import { TaskAttributeDropdown } from "./TaskAttributeDropdown";
 import { useFetchProjectMembers } from "../../../../hooks/projects/useFetchProjectMembers";
 import { useAssignUserToTask } from "../../../../hooks/tasks/useAssignUserToTask";
@@ -102,23 +95,23 @@ export const RightContainer = () => {
       <div className="flex flex-col gap-y-5 border-b border-border-dark-primary px-5 py-5 text-sm font-normal text-white text-opacity-80">
         <TaskAttributeDropdown
           label="Status"
-          dropdownLabel={displayStatus(activeTask?.status)}
+          dropdownLabel={activeTask?.status.toString() ?? ""}
           options={["Backlog", "Todo", "In progress", "Done"]}
           onSelect={(index) => {
             handleUpdateStatus(
               index === 0
-                ? "BACKLOG"
+                ? TaskStatus.BACKLOG
                 : index === 1
-                ? "TODO"
+                ? TaskStatus.TODO
                 : index === 2
-                ? "IN_PROGRESS"
-                : "DONE",
+                ? TaskStatus.IN_PROGRESS
+                : TaskStatus.DONE,
             );
           }}
         />
         <TaskAttributeDropdown
           label="Priority"
-          dropdownLabel={displayPriority(activeTask?.priority)}
+          dropdownLabel={activeTask?.priority.toString() ?? ""}
           options={["No priority", "Urgent", "High", "Medium", "Low"]}
           onSelect={(index: number) => {
             const priority = getPriorityByIndex(index);
