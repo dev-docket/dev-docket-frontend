@@ -44,3 +44,8 @@ export function getStatusByIndex(index: number): TaskStatus {
   const statuses = Object.values(TaskStatus);
   return statuses[index] as TaskStatus;
 }
+
+export function getPriorityByIndex(index: number): TaskPriority {
+  const priorities = Object.values(TaskPriority);
+  return priorities[index] as TaskPriority;
+}
