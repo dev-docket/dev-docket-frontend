@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Icon } from "@iconify/react";
 import { toast } from "react-toastify";
 import { generateProjectInvitationLink } from "../../../store/slices/actions/projectInvitations";
-import { useAppDispatch, useAppSelector } from "../../../hooks/storeHook";
-import { ProjectMember } from "../../../types/Project";
+import { useAppDispatch } from "../../../hooks/storeHook";
+import { useProjectStore, UserProjectMember } from "@/stores/projectStore";
 
-// Member Card Component
-const MemberCard = ({ member, isCurrentUser, onShowActions }) => {
+const MemberCard = ({
+  member,
+  onShowActions,
+}: {
+  member: UserProjectMember;
+  onShowActions: () => void;
+}) => {
   return (
     <div
       onClick={onShowActions}
@@ -20,11 +25,11 @@ const MemberCard = ({ member, isCurrentUser, onShowActions }) => {
           <h3 className="truncate text-sm font-medium text-white">
             {member.email}
           </h3>
-          {isCurrentUser && (
+          {/* {isCurrentUser && (
             <span className="inline-flex items-center rounded-md bg-blue-400/10 px-2 py-1 text-xs font-medium text-blue-400">
               You
             </span>
-          )}
+          )} */}
         </div>
         <p className="truncate text-sm text-gray-500">
           {member.role || "Member"}
@@ -39,7 +44,13 @@ const MemberCard = ({ member, isCurrentUser, onShowActions }) => {
 };
 
 // Member Actions Modal
-const MemberActionsModal = ({ member, onClose }) => {
+const MemberActionsModal = ({
+  member,
+  onClose,
+}: {
+  member: UserProjectMember | null;
+  onClose: () => void;
+}) => {
   if (!member) return null;
 
   return (
@@ -88,7 +99,13 @@ const MemberActionsModal = ({ member, onClose }) => {
 };
 
 // Invite Member Modal
-const InviteMemberModal = ({ isOpen, onClose, projectSlug }) => {
+interface InviteMemberModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  projectSlug: string;
+}
+
+const InviteMemberModal = ({ isOpen, onClose, projectSlug }: InviteMemberModalProps) => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
@@ -188,10 +205,11 @@ interface ProjectRolesProps {
 
 // Main ProjectRoles Component
 const ProjectRoles = ({ projectSlug }: ProjectRolesProps) => {
-  const [selectedMember, setSelectedMember] = useState(null);
+  const [selectedMember, setSelectedMember] = useState<UserProjectMember | null>(null);
   const [showInviteModal, setShowInviteModal] = useState(false);
 
-  const { projectMembers } = useAppSelector((state) => state.project);
+  // const { projectMembers } = useAppSelector((state) => state.project);
+  const {members} = useProjectStore();
 
   return (
     <div className="space-y-6 rounded-lg bg-[#1A1D2E] p-6">
@@ -211,11 +229,10 @@ const ProjectRoles = ({ projectSlug }: ProjectRolesProps) => {
           <span>Add new member</span>
         </button>
 
-        {projectMembers.map((member) => (
+        {members.map((member) => (
           <MemberCard
             key={member.id}
             member={member}
-            isCurrentUser={member.isCurrentUser}
             onShowActions={() => setSelectedMember(member)}
           />
         ))}

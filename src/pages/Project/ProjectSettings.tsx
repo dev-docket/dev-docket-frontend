@@ -4,11 +4,16 @@ import { useAppDispatch, useAppSelector } from '../../hooks/storeHook';
 import { useNavigate } from 'react-router-dom';
 import { updateProject } from '../../store/slices/actions/project';
 import { Navbar, Sidebar } from '../../features/Project/Navbar';
+import { Project } from '@/types/Project';
+import { useProjectStore, UserProjectMember } from '@/stores/projectStore';
 
 export const ProjectSettings = () => {
   const [activeTab, setActiveTab] = useState('general');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { activeProject, projectMembers } = useAppSelector((state) => state.project);
+  // const { activeProject, projectMembers } = useAppSelector((state) => state.project);
+
+  const {activeProject, members} = useProjectStore();
+
   const [project, setProject] = useState(activeProject);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
@@ -24,7 +29,7 @@ export const ProjectSettings = () => {
     });
   };
 
-  const handleTabChange = (tab) => {
+  const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     setIsMobileMenuOpen(false);
   };
@@ -120,7 +125,7 @@ export const ProjectSettings = () => {
               />
             )}
             {activeTab === 'access' && (
-              <Access projectMembers={projectMembers} />
+              <Access projectMembers={members} />
             )}
           </div>
         </div>
@@ -129,7 +134,14 @@ export const ProjectSettings = () => {
   );
 };
 
-const NavItem = ({ icon, label, isActive, onClick }) => (
+interface NavItemProps {
+  icon: string;
+  label: string;
+  isActive: boolean;
+  onClick: () => void;
+}
+
+const NavItem = ({ icon, label, isActive, onClick }: NavItemProps) => (
   <button
     onClick={onClick}
     className={`flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-sm transition-colors ${
@@ -143,7 +155,14 @@ const NavItem = ({ icon, label, isActive, onClick }) => (
   </button>
 );
 
-const MobileNavItem = ({ icon, label, isActive, onClick }) => (
+interface MobileNavItemProps {
+  icon: string;
+  label: string;
+  isActive: boolean;
+  onClick: () => void;
+}
+
+const MobileNavItem = ({ icon, label, isActive, onClick }: MobileNavItemProps) => (
   <button
     onClick={onClick}
     className={`flex w-full items-center gap-3 rounded-lg px-4 py-4 text-left text-lg transition-colors ${
@@ -157,7 +176,13 @@ const MobileNavItem = ({ icon, label, isActive, onClick }) => (
   </button>
 );
 
-const General = ({ project, setNewProject, handleUpdateProject }) => {
+interface GeneralProps {
+  project: Project | undefined;
+  setNewProject: (project: Project) => void;
+  handleUpdateProject: () => void;
+}
+
+const General = ({ project, setNewProject, handleUpdateProject }: GeneralProps) => {
   return (
     <div className="rounded-lg border border-gray-800 bg-[#1a1f2d] p-4 sm:p-6">
       <h2 className="mb-6 text-lg font-medium">General Settings</h2>
@@ -187,7 +212,11 @@ const General = ({ project, setNewProject, handleUpdateProject }) => {
   );
 };
 
-const Access = ({ projectMembers }) => {
+interface AccessProps {
+  projectMembers: UserProjectMember[];
+}
+
+const Access = ({ projectMembers }: AccessProps) => {
   return (
     <div className="rounded-lg border border-gray-800 bg-[#1a1f2d] p-4 sm:p-6">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -206,12 +235,12 @@ const Access = ({ projectMembers }) => {
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600/20">
                 <span className="text-sm font-medium text-blue-500">
-                  {member.user?.username?.[0]?.toUpperCase()}
+                  {member.name.toUpperCase()}
                 </span>
               </div>
               <div>
-                <div className="font-medium">{member.user?.username}</div>
-                <div className="text-sm text-gray-400">{member.user?.email}</div>
+                <div className="font-medium">{member.name}</div>
+                <div className="text-sm text-gray-400">{member.email}</div>
               </div>
             </div>
             

@@ -1,27 +1,36 @@
-import React from 'react';
-import { Icon } from '@iconify/react';
+import React from "react";
+import { Icon } from "@iconify/react";
 
-const InviteMemberModal = ({ isOpen, onClose, projectSlug }) => {
-  const [email, setEmail] = React.useState('');
-  const [role, setRole] = React.useState('member');
+interface InviteMemberModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  projectSlug: string;
+}
+
+const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
+  isOpen,
+  onClose,
+}) => {
+  const [email, setEmail] = React.useState("");
+  const [role, setRole] = React.useState("member");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [error, setError] = React.useState('');
+  const [error, setError] = React.useState("");
 
   if (!isOpen) return null;
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setError('');
+    setError("");
 
     try {
       // Here you would typically make an API call to invite the member
       // await inviteMember({ email, role, projectSlug });
       onClose();
-      setEmail('');
-      setRole('member');
+      setEmail("");
+      setRole("member");
     } catch (err) {
-      setError('Failed to invite member. Please try again.');
+      setError("Failed to invite member. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -31,7 +40,9 @@ const InviteMemberModal = ({ isOpen, onClose, projectSlug }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="w-full max-w-md rounded-lg bg-[#1a1f2d] p-6">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-white">Invite Team Member</h2>
+          <h2 className="text-xl font-semibold text-white">
+            Invite Team Member
+          </h2>
           <button
             onClick={onClose}
             className="rounded-full p-1 hover:bg-gray-700/30"
@@ -41,9 +52,12 @@ const InviteMemberModal = ({ isOpen, onClose, projectSlug }) => {
         </div>
 
         {error && (
-          <Alert variant="destructive" className="mb-4">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
+          <div className="mb-4 rounded-md bg-red-500/10 p-3 text-red-400">
+            <div className="flex items-center gap-2">
+              <Icon icon="mdi:alert-circle" className="h-5 w-5" />
+              <p className="text-sm">{error}</p>
+            </div>
+          </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -86,7 +100,7 @@ const InviteMemberModal = ({ isOpen, onClose, projectSlug }) => {
               disabled={isSubmitting}
               className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {isSubmitting ? 'Inviting...' : 'Send Invitation'}
+              {isSubmitting ? "Inviting..." : "Send Invitation"}
             </button>
           </div>
         </form>

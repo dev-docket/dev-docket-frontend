@@ -8,6 +8,8 @@ export interface Project {
 }
 
 export interface ProjectMember {
+  id: Key | null | undefined;
+  isCurrentUser: boolean;
   userId?: number;
   projectId?: number;
   role?: string;
