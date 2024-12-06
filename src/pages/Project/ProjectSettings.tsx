@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Icon } from "@iconify/react";
-import { useAppDispatch, useAppSelector } from '../../hooks/storeHook';
+import { useAppDispatch } from '../../hooks/storeHook';
 import { useNavigate } from 'react-router-dom';
 import { updateProject } from '../../store/slices/actions/project';
 import { Navbar, Sidebar } from '../../features/Project/Navbar';

@@ -9,7 +9,7 @@ export const Register = () => {
   const [emailError, setEmailError] = useState<boolean>(false);
   const [passwordError, setPasswordError] = useState<boolean>(false);
 
-  const { register } = useRegister();
+  const { register, isLoading } = useRegister();
 
   const handleRegistration = async () => {
     if (emailError) {
@@ -45,11 +45,13 @@ export const Register = () => {
   return (
     <FormAuth
       headerTitle={"welcome new user"}
+      isLoading={isLoading}
       headerSubTitle={"Create your new account"}
       input1={{
         type: "text",
         id: "email",
         isError: emailError,
+        errorMessage: "Please provide a valid email address",
         value: email,
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
           setEmail(e.target.value);

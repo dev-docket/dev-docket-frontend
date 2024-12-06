@@ -1,5 +1,3 @@
-import { useAppDispatch } from "../storeHook";
-import { removeToken } from "../../store/slices/authSlice";
 import { persistor } from "../../store/store";
 import { toast } from "react-toastify";
 import { useAuthStore } from "@/stores";

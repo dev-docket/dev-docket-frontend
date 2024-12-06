@@ -7,7 +7,7 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState<boolean>(false);
-  const { login, isLoading, error } = useLogin()
+  const { login, isLoading } = useLogin()
 
   const handleLogin = async () => {
     if (emailError) {
