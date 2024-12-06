@@ -1,143 +1,115 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks/storeHook";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchTeamsByProjectSlug } from "../../store/slices/actions/team";
-import { CreateNewTeamModal } from "../../features/Project/CreateNewTeam/CreateNewTeamModal";
-import { setActiveTeam } from "../../store/slices/teamSlice";
+import { CreateTeamModal } from "../../features/Project/CreateTeamModal";
 import { Team } from "../../types/Team";
-import {
-  fetchProjectBySlugAndSetAsActive,
-  fetchProjectMembersByProjectSlug,
-} from "../../store/slices/actions/project";
-import { ProjectPermissionModal } from "../../features/Project/ProjectPermissionModal";
-import { Header } from "../../features/Project/components/Header";
-import { ProjectRoles } from "../../features/Project/components/ProjectRoles";
-import TeamsSection from "../../features/Project/components/TeamsSection";
-import { Sidebar } from "../../features/Sidebar/Sidebar";
-import { ProjectSettings } from "../../features/Project/components/ProjectSettings";
+import { Navbar, Sidebar } from "../../features/Project/Navbar";
+import ProjectInfo from "../../features/Project/ProjectInfo";
+import TeamsSection from "../../features/Project/TeamsSection";
+import { useProjectStore, useTeamStore } from "@/stores";
 
-export const Project = () => {
-  const { teams, loading } = useAppSelector((state) => state.team);
-  const { activeProject, projectMembers } = useAppSelector(
-    (state) => state.project,
-  );
-
+const Project = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isCreateNewTeamModalOpen, setIsCreateNewTeamModalOpen] =
-    useState(false);
-  const [isProjectPermissionModalOpen, setIsProjectPermissionModalOpen] =
-    useState(false);
-  const [isDropDownProjectSettingsOpen, setIsDropDownProjectSettingsOpen] =
-    useState(false);
+  const [isCreateTeamModalOpen, setIsCreateTeamModalOpen] = useState(false);
 
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const { projectSlug } = useParams<{
-    projectSlug: string;
-    taskId: string;
-  }>();
-
-  const dispatch = useAppDispatch();
+  const { projectSlug } = useParams<{ projectSlug: string; taskId: string }>();
   const navigate = useNavigate();
+
+  // Zustand stores
+  const { teams, loading, fetchTeamsByProject, setActiveTeam } = useTeamStore();
+  const { activeProject, fetchProjectBySlug, fetchProjectMembers } = useProjectStore();
 
   const handleNavigateToTeamPage = (team: Partial<Team>) => {
     navigate(`/projects/${projectSlug}/teams/${team.id}/board`);
-
-    dispatch(setActiveTeam(team as Team));
+    setActiveTeam(team as Team);
   };
 
-  const closeMenu = useCallback(
-    (event: MouseEvent) => {
-      const target = event.target as Node;
-      if (dropdownRef.current && !dropdownRef.current.contains(target)) {
-        setIsDropDownProjectSettingsOpen(false);
-      }
-    },
-    [dropdownRef],
-  );
-
-  useEffect(() => {
-    window.addEventListener("mousedown", closeMenu);
-
-    return () => {
-      window.removeEventListener("mousedown", closeMenu);
-    };
-  }, [closeMenu]);
-
   useEffect(() => {
     if (!projectSlug) return;
+    
+    // Fetch project data
+    fetchProjectBySlug(projectSlug);
+    fetchProjectMembers(projectSlug);
+    fetchTeamsByProject(projectSlug);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectSlug]);
 
-    dispatch(fetchProjectMembersByProjectSlug({ projectSlug }));
-  }, [dispatch, projectSlug]);
+  // const closeMenu = useCallback(
+  //   (event: MouseEvent) => {
+  //     const target = event.target as Node;
+  //     if (dropdownRef.current && !dropdownRef.current.contains(target)) {
+  //       setIsDropDownProjectSettingsOpen(false);
+  //     }
+  //   },
+  //   [dropdownRef],
+  // );
 
-  useEffect(() => {
-    if (!projectSlug) return;
+  // useEffect(() => {
+  //   window.addEventListener("mousedown", closeMenu);
 
-    dispatch(fetchTeamsByProjectSlug(projectSlug));
-  }, [dispatch, projectSlug]);
+  //   return () => {
+  //     window.removeEventListener("mousedown", closeMenu);
+  //   };
+  // }, [closeMenu]);
 
-  useEffect(() => {
-    if (!projectSlug) return;
+  // useEffect(() => {
+  //   if (!projectSlug) return;
 
-    dispatch(
-      fetchProjectBySlugAndSetAsActive({
-        projectSlug,
-      }),
-    );
-  }, [dispatch, projectSlug]);
+  //   dispatch(fetchProjectMembersByProjectSlug({ projectSlug }));
+  // }, [dispatch, projectSlug]);
+
+  // useEffect(() => {
+  //   if (!projectSlug) return;
+
+  //   dispatch(fetchTeamsByProjectSlug(projectSlug));
+  // }, [dispatch, projectSlug]);
+
+  // useEffect(() => {
+  //   if (!projectSlug) return;
+
+  //   dispatch(
+  //     fetchProjectBySlugAndSetAsActive({
+  //       projectSlug,
+  //     }),
+  //   );
+  // }, [dispatch, projectSlug]);
 
   return (
-    <>
-      <div className="flex h-screen bg-dark-background text-white">
-        <Sidebar
+    <div className="flex h-full min-h-screen bg-[#0f1219] text-white">
+      <Sidebar
+        isSidebarOpen={isSidebarOpen}
+        setSidebarOpen={setIsSidebarOpen}
+      />
+
+      <div className="w-full transition-all">
+        <Navbar
           isSidebarOpen={isSidebarOpen}
           setSidebarOpen={setIsSidebarOpen}
+          activeProject={activeProject}
         />
 
-        <div className="w-full pt-4 transition-all">
-          <Header
-            isSidebarOpen={isSidebarOpen}
-            setSidebarOpen={setIsSidebarOpen}
-            activeProject={activeProject}
-            onOpenCreateTeamModal={() => setIsCreateNewTeamModalOpen(true)}
-            dropdownRef={dropdownRef}
-            isButtonDisabled={true}
-            isDropDownProjectSettingsOpen={isDropDownProjectSettingsOpen}
-            onToggleDropDown={() =>
-              setIsDropDownProjectSettingsOpen((prev) => !prev)
-            }
-          />
+        <div className="px-6 py-4">
+          {/* Compact Project Info */}
+          <ProjectInfo projectSlug={projectSlug} />
 
-          <div className="bg-background-primary pl-4">
-            <ProjectRoles
-              onAddMember={() => setIsProjectPermissionModalOpen(true)}
-              projectMembers={projectMembers}
-            />
-
-            <ProjectSettings projectSlug={projectSlug} />
-
+          {/* Teams Section - Now More Prominent */}
+          <div className="mt-6">
             <TeamsSection
               teams={teams}
-              loading={loading.teams}
+              loading={loading.teams === "pending"}
               onNavigateToTeamPage={handleNavigateToTeamPage}
-              onOpenCreateTeamModal={() => setIsCreateNewTeamModalOpen(true)}
+              onOpenCreateTeamModal={() => setIsCreateTeamModalOpen(true)}
             />
           </div>
         </div>
       </div>
 
-      {isProjectPermissionModalOpen && (
-        <ProjectPermissionModal
-          showModal={isProjectPermissionModalOpen}
-          onCloseModal={setIsProjectPermissionModalOpen}
-        />
-      )}
-
-      {isCreateNewTeamModalOpen && (
-        <CreateNewTeamModal
-          closeModal={() => setIsCreateNewTeamModalOpen(false)}
-        />
-      )}
-    </>
+      {/* Modals */}
+      <CreateTeamModal
+        isOpen={isCreateTeamModalOpen}
+        onClose={() => setIsCreateTeamModalOpen(false)}
+      />
+    </div>
   );
 };
+
+export default Project;

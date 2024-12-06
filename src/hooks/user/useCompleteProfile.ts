@@ -25,7 +25,7 @@ export const useCompleteProfile = () => {
       if (status !== 200) throw new Error("Error completing profile");
 
       dispatch(setProfileComplete(true));
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error.message);

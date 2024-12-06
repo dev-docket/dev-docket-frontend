@@ -1,20 +1,30 @@
-import { toast } from "react-toastify";
-import { removeToken } from "../../store/slices/authSlice";
-import { removeTasks } from "../../store/slices/taskSlice";
-import { removeUser } from "../../store/slices/userSlice";
 import { useAppDispatch } from "../storeHook";
-import { removeProjects } from "../../store/slices/projectSlice";
+import { removeToken } from "../../store/slices/authSlice";
+import { persistor } from "../../store/store";
+import { toast } from "react-toastify";
+import { useAuthStore } from "@/stores";
 
 export const useLogout = () => {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
+  const {logout} = useAuthStore();
 
-  const logoutUser = () => {
-    dispatch(removeToken());
-    dispatch(removeUser());
-    dispatch(removeTasks());
-    dispatch(removeProjects());
+  const logoutUser = async () => {
+    try {
+      logout();
+      // Clear all persisted state
+      await persistor.purge();
+      // Optional: Clear any other stored data
+      localStorage.clear();
+      sessionStorage.clear();
+      // navigate("/login");
 
-    toast.success("You have successfully logged out", { autoClose: 1000 });
+      toast.success("Logged out successfully",{
+        position: "top-center",
+        autoClose: 2000,
+      });
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
   return { logoutUser };

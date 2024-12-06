@@ -7,49 +7,45 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { Project } from "./pages/Project/Project";
+import Project from "./pages/Project/Project";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
-import { Dashboard } from "./pages/Dashboard";
-import { useAppSelector } from "./hooks/storeHook";
+import Dashboard from "./pages/Dashboard";
 import { useEffect } from "react";
-import { useLogout } from "./hooks/auth/useLogout";
 import { Team } from "./pages/Team";
 import { Error } from "./pages/Error";
 import { ProjectAcceptInvitation } from "./pages/Project/ProjectAcceptInvitation";
-import { CompleteProfile } from "./pages/CompleteProfile/CompleteProfile";
+import CompleteProfile from "./pages/CompleteProfile/CompleteProfile";
 import { Home } from "./pages/Home/Home";
-import { ProjectSettings } from "./pages/Project/ProjectSettings";
+import ProjectSettings from "./pages/Project/ProjectSettings";
 import { AuthenticatedRoute } from "./route-guards/AuthenticatedRoute";
+import { useAuthStore } from "./stores";
 
 function App() {
-  const token = useAppSelector((state) => state.auth.token);
-  const isProfileCompleted =
-    useAppSelector((state) => state.user.isProfileCompleted) || false;
+    const { 
+      token, 
+      isAuthenticated, 
+      isProfileCompleted, 
+      checkTokenExpiration 
+    } = useAuthStore()
+  
+    // Check token expiration on mount and token change
+    useEffect(() => {
+      const cleanup = checkTokenExpiration()
+      return () => cleanup?.()
+    }, [checkTokenExpiration])
+  
+    // Add periodic token check every minute
+    useEffect(() => {
+      console.log('Adding token check interval')
+      console.log('Token:', token)
+      if (!token) return
+  
+      const intervalId = setInterval(checkTokenExpiration, 60000)
+      return () => clearInterval(intervalId)
+    }, [token, checkTokenExpiration])
 
-  const isAuthenticated = !!token;
-
-  const { logoutUser } = useLogout();
-
-  useEffect(() => {
-    const isTokenExpired = (token: string) => {
-      if (token) {
-        const decodedToken = JSON.parse(atob(token.split(".")[1]));
-        const currentTime = Date.now() / 1000;
-
-        if (decodedToken.exp < currentTime) {
-          return true;
-        }
-      }
-      return false;
-    };
-
-    if (token) {
-      if (isTokenExpired(token)) {
-        logoutUser();
-      }
-    }
-  }, [logoutUser, token]);
+    console.log(isAuthenticated)
 
   return (
     <>

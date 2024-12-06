@@ -7,7 +7,7 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState<boolean>(false);
-  const { isLoading, login } = useLogin();
+  const { login, isLoading, error } = useLogin()
 
   const handleLogin = async () => {
     if (emailError) {
@@ -37,6 +37,7 @@ export const Login = () => {
         type: "text",
         id: "email",
         isError: emailError,
+        errorMessage: "Please enter a valid email address",
         value: email,
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
           setEmail(e.target.value);
@@ -47,6 +48,8 @@ export const Login = () => {
       input2={{
         type: "password",
         id: "password",
+        isError: false,
+        errorMessage: "",
         value: password,
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
           setPassword(e.target.value);

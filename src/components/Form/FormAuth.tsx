@@ -1,30 +1,92 @@
 import { Link } from "react-router-dom";
-import { FormInput } from "../common/inputs/FormInput";
-import { SmallButton } from "../common/buttons/SmallButton";
-import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
+import { Icon } from "@iconify/react";
 
-interface Input {
+interface FormInputProps {
   type: string;
   id: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  isError?: boolean;
-  errorMessage?: string;
+  isError: boolean;
+  errorMessage: string;
+  enterPressed?: () => void;
   title: string;
-  onValidation?: (value: string) => void;
 }
 
-interface Props {
+const FormInput = ({
+  type,
+  id,
+  value,
+  onChange,
+  isError,
+  errorMessage,
+  enterPressed,
+  title,
+}: FormInputProps) => {
+  return (
+    <div className="space-y-2">
+      <label htmlFor={id} className="block text-sm font-medium text-gray-200">
+        {title}
+      </label>
+      <div className="relative">
+        <input
+          type={type}
+          id={id}
+          className={`w-full rounded-lg bg-gray-800 p-3 text-sm text-white placeholder-gray-400 
+            focus:border-blue-500 focus:ring-2 focus:ring-blue-500 
+            ${isError ? "border-red-500 ring-2 ring-red-500" : "border-gray-600"}`}
+          value={value}
+          onChange={onChange}
+          onKeyPress={(e) => e.key === "Enter" && enterPressed?.()}
+          placeholder={`Enter your ${title.toLowerCase()}`}
+        />
+        {isError && (
+          <div className="absolute right-3 top-3 text-red-500">
+            <Icon icon="mdi:alert-circle" width="20" />
+          </div>
+        )}
+      </div>
+      {isError && <p className="text-xs text-red-500">{errorMessage}</p>}
+    </div>
+  );
+};
+
+interface ButtonProps {
+  title: string;
+  onClick: () => void;
+  isLoading: boolean;
+  spinIndicator: { color: string };
+}
+
+const Button = ({ title, onClick, isLoading }: ButtonProps) => (
+  <button
+    onClick={onClick}
+    disabled={isLoading}
+    className="w-full rounded-lg bg-blue-600 p-3 text-sm font-semibold text-white 
+      transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 
+      focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-70"
+  >
+    {isLoading ? (
+      <span className="flex items-center justify-center">
+        <Icon icon="mdi:loading" className="mr-2 h-4 w-4 animate-spin" />
+        Processing...
+      </span>
+    ) : (
+      title
+    )}
+  </button>
+);
+
+interface FormAuthProps {
   headerTitle: string;
   headerSubTitle: string;
-  input1: Input;
-  input2: Input;
+  input1: FormInputProps;
+  input2: FormInputProps;
   linkRedirectPath: string;
   buttonTitle: string;
   onButtonClick: () => void;
   underButtonText: string;
   underButtonTextBold: string;
-  isLoading?: boolean;
+  isLoading: boolean;
 }
 
 export const FormAuth = ({
@@ -38,60 +100,49 @@ export const FormAuth = ({
   underButtonText,
   underButtonTextBold,
   isLoading,
-}: Props) => {
-  const renderInput = (input: Input) => {
-    return (
-      <>
-        <div className="mt-4">
-          <label htmlFor={input.id}>{input.title}</label>
-        </div>
-        <FormInput
-          type={input.type}
-          id={input.id}
-          value={input.value}
-          onChange={input.onChange}
-          enterPressed={onButtonClick}
-          isError={input.isError}
-          errorMessage={
-            input.errorMessage ??
-            `Please provide valid ${input.title.toLowerCase()}`
-          }
-        />
-      </>
-    );
-  };
-
+}: FormAuthProps) => {
   return (
-    <div className="h-screen bg-gradient-to-b from-[#2c2d3c] via-[#191a23] to-[#191a23]">
-      <div className="flex h-full flex-col items-center justify-center">
-        <div className="m-4 w-1/3 rounded-lg bg-[#222428] p-8 text-white shadow-lg max-lg:w-auto">
-          <h1 className="text-center text-sm uppercase opacity-50">
-            {headerTitle}
-          </h1>
-          <h2 className="text-center text-2xl font-bold ">{headerSubTitle}</h2>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
+      <div className="flex min-h-screen flex-col items-center justify-center p-4">
+        <div className="w-full max-w-md rounded-xl bg-gray-800 p-8 shadow-xl">
+          <div className="mb-8 text-center">
+            <h1 className="mb-2 text-sm font-medium uppercase tracking-wider text-gray-400">
+              {headerTitle}
+            </h1>
+            <h2 className="text-2xl font-bold text-white">{headerSubTitle}</h2>
+          </div>
 
-          {renderInput(input1)}
-          {renderInput(input2)}
+          <div className="space-y-6">
+            <FormInput {...input1} />
+            <FormInput {...input2} />
 
-          <div className="mt-6">
-            <SmallButton
-              title={buttonTitle}
-              onClick={onButtonClick}
-              isLoading={isLoading}
-              spinIndicator={{
-                color: "#fff",
-              }}
-            />
+            <div className="space-y-4 pt-4">
+              <Button
+                title={buttonTitle}
+                onClick={onButtonClick}
+                isLoading={isLoading}
+                spinIndicator={{ color: "#fff" }}
+              />
 
-            <p className="mt-3 text-xs">
-              <span className="opacity-50">{underButtonText}</span>{" "}
-              <Link to={linkRedirectPath}>
-                {underButtonTextBold} <ArrowRightAltIcon />
-              </Link>
-            </p>
+              <div className="text-center">
+                <p className="text-sm">
+                  <span className="text-gray-400">{underButtonText}</span>{" "}
+                  <Link
+                    to={linkRedirectPath}
+                    className="inline-flex items-center font-medium text-blue-400 
+                      hover:text-blue-300"
+                  >
+                    {underButtonTextBold}
+                    <Icon icon="mdi:arrow-right" className="ml-1 h-4 w-4" />
+                  </Link>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 };
+
+export default FormAuth;

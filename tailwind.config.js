@@ -7,6 +7,12 @@ export default {
   theme: {
     extend: {
       colors: {
+        dark: {
+          background: "#0f1219",
+          surface: "#1a1f2e",
+          input: "#141824",
+        },
+
         background: {
           primary: "#161819",
           secondary: "#383838",
