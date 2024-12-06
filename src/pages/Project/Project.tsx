@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { CreateTeamModal } from "../../features/Project/CreateTeamModal";
 import { Team } from "../../types/Team";
@@ -89,7 +89,7 @@ const Project = () => {
 
         <div className="px-6 py-4">
           {/* Compact Project Info */}
-          <ProjectInfo projectSlug={projectSlug} />
+          {projectSlug && <ProjectInfo projectSlug={projectSlug} />}
 
           {/* Teams Section - Now More Prominent */}
           <div className="mt-6">

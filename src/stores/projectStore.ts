@@ -2,13 +2,15 @@ import { create } from "zustand";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useAuthStore } from "./authStore";
+import { Project } from "@/types/Project";
 
-interface Project {
+export interface UserProjectMember {
   id: number;
   name: string;
-  slug: string;
-  description?: string;
-  members?: { id: number; name: string; role: string }[];
+  email: string;
+  projectId: number;
+  role: string;
+  isOwner: boolean;
 }
 
 interface ProjectState {
@@ -16,7 +18,7 @@ interface ProjectState {
   activeProject: Project | undefined;
   isLoading: boolean;
   error: string | null;
-  members: { id: number; name: string; role: string }[];
+  members: UserProjectMember[];
 
   // Akcje
   fetchProjects: () => Promise<void>;
@@ -30,7 +32,7 @@ interface ProjectState {
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-export const useProjectStore = create<ProjectState>((set, get) => ({
+export const useProjectStore = create<ProjectState>((set) => ({
   projects: [],
   activeProject: undefined,
   isLoading: false,

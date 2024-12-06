@@ -3,9 +3,15 @@ import { Icon } from '@iconify/react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTeamStore } from '@/stores';
+import { Team } from '@/types/Team';
 
 // Modern Create Team Modal
-export const CreateTeamModal = ({ isOpen, onClose }) => {
+interface CreateTeamModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export const CreateTeamModal = ({ isOpen, onClose }: CreateTeamModalProps) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -113,10 +119,12 @@ export const CreateTeamModal = ({ isOpen, onClose }) => {
   );
 };
 
-// Team Card Component
-export const TeamCard = ({ team, onClick }) => {
-  const memberCount = team.members?.length || 0;
+interface TeamCardProps {
+  team: Team;
+  onClick: () => void;
+}
 
+export const TeamCard = ({ team, onClick }: TeamCardProps) => {
   return (
     <div
       onClick={onClick}
@@ -136,7 +144,7 @@ export const TeamCard = ({ team, onClick }) => {
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
+          {/* <div className="flex items-center space-x-2">
             <div className="flex -space-x-1">
               {team.members?.slice(0, 3).map((member, index) => (
                 <div
@@ -150,7 +158,7 @@ export const TeamCard = ({ team, onClick }) => {
             {memberCount > 3 && (
               <span className="text-xs text-gray-400">+{memberCount - 3} more</span>
             )}
-          </div>
+          </div> */}
           
           <div className="flex items-center text-xs text-gray-400">
             <Icon icon="ph:list-checks" className="mr-1 h-4 w-4" />

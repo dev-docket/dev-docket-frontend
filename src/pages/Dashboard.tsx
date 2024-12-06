@@ -5,8 +5,14 @@ import { setActiveProject } from "../store/slices/projectSlice";
 import { toast } from "react-toastify";
 import { Navbar, Sidebar } from "../features/Project/Navbar";
 import { useProjectStore } from "@/stores/projectStore";
+import { Project } from "@/types/Project";
 
-const CreateProjectModal = ({ isOpen, onClose }) => {
+interface CreateProjectModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const CreateProjectModal = ({ isOpen, onClose }: CreateProjectModalProps) => {
   const [projectName, setProjectName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -92,7 +98,7 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
 };
 
 // Project Card Component
-const ProjectCard = ({ project, onDelete }) => {
+const ProjectCard = ({ project }: {project: Project}) => {
   const navigate = useNavigate();
 
   const { setActiveProject } = useProjectStore();
@@ -175,7 +181,6 @@ const Dashboard = () => {
             <ProjectCard
               key={project.id}
               project={project}
-              onDelete={() => {}} // Handle is internal to card now
             />
           ))}
 

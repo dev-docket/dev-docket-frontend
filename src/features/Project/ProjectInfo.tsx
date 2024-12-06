@@ -4,7 +4,11 @@ import { Link } from "react-router-dom";
 import InviteMemberModal from "./InviteMemberModal"; // Import the new modal component
 import { useProjectStore } from "@/stores";
 
-const ProjectInfo = ({ projectSlug }) => {
+interface ProjectInfoProps {
+  projectSlug: string;
+}
+
+const ProjectInfo: React.FC<ProjectInfoProps> = ({ projectSlug }) => {
   const [showAddMember, setShowAddMember] = useState(false);
   // const { members } = useAppSelector((state) => state.project);
   const {members} = useProjectStore();
@@ -14,7 +18,7 @@ const ProjectInfo = ({ projectSlug }) => {
       {/* Left side - Members */}
       <div className="flex items-center space-x-4">
         <div className="flex -space-x-2">
-          {members.slice(0, 3).map((member, index) => (
+          {members.slice(0, 3).map((member) => (
             <div
               key={member.id}
               className="relative flex h-8 w-8 items-center justify-center rounded-full bg-blue-600/20 ring-2 ring-[#0f1219]"

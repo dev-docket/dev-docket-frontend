@@ -4,16 +4,23 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLogout } from "../../hooks/auth/useLogout";
 import { useAuthStore, useProjectStore } from "@/stores";
+import { Project } from "@/types/Project";
 
 // Navbar Component
-const Navbar = ({ isSidebarOpen, setSidebarOpen, activeProject }) => {
+interface NavbarProps {
+  isSidebarOpen: boolean;
+  setSidebarOpen: (isOpen: boolean) => void;
+  activeProject: Project | undefined;
+}
+
+const Navbar = ({ isSidebarOpen, setSidebarOpen, activeProject }: NavbarProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
       }
     };
@@ -90,7 +97,12 @@ const Navbar = ({ isSidebarOpen, setSidebarOpen, activeProject }) => {
 };
 
 // Sidebar Component
-const Sidebar = ({ isSidebarOpen, setSidebarOpen }) => {
+interface SidebarProps {
+  isSidebarOpen: boolean;
+  setSidebarOpen: (isOpen: boolean) => void;
+}
+
+const Sidebar = ({ isSidebarOpen, setSidebarOpen }: SidebarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logoutUser } = useLogout();
@@ -162,7 +174,7 @@ const Sidebar = ({ isSidebarOpen, setSidebarOpen }) => {
                       key={project.id}
                       to={`/projects/${project.slug}/dashboard`}
                       className={`flex items-center rounded-md px-3 py-2 text-sm ${
-                        location.pathname.includes(project.slug)
+                        location.pathname.includes(project.slug ?? "")
                           ? "bg-blue-600/10 text-blue-500"
                           : "text-gray-300 hover:bg-gray-700/50 hover:text-white"
                       }`}
