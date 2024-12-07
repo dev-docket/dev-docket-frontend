@@ -17,6 +17,7 @@ const Navbar = ({ isSidebarOpen, setSidebarOpen, activeProject }: NavbarProps) =
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const { logoutUser } = useLogout();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -83,7 +84,7 @@ const Navbar = ({ isSidebarOpen, setSidebarOpen, activeProject }: NavbarProps) =
                   Settings
                 </Link>
                 <hr className="my-1 border-gray-700" />
-                <button className="flex w-full items-center px-4 py-2 text-sm text-red-500 hover:bg-gray-700/50">
+                <button onClick={logoutUser} className="flex w-full items-center px-4 py-2 text-sm text-red-500 hover:bg-gray-700/50">
                   <Icon icon="ph:sign-out" className="mr-2 h-4 w-4" />
                   Sign out
                 </button>
