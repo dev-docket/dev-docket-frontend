@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useAuthStore } from "./authStore";
 import { Team } from "../types/Team";
+import { User } from "@/types/User";
 
 interface TeamState {
   teams: Team[];
@@ -11,6 +12,7 @@ interface TeamState {
   loading: {
     teams: "idle" | "pending" | "succeeded" | "failed";
   };
+  teamMembers: User[];
   error: string | null;
 
   // Akcje
@@ -28,6 +30,7 @@ export const useTeamStore = create<TeamState>((set) => ({
   loading: {
     teams: "idle",
   },
+  teamMembers: [],
   error: null,
 
   fetchTeamsByProject: async (projectSlug: string) => {

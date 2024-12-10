@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Icon } from "@iconify/react";
-import { useAppDispatch } from '../../hooks/storeHook';
 import { useNavigate } from 'react-router-dom';
-import { updateProject } from '../../store/slices/actions/project';
 import { Navbar, Sidebar } from '../../features/Project/Navbar';
 import { Project } from '@/types/Project';
 import { useProjectStore, UserProjectMember } from '@/stores/projectStore';
@@ -12,21 +10,22 @@ export const ProjectSettings = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   // const { activeProject, projectMembers } = useAppSelector((state) => state.project);
 
-  const {activeProject, members} = useProjectStore();
+  const {activeProject, updateProject, members} = useProjectStore();
 
   const [project, setProject] = useState(activeProject);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
-  const dispatch = useAppDispatch();
+
   const navigate = useNavigate();
 
   const handleUpdateProject = () => {
     if (!project) return;
-    dispatch(updateProject({ project })).then((action) => {
-      if (updateProject.fulfilled.match(action)) {
-        navigate(`/projects/${action.payload.slug}/settings`);
-      }
-    });
+
+    if (project.id) {
+      updateProject(project).then(() => {
+        navigate(`/projects/${project.slug}/settings`);
+      });
+    }
   };
 
   const handleTabChange = (tab: string) => {
@@ -217,6 +216,16 @@ interface AccessProps {
 }
 
 const Access = ({ projectMembers }: AccessProps) => {
+  // Function to get initials from name
+  const getInitials = (name: string) => {
+    if (!name) return '?';
+    return name.split(' ')
+      .map(word => word[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase();
+  };
+
   return (
     <div className="rounded-lg border border-gray-800 bg-[#1a1f2d] p-4 sm:p-6">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -229,25 +238,29 @@ const Access = ({ projectMembers }: AccessProps) => {
       <div className="space-y-4">
         {projectMembers.map((member, index) => (
           <div
-            key={index}
+            key={member?.id || index}
             className="flex flex-col gap-4 rounded-lg border border-gray-700 bg-[#0f1219] p-4 sm:flex-row sm:items-center sm:justify-between"
           >
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600/20">
                 <span className="text-sm font-medium text-blue-500">
-                  {member.name.toUpperCase()}
+                  {getInitials(member?.user?.name || member?.name || 'Unknown User')}
                 </span>
               </div>
               <div>
-                <div className="font-medium">{member.name}</div>
-                <div className="text-sm text-gray-400">{member.email}</div>
+                <div className="font-medium">
+                  {member?.user?.name || member?.name || 'Unknown User'}
+                </div>
+                <div className="text-sm text-gray-400">
+                  {member?.user?.email || member?.email || 'No email provided'}
+                </div>
               </div>
             </div>
             
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <select
                 className="w-full rounded-lg border border-gray-700 bg-[#0f1219] px-3 py-1.5 text-sm text-gray-400 sm:w-auto"
-                defaultValue={member.role || 'member'}
+                defaultValue={member?.role || 'member'}
               >
                 <option value="owner">Owner</option>
                 <option value="admin">Admin</option>
@@ -261,6 +274,12 @@ const Access = ({ projectMembers }: AccessProps) => {
             </div>
           </div>
         ))}
+
+        {(!projectMembers || projectMembers.length === 0) && (
+          <div className="rounded-lg border border-gray-700 bg-[#0f1219] p-6 text-center text-gray-400">
+            No members found
+          </div>
+        )}
       </div>
     </div>
   );

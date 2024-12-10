@@ -25,6 +25,7 @@ interface ProjectState {
   fetchProjectBySlug: (projectSlug: string) => Promise<void>;
   fetchProjectMembers: (projectSlug: string) => Promise<void>;
   createProject: (projectName: string) => Promise<Project | undefined>;
+  updateProject: (project: Project) => Promise<Project | undefined>;
   deleteProject: (projectSlug: string) => Promise<void>;
   setActiveProject: (project: Project | undefined) => void;
   clearProjects: () => void;
@@ -166,6 +167,50 @@ export const useProjectStore = create<ProjectState>((set) => ({
       const errorMessage = axios.isAxiosError(err)
         ? err.response?.data.message
         : "Failed to create project";
+      toast.error(errorMessage);
+      set({ error: errorMessage, isLoading: false });
+    }
+  },
+
+  updateProject: async (project: Project) => {
+    const token = useAuthStore.getState().token;
+
+    if (!token) {
+      toast.error("Please login first");
+      return;
+    }
+
+    console.log(project)
+
+    set({ isLoading: true });
+    try {
+      await axios.put(
+        `${apiUrl}/projects/${project.id}`,
+        {
+          ...project
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      set((state) => ({
+        projects: state.projects.map((p) =>
+          p.id === project.id ? project : p
+        ),
+        activeProject: project,
+        isLoading: false,
+        error: null,
+      }));
+
+      toast.success("Project updated successfully");
+      return project;
+    } catch (err) {
+      const errorMessage = axios.isAxiosError(err)
+        ? err.response?.data.message
+        : "Failed to update project";
       toast.error(errorMessage);
       set({ error: errorMessage, isLoading: false });
     }

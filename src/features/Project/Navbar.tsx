@@ -13,7 +13,11 @@ interface NavbarProps {
   activeProject: Project | undefined;
 }
 
-const Navbar = ({ isSidebarOpen, setSidebarOpen, activeProject }: NavbarProps) => {
+const Navbar = ({
+  isSidebarOpen,
+  setSidebarOpen,
+  activeProject,
+}: NavbarProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -21,7 +25,10 @@ const Navbar = ({ isSidebarOpen, setSidebarOpen, activeProject }: NavbarProps) =
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };
@@ -84,7 +91,10 @@ const Navbar = ({ isSidebarOpen, setSidebarOpen, activeProject }: NavbarProps) =
                   Settings
                 </Link>
                 <hr className="my-1 border-gray-700" />
-                <button onClick={logoutUser} className="flex w-full items-center px-4 py-2 text-sm text-red-500 hover:bg-gray-700/50">
+                <button
+                  onClick={logoutUser}
+                  className="flex w-full items-center px-4 py-2 text-sm text-red-500 hover:bg-gray-700/50"
+                >
                   <Icon icon="ph:sign-out" className="mr-2 h-4 w-4" />
                   Sign out
                 </button>
@@ -109,13 +119,20 @@ const Sidebar = ({ isSidebarOpen, setSidebarOpen }: SidebarProps) => {
   const { logoutUser } = useLogout();
   const [isProjectsExpanded, setIsProjectsExpanded] = useState(true);
 
-  const {isAuthenticated} = useAuthStore();
-  const {projects} = useProjectStore();
+  const { fetchProjects } = useProjectStore();
+
+  const { isAuthenticated } = useAuthStore();
+  const { projects } = useProjectStore();
 
   const sidebarVariants = {
     open: { x: 0, opacity: 1 },
     closed: { x: "-100%", opacity: 0 },
   };
+
+  useEffect(() => {
+    fetchProjects();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <AnimatePresence mode="wait">

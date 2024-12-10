@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { KanbanBoard } from "../features/KanbanBoard/KanbanBoard";
-import { TaskDetailsSidebar } from "../features/KanbanBoard/TaskDetailsSidebar/TaskDetailsSidebar";
-import { useAppDispatch, useAppSelector } from "../hooks/storeHook";
-import { closeTaskDetailsSidebar } from "../store/slices/teamPageSlice";
-import { fetchTaskAndOpenDetailsSidebar } from "../store/slices/actions/task";
-import { Sidebar } from "../features/Sidebar/Sidebar";
-import { Header } from "../features/Sidebar/Header";
+import KanbanBoard  from "../features/KanbanBoard/KanbanBoard";
+import { Navbar, Sidebar } from "@/features/Project/Navbar";
+import { useProjectStore } from "@/stores";
 
 export const Team = () => {
-  const { isTaskDetailsSidebarOpen, activeTaskInSidebar } = useAppSelector(
-    (state) => state.teamPage,
-  );
-  const activeTeam = useAppSelector((state) => state.team?.activeTeam);
+  // const { isTaskDetailsSidebarOpen, activeTaskInSidebar } = useAppSelector(
+  //   (state) => state.teamPage,
+  // );
+  // const activeTeam = useAppSelector((state) => state.team?.activeTeam);
+
+  const { projects, activeProject, fetchProjects, fetchProjectBySlug, setActiveProject } = useProjectStore();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -22,53 +20,68 @@ export const Team = () => {
     taskId: string;
   }>();
 
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleModalClose = () => {
-    dispatch(closeTaskDetailsSidebar());
+    // dispatch(closeTaskDetailsSidebar());
     navigate(`/projects/${projectSlug}/teams/${teamId}/board`);
   };
 
   useEffect(() => {
-    if (!taskId) {
-      dispatch(closeTaskDetailsSidebar());
-      return;
-    }
+    if (!projectSlug) return;
 
-    dispatch(
-      fetchTaskAndOpenDetailsSidebar({
-        taskId: Number(taskId),
-        dispatch,
-      }),
-    );
-  }, [dispatch, taskId]);
+    fetchProjectBySlug(projectSlug);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectSlug]);
+
+
+  // useEffect(() => {
+  //   if (!taskId) {
+  //     // dispatch(closeTaskDetailsSidebar());
+  //     return;
+  //   }
+
+  //   // dispatch(
+  //   //   fetchTaskAndOpenDetailsSidebar({
+  //   //     taskId: Number(taskId),
+  //   //     dispatch,
+  //   //   }),
+  //   // );
+  // }, [dispatch, taskId]);
 
   return (
-    <>
+    <div className="min-h-screen bg-[#0f1219]">
+      <Sidebar isSidebarOpen={isSidebarOpen} setSidebarOpen={setIsSidebarOpen} />
+      <Navbar
+        isSidebarOpen={isSidebarOpen}
+        setSidebarOpen={setIsSidebarOpen}
+        activeProject={activeProject}
+      />
       <div className="flex bg-background-primary">
-        <Sidebar
+        {/* <Sidebar
           isSidebarOpen={isSidebarOpen}
           setSidebarOpen={setIsSidebarOpen}
-        />
+        /> */}
+
 
         <div className="flex h-screen w-screen flex-col overflow-hidden bg-background-primary transition-all">
-          <Header
+          {/* <Header
             setSidebarOpen={setIsSidebarOpen}
             isButtonDisabled={true}
             title={activeTeam?.name ?? ""}
             underTitle="Here you can manage your team"
-          />
+          /> */}
 
           <KanbanBoard />
         </div>
       </div>
 
-      <TaskDetailsSidebar
+      {/* <TaskDetailsSidebar
         task={activeTaskInSidebar}
         show={isTaskDetailsSidebarOpen}
         onHide={handleModalClose}
-      />
-    </>
+      /> */}
+    </div>
   );
 };

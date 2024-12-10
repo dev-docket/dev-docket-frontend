@@ -1,5 +1,20 @@
-import { TaskActivity } from "../store/slices/teamPageSlice";
+import { DateTime } from "luxon";
 import { User } from "./User";
+
+
+export interface TaskActivity {
+  id: string;
+  description: string;
+  createdAt: string;
+  createdAtFormatted: DateTime;
+  user: {
+    id: string;
+    name: string;
+  };
+  task: {
+    id: string;
+  };
+}
 
 /**
  * Represents the status of a task in the system.

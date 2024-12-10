@@ -33,46 +33,6 @@ const Project = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectSlug]);
 
-  // const closeMenu = useCallback(
-  //   (event: MouseEvent) => {
-  //     const target = event.target as Node;
-  //     if (dropdownRef.current && !dropdownRef.current.contains(target)) {
-  //       setIsDropDownProjectSettingsOpen(false);
-  //     }
-  //   },
-  //   [dropdownRef],
-  // );
-
-  // useEffect(() => {
-  //   window.addEventListener("mousedown", closeMenu);
-
-  //   return () => {
-  //     window.removeEventListener("mousedown", closeMenu);
-  //   };
-  // }, [closeMenu]);
-
-  // useEffect(() => {
-  //   if (!projectSlug) return;
-
-  //   dispatch(fetchProjectMembersByProjectSlug({ projectSlug }));
-  // }, [dispatch, projectSlug]);
-
-  // useEffect(() => {
-  //   if (!projectSlug) return;
-
-  //   dispatch(fetchTeamsByProjectSlug(projectSlug));
-  // }, [dispatch, projectSlug]);
-
-  // useEffect(() => {
-  //   if (!projectSlug) return;
-
-  //   dispatch(
-  //     fetchProjectBySlugAndSetAsActive({
-  //       projectSlug,
-  //     }),
-  //   );
-  // }, [dispatch, projectSlug]);
-
   return (
     <div className="flex h-full min-h-screen bg-[#0f1219] text-white">
       <Sidebar

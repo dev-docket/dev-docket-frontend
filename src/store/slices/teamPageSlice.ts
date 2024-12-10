@@ -1,23 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Task } from "../../types/Task";
+import { Task, TaskActivity } from "../../types/Task";
 import { fetchAllActivitiesInTask } from "./actions/taskActivity";
-import { DateTime } from "luxon";
 import { patchTask } from "./actions/task";
 import { User } from "../../types/User";
 
-export interface TaskActivity {
-  id: string;
-  description: string;
-  createdAt: string;
-  createdAtFormatted: DateTime;
-  user: {
-    id: string;
-    username: string;
-  };
-  task: {
-    id: string;
-  };
-}
+
 
 interface TeamPageState {
   isTaskDetailsSidebarOpen: boolean;
