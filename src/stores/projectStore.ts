@@ -3,14 +3,13 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useAuthStore } from "./authStore";
 import { Project } from "@/types/Project";
+import { User } from "@/types/User";
 
 export interface UserProjectMember {
-  id: number;
-  name: string;
-  email: string;
   projectId: number;
   role: string;
   isOwner: boolean;
+  user: User;
 }
 
 interface ProjectState {

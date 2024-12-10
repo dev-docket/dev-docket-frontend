@@ -37,7 +37,7 @@ const CreateTaskModal = ({
       return;
     }
 
-    const assignedUser = teamMembers.find(member => member.id === assignedUserId);
+    const assignedUser = teamMembers.find(member => member.id === Number(assignedUserId));
     if (!assignedUser) {
       toast.error("Selected team member not found");
       return;
