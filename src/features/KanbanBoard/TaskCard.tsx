@@ -3,12 +3,10 @@ import { Icon } from '@iconify/react';
 import { Draggable } from 'react-beautiful-dnd';
 import { useState } from 'react';
 import { TaskDetailsPanel } from './TaskDetailsPanel';
-import { User } from '@/types/User';
 
 interface TaskCardProps {
   task: Task;
   index: number;
-  teamMembers: User[];
 }
 
 const getPriorityIcon = (priority: TaskPriority) => {
@@ -41,7 +39,7 @@ const getPriorityColor = (priority: TaskPriority) => {
   }
 };
 
-export const TaskCard = ({ task, index, teamMembers }: TaskCardProps) => {
+export const TaskCard = ({ task, index }: TaskCardProps) => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   return (
@@ -89,7 +87,6 @@ export const TaskCard = ({ task, index, teamMembers }: TaskCardProps) => {
         isOpen={isDetailsOpen}
         onClose={() => setIsDetailsOpen(false)}
         task={task}
-        teamMembers={teamMembers}
       />
     </>
   );

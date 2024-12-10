@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import KanbanBoard  from "../features/KanbanBoard/KanbanBoard";
 import { Navbar, Sidebar } from "@/features/Project/Navbar";
 import { useProjectStore } from "@/stores";
@@ -10,23 +10,15 @@ export const Team = () => {
   // );
   // const activeTeam = useAppSelector((state) => state.team?.activeTeam);
 
-  const { projects, activeProject, fetchProjects, fetchProjectBySlug, setActiveProject } = useProjectStore();
+  const { activeProject, fetchProjectBySlug } = useProjectStore();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const { projectSlug, teamId, taskId } = useParams<{
+  const { projectSlug} = useParams<{
     projectSlug: string;
     teamId: string;
     taskId: string;
   }>();
-
-  // const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
-  const handleModalClose = () => {
-    // dispatch(closeTaskDetailsSidebar());
-    navigate(`/projects/${projectSlug}/teams/${teamId}/board`);
-  };
 
   useEffect(() => {
     if (!projectSlug) return;
@@ -34,21 +26,6 @@ export const Team = () => {
     fetchProjectBySlug(projectSlug);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectSlug]);
-
-
-  // useEffect(() => {
-  //   if (!taskId) {
-  //     // dispatch(closeTaskDetailsSidebar());
-  //     return;
-  //   }
-
-  //   // dispatch(
-  //   //   fetchTaskAndOpenDetailsSidebar({
-  //   //     taskId: Number(taskId),
-  //   //     dispatch,
-  //   //   }),
-  //   // );
-  // }, [dispatch, taskId]);
 
   return (
     <div className="min-h-screen bg-[#0f1219]">

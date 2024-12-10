@@ -5,7 +5,6 @@ import { Dialog, Transition } from '@headlessui/react';
 import { useTaskStore } from '@/stores/taskStore';
 import { useAuthStore } from '@/stores/authStore';
 import { toast } from 'react-toastify';
-import { User } from '@/types/User';
 
 const getPriorityIcon = (priority: TaskPriority) => {
   switch (priority) {
@@ -41,10 +40,9 @@ interface TaskDetailsPanelProps {
   isOpen: boolean;
   onClose: () => void;
   task: Task;
-  teamMembers: User[];
 }
 
-export const TaskDetailsPanel = ({ isOpen, onClose, task, teamMembers }: TaskDetailsPanelProps) => {
+export const TaskDetailsPanel = ({ isOpen, onClose, task }: TaskDetailsPanelProps) => {
   const [editedTask, setEditedTask] = useState<Task>(task);
   const [isEditing, setIsEditing] = useState(false);
   const { updateTask } = useTaskStore();
@@ -61,7 +59,7 @@ export const TaskDetailsPanel = ({ isOpen, onClose, task, teamMembers }: TaskDet
       await updateTask({
         taskId: task.id,
         task: editedTask,
-        teamId: task?.teamId,
+        teamId: task?.id,
         token
       });
       setIsEditing(false);

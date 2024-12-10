@@ -3,7 +3,6 @@ import { Task, TaskPriority, TaskStatus } from "../../types/Task";
 import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 import { useAuthStore, useTaskStore, useTeamStore } from "@/stores";
 import CreateTaskModal from "./CreateTaskModal";
 import { TaskCard } from "./TaskCard";
@@ -53,17 +52,17 @@ const initialBoard: BoardType = {
   ],
 };
 
-const getEmptyBoard = () => ({
+const getEmptyBoard = (): BoardType => ({
   columns: initialBoard.columns.map(col => ({
     ...col,
-    cards: []
+    cards: [] as Task[]
   }))
 });
 
 const KanbanBoard = () => {
   const [board, setBoard] = useState<BoardType>(getEmptyBoard());
-  const [placeholderIndex, setPlaceholderIndex] = useState<number | null>(null);
-  const [placeholderColumnId, setPlaceholderColumnId] = useState<string | null>(null);
+  const [, setPlaceholderIndex] = useState<number | null>(null);
+  const [, setPlaceholderColumnId] = useState<string | null>(null);
   const { teamId } = useParams<{ teamId: string }>();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [initialTaskStatus, setInitialTaskStatus] = useState<TaskStatus>(TaskStatus.TODO);
