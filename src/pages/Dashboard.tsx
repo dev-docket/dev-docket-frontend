@@ -129,7 +129,7 @@ const Dashboard = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const { projects, activeProject, fetchProjects, setActiveProject } = useProjectStore();
+  const { projects, fetchProjects, setActiveProject } = useProjectStore();
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -184,7 +184,6 @@ const Dashboard = () => {
       <Navbar
         isSidebarOpen={isSidebarOpen}
         setSidebarOpen={setIsSidebarOpen}
-        activeProject={activeProject}
       />
       <div className="mx-auto max-w-7xl px-4 py-8 transition-all duration-300 max-md:ml-0 max-md:w-full">
         <div className="mb-8 flex items-center justify-between">

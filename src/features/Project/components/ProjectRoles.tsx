@@ -23,7 +23,7 @@ const MemberCard = ({
       <div className="flex-1 truncate">
         <div className="flex items-center space-x-2">
           <h3 className="truncate text-sm font-medium text-white">
-            {member.email}
+            {member.user.email}
           </h3>
           {/* {isCurrentUser && (
             <span className="inline-flex items-center rounded-md bg-blue-400/10 px-2 py-1 text-xs font-medium text-blue-400">
@@ -71,7 +71,7 @@ const MemberActionsModal = ({
               />
             </div>
             <div>
-              <h3 className="text-sm font-medium text-white">{member.email}</h3>
+              <h3 className="text-sm font-medium text-white">{member.user.email}</h3>
               <p className="text-sm text-gray-500">{member.role || "Member"}</p>
             </div>
           </div>
@@ -231,7 +231,7 @@ const ProjectRoles = ({ projectSlug }: ProjectRolesProps) => {
 
         {members.map((member) => (
           <MemberCard
-            key={member.id}
+            key={member.user.id}
             member={member}
             onShowActions={() => setSelectedMember(member)}
           />
