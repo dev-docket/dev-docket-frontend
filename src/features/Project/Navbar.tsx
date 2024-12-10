@@ -1,27 +1,39 @@
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLogout } from "../../hooks/auth/useLogout";
 import { useAuthStore, useProjectStore } from "@/stores";
-import { Project } from "@/types/Project";
 
 // Navbar Component
 interface NavbarProps {
   isSidebarOpen: boolean;
   setSidebarOpen: (isOpen: boolean) => void;
-  activeProject: Project | undefined;
 }
 
 const Navbar = ({
   isSidebarOpen,
   setSidebarOpen,
-  activeProject,
 }: NavbarProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const { logoutUser } = useLogout();
+
+  const { activeProject, fetchProjectBySlug } = useProjectStore();
+
+  const { projectSlug} = useParams<{
+    projectSlug: string;
+    teamId: string;
+    taskId: string;
+  }>();
+
+  useEffect(() => {
+    if (!projectSlug) return;
+
+    fetchProjectBySlug(projectSlug);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectSlug]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

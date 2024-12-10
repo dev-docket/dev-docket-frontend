@@ -16,7 +16,7 @@ const Project = () => {
 
   // Zustand stores
   const { teams, loading, fetchTeamsByProject, setActiveTeam } = useTeamStore();
-  const { activeProject, fetchProjectBySlug, fetchProjectMembers } = useProjectStore();
+  const { fetchProjectBySlug, fetchProjectMembers } = useProjectStore();
 
   const handleNavigateToTeamPage = (team: Partial<Team>) => {
     navigate(`/projects/${projectSlug}/teams/${team.id}/board`);
@@ -44,7 +44,6 @@ const Project = () => {
         <Navbar
           isSidebarOpen={isSidebarOpen}
           setSidebarOpen={setIsSidebarOpen}
-          activeProject={activeProject}
         />
 
         <div className="px-6 py-4">

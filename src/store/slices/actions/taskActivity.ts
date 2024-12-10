@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import axios from "axios";
-import { TaskActivity } from "../teamPageSlice";
 import { DateTime } from "luxon";
+import { TaskActivity } from "@/types/Task";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 

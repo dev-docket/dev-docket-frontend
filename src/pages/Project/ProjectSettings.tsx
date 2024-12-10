@@ -53,7 +53,6 @@ export const ProjectSettings = () => {
       <Navbar
           isSidebarOpen={isSidebarOpen}
           setSidebarOpen={setIsSidebarOpen}
-          activeProject={activeProject}
         />
       <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-8">
         

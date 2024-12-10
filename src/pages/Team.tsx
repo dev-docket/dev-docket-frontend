@@ -10,7 +10,7 @@ export const Team = () => {
   // );
   // const activeTeam = useAppSelector((state) => state.team?.activeTeam);
 
-  const { activeProject, fetchProjectBySlug } = useProjectStore();
+  const { fetchProjectBySlug } = useProjectStore();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -33,7 +33,6 @@ export const Team = () => {
       <Navbar
         isSidebarOpen={isSidebarOpen}
         setSidebarOpen={setIsSidebarOpen}
-        activeProject={activeProject}
       />
       <div className="flex bg-background-primary">
         {/* <Sidebar

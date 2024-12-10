@@ -20,9 +20,9 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ projectSlug }) => {
         <div className="flex -space-x-2">
           {members.slice(0, 3).map((member) => (
             <div
-              key={member.id}
+              key={member.user.id}
               className="relative flex h-8 w-8 items-center justify-center rounded-full bg-blue-600/20 ring-2 ring-[#0f1219]"
-              title={member.email}
+              title={member.user.email}
             >
               <Icon icon="ph:user" className="h-4 w-4 text-blue-500" />
               {member.isOwner && (

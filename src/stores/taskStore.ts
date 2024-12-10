@@ -39,7 +39,7 @@ interface UpdateTaskParams {
   token: string;
 }
 
-export const useTaskStore = create<TaskState>((set, get) => ({
+export const useTaskStore = create<TaskState>((set) => ({
   tasks: [],
   activeTask: null,
   isLoading: false,
